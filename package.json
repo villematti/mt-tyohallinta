@@ -1,0 +1,28 @@
+{
+  "name": "muottituote-nodejs",
+  "version": "1.0.0",
+  "description": "Muotituotteen työaikahallintajärjestelmä, NodeJS versio.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/villematti/mt-tyohallinta.git"
+  },
+  "author": "Ville-Matti Hakanpää",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/villematti/mt-tyohallinta/issues"
+  },
+  "homepage": "https://github.com/villematti/mt-tyohallinta#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "cors": "^2.7.1",
+    "ejs": "^2.4.2",
+    "errorhandler": "^1.4.3",
+    "express": "^4.14.0",
+    "express-jwt": "^3.4.0",
+    "mongoose": "^4.5.1"
+  }
+}
