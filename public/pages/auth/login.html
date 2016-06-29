@@ -1,0 +1,11 @@
+<h3>Login</h3>
+<div class="alert alert-danger" ng-hide="errorMessage == ''">{{ errorMessage }}</div>
+<p>
+<label>Username:</label>
+<input class="form-control" type="text" ng-model="username" />
+</p>
+<p>
+<label>Password:</label>
+<input class="form-control" type="password" ng-model="password" />
+</p>
+<button class="btn btn-primary" ng-click="login()">Login</button>

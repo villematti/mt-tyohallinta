@@ -1,0 +1,17 @@
+<div class="col-md-6 col-md-offset-3">
+<h2>Settings</h2>
+<div class="alert alert-warning" ng-if="settingsMessage !== ''">{{ settingsMessage }}</div>
+<h3>Statuses</h3>
+<input type="text" ng-model="newStatusName" /> <button ng-disabled="newStatusName === ''" class="btn btn-primary" ng-click="createNewStatus()">Add Status</button>
+<hr />
+<ul class="list-group" ng-repeat="status in statuses">
+	<li class="list-group-item">{{ status.name }} | <button class="btn btn-warning" ng-click="deleteStatus(status._id)">Delete</button></li>
+</ul>
+
+<h3>Types</h3>
+<input type="text" ng-model="newTypeName" /> <button ng-disabled="newTypeName === ''" class="btn btn-primary" ng-click="createNewType()">Add Type</button>
+<hr />
+<ul class="list-group" ng-repeat="type in types">
+	<li class="list-group-item">{{ type.name }} | <button class="btn btn-warning" ng-click="deleteType(type._id)">Delete</button></li>
+</ul>
+</div>

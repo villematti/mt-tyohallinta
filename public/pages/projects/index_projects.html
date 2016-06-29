@@ -1,0 +1,15 @@
+<div class="col-md-6 col-md-offset-3">
+	<h3>Projects</h3>
+	<a class="btn btn-primary" href="#/projects/create">Create New Project</a>
+	<hr />
+	<ul class="list-group" dir-paginate="project in projects | orderBy: 'modifiedAt':true | itemsPerPage: 10">
+		<a href="#/projects/{{ project._id }}" class="list-group-item">
+			<h4 class="list-group-item-heading">{{ project.name }}</h4>
+			<p class="list-group-item-text">
+				<b>Started: </b>{{ project.createdAt | date : dd-MM-yyyy }}
+				<b>Status: </b>{{ project.statusId.name }}
+			</p>
+		</a>
+	</ul>
+	<dir-pagination-controls></dir-pagination-controls>
+</div>

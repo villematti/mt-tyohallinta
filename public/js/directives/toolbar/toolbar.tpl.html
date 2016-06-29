@@ -1,0 +1,21 @@
+	<header>
+		<nav class="navbar navbar-default">
+			<div class="container">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#/dashboard">MuottiNet 3.0<span ng-if="token.isAuthenticated()"> - Hello {{ token.getUsername() }}</span></a>
+				</div>
+
+				<ul ng-if="token.isAuthenticated()" class="nav navbar-nav navbar-right">
+					<li><a href="#/dashboard">Home</a></li>
+					<li><a href="#/projects">Projects</a></li>
+					<li ng-if="token.isAdmin()"><a href="#/tasks">Tasks</a></li>
+					<li ng-if="token.isAdmin()"><a href="#/users">Users</a></li>
+					<li ng-if="token.isAdmin()"><a href="#/settings">Settings</a></li>
+					<li><a href="#/auth/logout">Logout</a></li>
+				</ul>
+				<ul ng-if="!token.isAuthenticated()" class="nav navbar-nav navbar-right">
+					<li><a href="#/auth/login">Login</li>
+				</ul>
+			</div>
+		</nav>
+	</header>

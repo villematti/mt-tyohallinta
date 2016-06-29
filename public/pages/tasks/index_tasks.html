@@ -1,0 +1,68 @@
+<md-content style="margin-bottom: 25px;">
+	
+	<div ng-if="exportReady" class="alert alert-info">Download the export at: <a href="http://localhost:3000/assets/export.csv">http://localhost:3000/assets/export.csv</a>.</div>
+
+	<h3>Tasks</h3>
+	<div class="col-md-4">
+		<label>Start date:</label><br />
+		<md-datepicker ng-model="startDate" md-placeholder="Enter date"></md-datepicker>
+	</div>
+	<div class="col-md-4">
+		<label>End date: </label><br />
+		<md-datepicker ng-model="endDate" md-placeholder="Enter date"></md-datepicker>
+	</div>
+	<div class="col-md-2">
+		<label>Select user: </label><br />
+		<select ng-model="selectedUser" style="margin-top: 11px;">
+			<option value="0" selected>All Users</option>
+			<option ng-repeat="user in users" value="{{ user._id }}">{{ user.name }}</option>
+		</select>
+	</div>
+	<div class="col-md-1">
+		<button style="margin-top: 29px;" class="btn btn-primary btn-sm" ng-click="getTasksOnTime()">Get Tasks</button>
+	</div>
+	<div class="col-md-1">
+		<button ng-disabled="tasks.length === 0" style="margin-top: 29px;" class="btn btn-warning btn-sm" ng-click="exportToCsv()">Export</button>
+	</div>
+
+</md-content>
+<div ng-if="notFound == true" class="alert alert-warning">No results found...</div>
+<table ng-if="tasks.length !== 0" class="table">
+	<thead>
+		<tr>
+			<th>Start Time</th>
+			<th>End Time</th>
+			<th>Hours</th>
+			<th>Project name</th>
+			<th>Username</th>
+			<th>Big Visit</th>
+			<th>Dirty Work</th>
+			<th>Machine Time</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="task in tasks">
+			<td>{{ task.createdAt | date: "dd-MM-yyyy HH:mm" }}</td>
+			<td>{{ task.endedAt | date: "dd-MM-yyyy HH:mm" }}</td>
+			<td>{{ task.hours | number: 1 }} h</td>
+			<td>{{ task.projectId.name }}</td>
+			<td>{{ task.userId.name }}</td>
+			<td>
+				<input ng-disabled="true" ng-if="!task.bigVisit" type="checkbox" />
+				<input ng-disabled="true" ng-if="task.bigVisit" type="checkbox" checked />
+			</td>
+			<td>{{ task.dirtyWork }}</td>
+			<td>{{ task.machineTime }}</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td><b>Total: {{ totalHours | number: 1 }}h</b></td>
+			<td></td>
+			<td></td>
+			<td><b>Total: {{ totalBigVisits | number: 0 }}</b></td>
+			<td><b>Total: {{ totalDirtyWork | number: 1 }}h</td>
+			<td><b>Total: {{ totalMachineTime | number: 1 }}h</b></td>
+		</tr>
+	</tbody>
+</tabel>

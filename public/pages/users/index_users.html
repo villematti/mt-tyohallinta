@@ -1,0 +1,8 @@
+<div class="col-md-6 col-md-offset-3">
+<a href="#/users/create" class="btn btn-primary">Create new user</a>
+<h3>Show all users</h3>
+
+<ul class="list-group" ng-repeat="user in users">
+	<li class="list-group-item"><a href="#/users/{{ user._id }}">{{ user.name }}</a></li>
+</ul>
+</div>

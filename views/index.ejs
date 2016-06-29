@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="eng" ng-app="mtweb3App">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="/assets/css/libs/bootstrap.min.css">
+	<link rel="stylesheet" href="/assets/css/libs/angularjs-material.min.css">
+	<link rel="stylesheet" href="/assets/css/app.css">
+	<title>Muotituote Ty&ouml;aikahallintaj&auml;rjestelm&auml;</title>
+
+	<!-- Primary Angular Library -->
+	<script type="text/javascript" src="/assets/js/libs/angularjs.min.js"></script>
+
+	<!-- Additional Libraries -->
+	<script type="text/javascript" src="/assets/js/libs/angularjs-messages.min.js"></script>
+	<script type="text/javascript" src="/assets/js/libs/angularjs-resource.min.js"></script>
+	<script type="text/javascript" src="/assets/js/libs/ngStorage.min.js"></script>
+	<script type="text/javascript" src="/assets/js/libs/angularjs-route.min.js"></script>
+	<script type="text/javascript" src="/assets/js/libs/angularjs-storage.min.js"></script>
+	<script type="text/javascript" src="/assets/js/libs/angularjs-jwt.min.js"></script>
+	<script type="text/javascript" src="/assets/js/libs/angularjs-aria.min.js"></script>
+	<script type="text/javascript" src="/assets/js/libs/angularjs-animate.min.js"></script>
+	<script type="text/javascript" src="/assets/js/libs/angularjs-material.min.js"></script>
+
+	<!-- Application Start -->
+	<script type="text/javascript" src="/assets/js/app.js"></script>
+
+	<!-- Locale FI_fi -->
+	<script type="text/javascript" src="/assets/js/i18n/angular-locale_fi-fi.js"></script>
+
+	<!-- Config and Routes -->
+	<script type="text/javascript" src="/assets/js/config.js"></script>
+
+	<!-- Controllers -->
+	<script type="text/javascript" src="/assets/js/controllers/user_controllers.js"></script>
+	<script type="text/javascript" src="/assets/js/controllers/auth_controllers.js"></script>
+	<script type="text/javascript" src="/assets/js/controllers/dashboard_controllers.js"></script>
+	<script type="text/javascript" src="/assets/js/controllers/settings_controllers.js"></script>
+	<script type="text/javascript" src="/assets/js/controllers/project_controllers.js"></script>
+	<script type="text/javascript" src="/assets/js/controllers/task_controllers.js"></script>
+
+	<!-- Directives -->
+	<script type="text/javascript" src="/assets/js/directives/toolbar/toolbar.dir.js"></script>
+	<script type="text/javascript" src="/assets/js/directives/dirpagination/dirPagination.js"></script>
+
+	<!-- Services -->
+	<script type="text/javascript" src="/assets/js/services/auth_service.js"></script>
+	<script type="text/javascript" src="/assets/js/services/http_request_service.js"></script>
+	<script type="text/javascript" src="/assets/js/services/project_status_service.js"></script>
+
+	<!-- Factories -->
+	<script type="text/javascript" src="/assets/js/factories/authenticate_factory.js"></script>
+
+</head>
+<body>
+	<div class="row">
+		<toolbar></toolbar>
+	</div>
+
+	<div class="container">
+		<div class="col-md-12">
+				<div ng-view></div>
+		</div>
+	</div>
+
+	<footer class="col-md-4 col-md-offset-4 footer">
+      &copy; 2016 MuottiNet 3.0 - Muottituote Group Oy
+    </footer>
+<script type="text/javascript" src="/assets/js/libs/jquery.min.js"></script>
+<script type="text/javascript" src="/assets/js/libs/bootstrap.min.js"></script>
+<script type="text/javascript" src="/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+</body>
+</html>
