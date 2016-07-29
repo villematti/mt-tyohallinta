@@ -466,50 +466,103 @@ apiRoutes.delete('/users/:id', function(req, res, next) {
 
 // ROUTES FOR TASKS
 
-// Update spesific task
-apiRoutes.put('/task/:id', function(req, res, next) {
+// 2nd version of editing task
+apiRoutes.put('/task/:id/edit', function(req, res, next) {
 
 	var update = {};
 
 	Task.findOne({ _id: req.params.id}, function(err, foundTask) {
 		if(err) return next(err);
 
-		update.projectId = req.body.projectId;
-		update.userId = req.body.userId;
-		update.bigVisit = req.body.bigVisit;
-		update.machineTime = req.body.machineTime;
-		update.dirtyWork = req.body.dirtyWork;
-		update.overtime = req.body.overtime;
-		update.taskTypeId = req.body.taskTypeId;
+		Project.findOne({_id: req.body.values.projectId}, function(projectError, project) {
 
-		console.log(foundTask);
+			if(project) {
+				foundTask.projectId = project._id;
+
+				User.findOne({ _id: req.body.values.userId }, function(userError, user) {
+
+					if(user) {
+
+						foundTask.userId = user._id;
+
+						Tasktype.findOne({ _id: req.body.values.taskTypeId}, function(taskTypeError, taskType) {
+
+							if(taskType) {
+
+								foundTask.taskTypeId = taskType._id;
+
+								foundTask.bigVisit = req.body.values.bigVisit;
+								foundTask.machineTime = req.body.values.machineTime;
+								foundTask.dirtyWork = req.body.values.dirtyWork;
+								foundTask.overtime = req.body.values.overtime;
+
+								if(req.body.end) {
+
+									foundTask.endedAt = Date.now();
+									var startTime = Date.parse(foundTask.createdAt);
+									var elapsetTime = Date.now() - startTime;
+									var hours = (((elapsetTime / 1000) / 60) / 60);
+									foundTask.hours = hours;
+								}
+
+								foundTask.save(function(result) {
+									res.json(result);
+								})
+
+							} else {
+								res.json({ success: false, message: "Invalid tasktype!" });
+							}
+						})
+					} else {
+						res.json({ success: false, message: "Invalid user!" });
+					}
+				})
+			} else {
+				res.json({ success: false, message: "Invalid project number!" });
+			}
+		})		
+	});
+})
+
+// Update spesific task
+apiRoutes.put('/task/:id', function(req, res, next) {
+	console.log(req.body);
+	var update = {};
+
+	Task.findOne({ _id: req.params.id}, function(err, foundTask) {
+		if(err) return next(err);
+
+		foundTask.projectId = req.body.projectId;
+		foundTask.userId = req.body.userId;
+		foundTask.bigVisit = req.body.bigVisit;
+		foundTask.machineTime = req.body.machineTime;
+		foundTask.dirtyWork = req.body.dirtyWork;
+		foundTask.overtime = req.body.overtime;
+		foundTask.taskTypeId = req.body.taskTypeId;
 
 		if(req.body.end) {
 
-			update.endedAt = Date.now();
+			foundTask.endedAt = Date.now();
 			var startTime = Date.parse(foundTask.createdAt);
 			var elapsetTime = Date.now() - startTime;
 			var hours = (((elapsetTime / 1000) / 60) / 60);
-			update.hours = hours;
+			foundTask.hours = hours;
 		}
 
-		Task.update({ _id: req.params.id }, {
-		$set: update},
-		function(error, result) {
-			if(error) return next(error);
+		console.log(foundTask);
 
+		foundTask.save(function(result) {
 			res.json(result);
-		}
-	)
-
+		})
 	});	
 
 	
 });
 
+
 // Add new task
 apiRoutes.post('/tasks', function(req, res, next) {
-
+	console.log(req.body);
 	var current = {};
 
 	current.projectId = req.body.projectId;
@@ -715,11 +768,22 @@ apiRoutes.get('/tasks/user/:id', function(req, res, next) {
 	})
 });
 
+// Find spesific task, but don't populate
+apiRoutes.get('/task/:id/nopopulate', function(req, res, next) {
+	Task.findOne({_id: req.params.id})
+		.exec(function(err, task) {
+			if(err) return next(err);
+
+			res.json(task);
+		})
+});
+
 // Find spesific task
 apiRoutes.get('/task/:id', function(req, res, next) {
 	Task.findOne({_id: req.params.id})
 		.populate('userId')
 		.populate('projectId')
+		.populate('taskTypeId')
 		.exec(function(err, task) {
 			if(err) return next(err);
 

@@ -19,7 +19,7 @@
 		<div class="col-md-2">
 			<label>{{ 'SELECT_USER' | translate }}: </label><br />
 			<select class="form-control" ng-model="selectedUser" style="margin-top: 5px;">
-				<option value="0" selected>{{ 'ALL_USERS' | translate }}</option>
+				<option value="0" selected>{{ 'ALL' | translate }}</option>
 				<option ng-repeat="user in users" value="{{ user._id }}">{{ user.name }}</option>
 			</select>
 		</div>
@@ -28,12 +28,12 @@
 		<div class="col-md-6">
 			<label>{{ 'SELECT_PROJECT' | translate }}: </label><br />
 			<select class="form-control" ng-model="selectedProject" style="margin-top: 11px;">
-				<option value="0" selected>{{ 'ALL_PROJECTS' | translate }}</option>
+				<option value="0" selected>{{ 'ALL' | translate }}</option>
 				<option ng-repeat="project in projects" value="{{ project._id }}">{{ project.name }}</option>
 			</select>
 		</div>
 		<div class="col-md-2">
-			<label>{{ 'ACTIVE_PROJECTS' | translate }}</label><br />
+			<label style="margin-left: 25px;">{{ 'ACTIVE_PROJECTS' | translate }}</label><br />
 			<input class="form-control" type="checkbox" ng-model="activeProjects" style="margin-top: 11px;" />
 		</div>
 		<div class="col-md-2">
@@ -46,7 +46,7 @@
 
 </md-content>
 <div ng-if="notFound == true" class="alert alert-warning">{{ 'NO_RESULTS_FOUND_ERROR' | translate }}</div>
-<table ng-if="tasks.length !== 0" class="table">
+<table ng-if="tasks.length !== 0" class="table table-bordered" style="text-align: center; margin-left: -50px;">
 	<thead>
 		<tr>
 			<th>{{ 'START_TIME' | translate }}</th>
@@ -77,12 +77,14 @@
 			<td>{{ task.overtime }}</td>
 			<td>{{ task.dirtyWork }}</td>
 			<td>{{ task.machineTime }}</td>
-			<td><button class="btn btn-danger" ng-click="deleteTask(task._id)">{{ 'EDIT' | translate }}</button></td>
+			<td><a href="#/task/{{ task._id }}" class="btn btn-danger">{{ 'EDIT' | translate }}</a></td>
 		</tr>
 		<tr>
 			<td></td>
 			<td></td>
 			<td><b>{{ 'TOTAL' | translate }}: {{ totalHours | number: 1 }}h</b></td>
+			<td></td>
+			<td></td>
 			<td></td>
 			<td></td>
 			<td></td>

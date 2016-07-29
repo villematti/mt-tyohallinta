@@ -1,6 +1,6 @@
 <div class="col-md-6 col-md-offset-3">
 	<h3>{{ 'CUSTOMERS_TITLE' | translate }}</h3>
-	<a class="btn btn-primary" href="#/customers/create">{{ NEW_CUSTOMER_TITLE | translate }}</a>
+	<a class="btn btn-primary" href="#/customers/create">{{ 'NEW_CUSTOMER_TITLE' | translate }}</a>
 	<hr />
 	<ul class="list-group" dir-paginate="customer in customers | orderBy: 'modifiedAt':true | itemsPerPage: 10">
 		<a href="#/customer/{{ customer._id }}" class="list-group-item">

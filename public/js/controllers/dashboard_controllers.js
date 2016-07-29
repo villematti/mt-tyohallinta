@@ -45,7 +45,7 @@ theApp.controller('dashboardController', ['$scope', '$http', '$log', 'store', '$
 
 		$http.post('/api/tasks', setup)
 			.success(function(result) {
-				$log.info(result);
+				$scope.selectedTaskType = '';
 				$scope.selectedProject = '';
 				$scope.bigVisit = false;
 				$scope.machineTime = 0;
@@ -72,6 +72,7 @@ theApp.controller('dashboardController', ['$scope', '$http', '$log', 'store', '$
 			.success(function(result) {
 				$log.info(result);
 				getUsersTasks();
+				$scope.taskValues = {};
 			})
 	}
 

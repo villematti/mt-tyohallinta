@@ -1,22 +1,22 @@
 <div class="col-md-6 col-md-offset-3">
 	<div class="alert alert-danger" ng-if="usercreationerror !== ''">{{ usercreationerror }}</div>
-	<h3>Create new user</h3>
+	<h3>{{ 'NEW_USER_TITLE' | translate }}</h3>
 	<div class="form-group">
-		<label>Username:</label>
+		<label>{{ 'USERNAME' | translate }}:</label>
 		<input class="form-control" type="text" ng-model="username" />
-		<div class="alert alert-warning" ng-show="username.length < 5 && username !== ''">Username has to be more than 5 letters.</div>
+		<div class="alert alert-warning" ng-show="username.length < 5 && username !== ''">{{ 'USERNAME_HAS_TO_HAVE_MORE_THAN_5_LETTERS' | translate }}</div>
 	</div>
 	<div class="form-group">
-		<label>Password:</label>
+		<label>{{ 'PASSWORD' | translate }}:</label>
 		<input class="form-control" type="password" ng-model="password" />
 	</div>
 	<div class="form-group">
-		<label>Repeat password:</label>
+		<label>{{ 'REPEAT_PASSWORD' | translate }}:</label>
 		<input class="form-control" type="password" ng-model="repeat" />
-		<div class="alert alert-warning" ng-show="password !== repeat">Passwords don't mach.</div>
+		<div class="alert alert-warning" ng-show="password !== repeat">{{ 'PASSWORD_DOES_NOT_MACH' | translate }}</div>
 	</div>
 	<div class="form-group">
-		<label>Admin?</label>
+		<label>{{ 'IS_ADMIN' | translate }}</label>
 		<input type="checkbox" ng-model="admin" />
 	</div>
 	<div class="form-group">

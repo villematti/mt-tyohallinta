@@ -152,27 +152,97 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 	}
 
 	$scope.exportReady = false;
+	
+}]);
+
+theApp.controller('showTaskController', ['$scope', '$http', '$log', 'store', '$routeParams', '$location', 
+	function($scope, $http, $log, store, $routeParams, $location) {
+
+	$scope.task = '';
+	$scope.users = '';
+	$scope.projects = '';
+	$scope.taskTypes = '';
+
+	$scope.selectedProject = '';
+	$scope.selectedUser = '';
+	$scope.selectedTaskType = '';
+
+	$scope.actionMessage = '';
+
+	function getTask() {
+		$http.get('/api/task/' + $routeParams.id + '/nopopulate')
+			.success(function(task) {
+				$scope.task = task;
+				$scope.selectedUser = task.userId;
+				$scope.selectedProject = task.projectId;
+				$scope.selectedTaskType = task.taskTypeId;
+			})
+	}
+
+	function getUsers() {
+		$http.get('/api/users')
+			.success(function(users) {
+				$scope.users = users;
+		})
+	}
+
+	function getProjects() {
+		$http.get('/api/projects')
+			.success(function(projects) {
+				$scope.projects = projects;
+		})
+	}
+
+	function getTaskTypes() {
+		$http.get('/api/tasktypes')
+			.success(function(taskTypes) {
+				$scope.taskTypes = taskTypes;
+		})
+	}
+
+	getTask()
+	getUsers()
+	getProjects()
+	getTaskTypes()
 
 	$scope.deleteTask = function(taskId) {
-		if(confirm('Are you sure?')) {
+		if(confirm('Oletko varma?')) {
 			$http.delete('/api/task/' + taskId)
 			.success(function(result) {
-				$scope.getTasksOnTime();
+				if(result.success === true) {
+					$location.path('/tasks');
+				}
 			});
 		}
 	}
-}]);
 
-theApp.controller('showTaskController', ['$scope', '$http', '$log', 'store', '$routeParams', 
-	function($scope, $http, $log, store, $routeParams) {
+	$scope.editTask = function(task) {
+		if(confirm('Oletko varma?')) {
+			var values = {};
+			console.log($scope.selectedProject);
+			values.projectId = $scope.selectedProject;
+			values.userId = $scope.selectedUser;
+			values.taskTypeId = $scope.selectedTaskType;
+			values.createdAt = task.createdAt;
+			values.bigVisit = task.bigVisit;
+			values.endedAt = task.endedAt;
+			values.dirtyWork = +$scope.task.dirtyWork;
+			values.overtime = +$scope.task.overtime;
+			values.machineTime = +$scope.task.machineTime;
 
-	$scope.task = '';
+			console.log(values);
 
-	function getTask() {
-		get('/api/task/' + $routeParams.id)
-			.success(function(task) {
-				$scope.task = task;
-			})
+			$http.put('/api/task/' + task._id + '/edit', {values})
+				.success(function(result) {
+					console.log(result);
+					$location.path('/tasks');
+				})
+		}
 	}
+
+	$scope.cancelEdit = function() {
+		$location.path('/tasks');
+	}
+	
 
 }]);

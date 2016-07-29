@@ -26,3 +26,10 @@ a {
   color: #337ab7 !important;
 }
 
+table th {
+  text-align: center;
+}
+
+table td a {
+  color: #fff !important;
+}

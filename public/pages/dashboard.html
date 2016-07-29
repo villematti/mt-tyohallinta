@@ -1,5 +1,5 @@
 <div class="col-md-12">
-<h2>Welcome to your dashboard!</h2>
+<h2>{{ 'DASHBOARD_WELCOME' | translate }}</h2>
 <h3>{{ 'START_WORKING' | translate }}</h3>
 	<div class="form-group">
 		<label>Select a project:</label>
@@ -9,59 +9,59 @@
 	</div>
 	<div class="form-inline">
 		<div class="form-group">
-			<label for="bigvisit" class="label-control">Big visit?</label>
+			<label for="bigvisit" class="label-control">{{ 'BIG_VISIT' | translate }}?</label>
 			<input id="bigvisit" type="checkbox" ng-model="bigVisit" />
 		</div>
 		<div class="form-group">
-			<label for="tasktype" class="control-label">Tasktype</label>
+			<label for="tasktype" class="control-label">{{ 'TASKTYPE' | translate }}</label>
 			<select id="tasktype" class="form-control" ng-model="selectedTaskType">
 				<option ng-repeat="taskType in taskTypes" value="{{ taskType._id }}">{{ taskType.name }}</option>
 			</select>
 		</div>
 		<div class="form-group">
-			<button class="btn btn-primary form-control" ng-click="startTask()">Start Task</button>
+			<button class="btn btn-primary form-control" ng-click="startTask()">{{ 'START_TASK' | translate }}</button>
 		</div>
 	</div>
 
-	<h3>Current Task</h3>
+	<h3>{{ 'CURRENT_TASK' | translate }}</h3>
 	<ul ng-if="usersTasks.lenght !== 0" class="list-group" ng-repeat="task in usersTasks">
 		<div ng-if="task.endedAt === null" class="list-group-item">
 			<h4 class="list-group-item-heading">{{ task.projectId.name }}</h4>
 			<p class="list-group-item-text">
-				<b>Started: </b>{{ task.createdAt | date: "dd-MM-yyyy HH:mm" }}
-				<b>Big visit? </b>
+				<b>{{ 'TASK_STARTED' | translate }}: </b>{{ task.createdAt | date: "dd-MM-yyyy HH:mm" }}
+				<b>{{ 'BIG_VISIT' | translate }}? </b>
 				<input ng-disabled="true" ng-if="!task.bigVisit" type="checkbox" />
 				<input ng-disabled="true" ng-if="task.bigVisit" type="checkbox" checked />
 			</p>
 			<p class="list-group-item-text">
-				<button ng-click="endTask(task)" class="btn btn-warning">End Task </button>
-				<label>Dirty Work: </label>
+				<button ng-click="endTask(task)" class="btn btn-warning">{{ 'END_TASK' | translate }} </button>
+				<label>{{ 'DIRTY_WORK' | translate }}: </label>
 				<input size="4" type="text" ng-model="taskValues.dirtyWork" />
-				<label>Machine Time: </label>
+				<label>{{ 'MACHINE_TIME' | translate }}: </label>
 				<input size="4" type="text" ng-model="taskValues.machineTime" />
-				<label>Overtime: </label>
+				<label>{{ 'OVERTIME' | translate }}: </label>
 				<input size="4" type="text" ng-model="taskValues.overtime" />
 			</p>
 		</div>
 	</ul>
 
-	<h3>Past Tasks</h3>
-	<div ng-if="usersTasks.lenght === 0" class="alert alert-info">You have never worked.</div>
+	<h3>{{ 'PAST_TASKS' | translate }}</h3>
+	<div ng-if="usersTasks.lenght === 0" class="alert alert-info">{{ 'YOU_HAVE_NEVER_WORKED' | translate }}</div>
 	<ul ng-if="usersTasks.lenght !== 0" class="list-group" dir-paginate="task in usersTasks | orderBy: 'createdAt':true | itemsPerPage: 5">
 		<a ng-if="task.endedAt !== null" href="#/tasks/{{ task._id }}" class="list-group-item">
 			<h4 class="list-group-item-heading">{{ task.projectId.name }}</h4>
 			<p class="list-group-item-text">
-				<b>Started: </b>{{ task.createdAt | date: "dd-MM-yyyy HH:mm" }}
-				<b>Ended: </b>{{ task.endedAt | date: "dd-MM-yyyy HH:mm" }}
+				<b>{{ 'TASK_STARTED' | translate }}: </b>{{ task.createdAt | date: "dd-MM-yyyy HH:mm" }}
+				<b>{{ 'TASK_ENDED' | translate }}: </b>{{ task.endedAt | date: "dd-MM-yyyy HH:mm" }}
 			</p>
 			<p class="list-group-item-text">
-				<b>Big visit? </b>
+				<b>{{ 'BIG_VISIT' | translate }}? </b>
 				<input ng-disabled="true" ng-if="!task.bigVisit" type="checkbox" />
 				<input ng-disabled="true" ng-if="task.bigVisit" type="checkbox" checked />
-				<span><b>Hours: </b>{{ task.hours | number: 1 }}h</span>
-				<span ng-if="task.machineTime !== null"><b>Machine time: </b>{{ task.machineTime | number: 1 }}h</span>
-				<span ng-if="task.dirtyWork !== null"><b>Dirty work: </b>{{ task.dirtyWork | number: 1 }}h</span>
-				<span ng-if="task.overtime !== null"><b>Overtime: </b>{{ task.overtime | number: 1 }}h</span>
+				<span><b>{{ 'HOURS' | translate }}: </b>{{ task.hours | number: 1 }}h</span>
+				<span ng-if="task.machineTime !== null"><b>{{ 'MACHINE_TIME' | translate }}: </b>{{ task.machineTime | number: 1 }}h</span>
+				<span ng-if="task.dirtyWork !== null"><b>{{ 'DIRTY_WORK' | translate }}: </b>{{ task.dirtyWork | number: 1 }}h</span>
+				<span ng-if="task.overtime !== null"><b>{{ 'OVERTIME' | translate }}: </b>{{ task.overtime | number: 1 }}h</span>
 			</p>
 		</a>
 	</ul>
@@ -70,30 +70,31 @@
 
 <md-content class="col-md-12" style="margin-bottom: 25px;">
 	
-	<h3>Search Tasks With Date Range</h3>
+	<h3>{{ 'SEARCH_TASKS_WITH_DATE_RANGE' | translate }}</h3>
 	<div class="col-md-5">
-		<label>Start date:</label><br />
+		<label>{{ 'START_DATE' | translate }}:</label><br />
 		<md-datepicker ng-model="startDate" md-placeholder="Enter date"></md-datepicker>
 	</div>
 	<div class="col-md-5">
-		<label>End date: </label><br />
+		<label>{{ 'END_DATE' | translate }}: </label><br />
 		<md-datepicker ng-model="endDate" md-placeholder="Enter date"></md-datepicker>
 	</div>
 	<div class="col-md-2">
-		<button style="margin-top: 29px;" class="btn btn-primary btn-sm" ng-click="getUsersTasksAtRange()">Get Tasks</button>
+		<button style="margin-top: 29px;" class="btn btn-primary btn-sm" ng-click="getUsersTasksAtRange()">{{ 'GET_TASKS' | translate }}</button>
 	</div>
 </md-content>
-<div ng-if="notFound == true" class="alert alert-warning col-md-12">No results found...</div>
-<table ng-if="tasksOnRange.length !== 0" class="table">
+<div ng-if="notFound == true" class="alert alert-warning col-md-12">{{ 'NO_RESULTS_FOUND_ERROR' | translate }}</div>
+<table ng-if="tasksOnRange.length !== 0" style="text-align: center;" class="table table-bordered">
 	<thead>
 		<tr>
-			<th>Start Time</th>
-			<th>End Time</th>
-			<th>Hours</th>
-			<th>Project name</th>
-			<th>Big Visit</th>
-			<th>Dirty Work</th>
-			<th>Machine Time</th>
+			<th>{{ 'START_TIME' | translate }}</th>
+			<th>{{ 'END_TIME' | translate }}</th>
+			<th>{{ 'HOURS' | translate }}</th>
+			<th>{{ 'PROJECT_NAME' | translate }}</th>
+			<th>{{ 'BIG_VISIT' | translate }}</th>
+			<th>{{ 'OVERTIME' | translate }}</th>
+			<th>{{ 'DIRTY_WORK' | translate }}</th>
+			<th>{{ 'MACHINE_TIME' | translate }}</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -106,13 +107,14 @@
 				<input ng-disabled="true" ng-if="!task.bigVisit" type="checkbox" />
 				<input ng-disabled="true" ng-if="task.bigVisit" type="checkbox" checked />
 			</td>
+			<td>{{ task.overtime }}</td>
 			<td>{{ task.dirtyWork }}</td>
 			<td>{{ task.machineTime }}</td>
 		</tr>
 		<tr>
 			<td></td>
 			<td></td>
-			<td><b>Total: {{ totalHours | number: 1 }}h</b></td>
+			<td><b>{{ 'TOTAL' | translate }}: {{ totalHours | number: 1 }}h</b></td>
 			<td></td>
 			<td></td>
 			<td></td>

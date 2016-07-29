@@ -24,6 +24,7 @@ theApp.config(function($translateProvider) {
     	DELETE_PROJECT: 'Tuhoa projekti',
     	DELETE: 'Poista',
     	SETTINGS_TITLE: 'Asetukset',
+        TASK_TITLE: 'Tehtävä',
     	STATUSES_TITLE: 'Tilas',
     	ADD_STATUS: 'Lisää tila',
     	TASKTYPES_TITLE: 'Työvaiheet',
@@ -41,9 +42,11 @@ theApp.config(function($translateProvider) {
         NO_DATE_RANGE: 'Ei ajanjaksoa',
         SELECT_USER: 'Valitse käyttäjä',
         SELECT_PROJECT: 'Valitse projekti',
+        SELECT_TASKTYPE: 'Valitse työvaihe',
         ACTIVE_PROJECTS: 'Aktiiviset',
         GET_TASKS: 'Hae työt',
-        EXPORT: 'Vienti',
+        EXPORT: 'Vie Exceliin',
+        ALL: 'Kaikki',
         NO_RESULTS_FOUND_ERROR: 'Tuloksia ei löytynyt...',
         START_TIME: 'Alkoi',
         END_TIME: 'Päättyi',
@@ -54,8 +57,24 @@ theApp.config(function($translateProvider) {
         DIRTY_WORK: 'Likainen työ',
         MACHINE_TIME: 'Yksinkäynti',
         TOTAL: 'Yhteentä',
-        EDIT: 'Muokkaa'
-
+        EDIT: 'Muokkaa',
+        NEW_USER_TITLE: 'Luo uusi käyttäjä',
+        USERNAME_HAS_TO_HAVE_MORE_THAN_5_LETTERS: 'Käyttäjänimen on oltava vähintään 5 merkki pitkä.',
+        REPEAT_PASSWORD: 'Toista salasana',
+        PASSWORD_DOES_NOT_MACH: 'Salasanat eivät täsmää.',
+        IS_ADMIN: 'Järjestelmävalvoja?',
+        USER_ID: 'Käyttäjänumero',
+        DELETE_USER: 'Poista käyttäjä',
+        START_TASK: 'Aloita työ',
+        CURRENT_TASK: 'Nykyinen tehtävä',
+        TASK_STARTED: 'Aloitettu',
+        END_TASK: 'Lopeta työ',
+        PAST_TASKS: 'Edelliset tehtävät',
+        YOU_HAVE_NEVER_WORKED: 'Et ole vielä koskaan rekisteröinyt töitä.',
+        TASK_ENDED: 'Lopetettu',
+        SEARCH_TASKS_WITH_DATE_RANGE: 'Etsi menneitä tehtäviä päivämäärähaarukan mukaan.',
+        DASHBOARD_WELCOME: 'Tervetuloa hallintapaneliin',
+        USER: 'Käyttäjä'
 
 
     });

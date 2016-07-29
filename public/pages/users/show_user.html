@@ -1,7 +1,7 @@
 <div class="col-md-6 col-md-offset-3">
-<p><label>Userid: </label>{{ currentuser._id }}</p>
-<p><label>Username: </label>{{ currentuser.name }}</p>
-<p><label>Is admin: </label>{{ currentuser.admin }}</p>
-<p><button ng-click="deleteUser(currentuser._id)" class="btn btn-warning">Delete User</button></p>
+<p><label>{{ 'USER_ID' | translate }}: </label>{{ currentuser._id }}</p>
+<p><label>{{ 'USERNAME' | translate }}: </label>{{ currentuser.name }}</p>
+<p><label>{{ 'IS_ADMIN' | translate }}: </label>{{ currentuser.admin }}</p>
+<p><button ng-click="deleteUser(currentuser._id)" class="btn btn-warning">{{ 'DELETE_USER' | translate }}</button></p>
 </div>
 

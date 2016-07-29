@@ -141,9 +141,26 @@ theApp.config(function($routeProvider, $httpProvider, paginationTemplateProvider
             }
 		})
 
+		.when('/task/:id', {
+			templateUrl: 'assets/pages/tasks/show_task.html',
+			controller: 'showTaskController',
+			resolve : {
+                //This function is injected with the AuthService where you'll put your authentication logic
+                'auth' : function(Authenticate){
+                    return Authenticate.authenticate();
+                }
+            }
+		})
+
 		.when('/tasks', {
 			templateUrl: 'assets/pages/tasks/index_tasks.html',
-			controller: 'allTasksController'
+			controller: 'allTasksController',
+			resolve : {
+                //This function is injected with the AuthService where you'll put your authentication logic
+                'auth' : function(Authenticate){
+                    return Authenticate.authenticate();
+                }
+            }
 		})
 
 		.otherwise({

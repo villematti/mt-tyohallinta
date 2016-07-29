@@ -1,0 +1,48 @@
+<h3>{{ 'TASK_TITLE' | translate }}</h3>
+
+<div class="form-group">
+	<label for="startDate" class="label-control">Start date:</label>
+	<input id="startDate" class="form-control" type="text" ng-model="task.createdAt" />
+</div>
+<div class="form-group">
+	<label for="endDate" class="label-control">End date:</label>
+	<input id="endDate" class="form-control" type="text" ng-model="task.endedAt" />
+</div>
+<div class="form-group">
+	<label>{{ 'PROJECT_NAME' | translate }}:</label>
+		<select class="form-control" ng-model="selectedProject">
+			<option ng-repeat="project in projects" value="{{ project._id }}">{{ project.name }}</option>
+		</select>
+</div>
+<div class="form-group">
+	<label>{{ 'SELECT_USER' | translate }}:</label>
+		<select class="form-control" ng-model="selectedUser">
+			<option ng-repeat="user in users" value="{{ user._id }}">{{ user.name }}</option>
+		</select>
+</div>
+<div class="form-group">
+	<label>{{ 'SELECT_TASKTYPE' | translate }}:</label>
+		<select class="form-control" ng-model="selectedTaskType">
+			<option ng-repeat="taskType in taskTypes" value="{{ taskType._id }}">{{ taskType.name }}</option>
+		</select>
+</div>
+
+<div class="form-group col-xs-3 col-md-3">
+		<label for="overtime" class="control-label">{{ 'OVERTIME' | translate }}</label>
+		<input type="text" id="overtime" class="form-control" ng-model="task.overtime" />
+</div>
+<div class="form-group col-xs-3 col-md-3">
+		<label for="dirtyWork" class="control-label">{{ 'DIRTY_WORK' | translate }}</label>
+		<input type="text" id="dirtyWork" class="form-control" ng-model="task.dirtyWork" />
+</div>
+<div class="form-group col-xs-3 col-md-3">
+		<label for="machineTime" class="control-label">{{ 'MACHINE_TIME' | translate }}</label>
+		<input type="text" id="machineTime" class="form-control" ng-model="task.machineTime" />
+</div>
+<div class="form-group col-xs-3 col-md-3">
+		<label for="bigVisit" class="control-label">{{ 'BIG_VISIT' | translate }}</label>
+		<input style="margin-left: -65px;" type="checkbox" id="bigVisit" class="form-control" ng-model="task.bigVisit" />
+</div>
+<div class="form-group">
+	<button ng-click="cancelEdit()" class="btn btn-warning">{{ 'CANCEL' | translate }}</button> <button ng-click="editTask(task)" class="btn btn-primary">{{ 'EDIT' | translate }}</button> <button ng-click="deleteTask(task._id)" class="btn btn-danger">{{ 'DELETE' | translate }}</button>
+</div>
