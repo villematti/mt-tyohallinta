@@ -11,6 +11,10 @@ module.exports = mongoose.model('Project', new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Status'
 	},
+	customerId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Customer'
+	},
 	createdAt: {
 		type: Date,
 		required: true,

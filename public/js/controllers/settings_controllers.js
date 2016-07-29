@@ -90,4 +90,47 @@ theApp.controller('settingsController', ['$scope', '$http', '$log',
 			});
 	}
 
+	$scope.taskTypes = [];
+	$scope.taskTypeName = '';
+
+	// Find all task types from the database
+	function getTaskTypes() {
+		$http.get('/api/tasktypes')
+			.success(function(results) {
+				$scope.taskTypes = results;
+			});
+	}
+
+	getTaskTypes();
+
+	// Task types
+	$scope.createNewTaskType = function() {
+		$http.post('/api/tasktypes', {
+			name: $scope.taskTypeName
+		})
+		.success(function(result) {
+			$scope.settingsMessage ='';
+			if(result.success === false) {
+				$scope.settingsMessage = result.message;
+			} else {
+				$scope.settingsMessage = result.message;
+				$scope.taskTypeName = '';
+				getTaskTypes();
+			}
+		})
+	}
+
+	$scope.deleteTaskType = function(taskTypeId) {
+		$http.delete('/api/tasktypes/' + taskTypeId + '/delete')
+			.success(function(result){
+				$scope.settingsMessage = '';
+				if(result.success === false) {
+					$scope.settingsMessage = result.message;
+				} else {
+					$scope.settingsMessage = result.message;
+					getTaskTypes();
+				}
+			});
+	}
+
 }]);

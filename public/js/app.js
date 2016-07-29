@@ -1,4 +1,4 @@
-var theApp = angular.module('mtweb3App', ['ngMaterial','angularUtils.directives.dirPagination','angular-storage', 'angular-jwt','ngMessages', 'ngResource','ngStorage', 'ngRoute']);
+var theApp = angular.module('mtweb3App', ['pascalprecht.translate','ngMaterial','angularUtils.directives.dirPagination','angular-storage', 'angular-jwt','ngMessages', 'ngResource','ngStorage', 'ngRoute']);
 
 theApp.run(function($rootScope, $location){
 

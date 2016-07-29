@@ -77,6 +77,14 @@ theApp.controller('createNewProjectController', ['$scope', '$http', '$log', '$lo
 
 	$scope.creationErrorMessage = '';
 	$scope.projectStatuses = '';
+	$scope.customers = '';
+
+	function getCustomers() {
+		$http.get('/api/customers')
+			.success(function(result) {
+				$scope.customers = result;
+		});
+	}
 
 	function getStatuses() {
 		$http.get('/api/statuses')
@@ -86,17 +94,22 @@ theApp.controller('createNewProjectController', ['$scope', '$http', '$log', '$lo
 	}
 
 	getStatuses();
+	getCustomers();
 
 	$scope.newProjectStatus = '';
+	$scope.newProjectNumber = '';
 	$scope.newProjectName = '';
+	$scope.newProjectCustomer = '';
 
 	$scope.createNewProject = function() {
 		$http.post('/api/projects', {
 			name: $scope.newProjectName,
-			statusId: $scope.newProjectStatus
+			number: $scope.newProjectNumber,
+			statusId: $scope.newProjectStatus,
+			customerId: $scope.newProjectCustomer
 		})
 		.success(function(result) {
-			if(result.success === false) {
+			if(result.success === "Failure") {
 				$scope.creationErrorMessage = result.message;
 			} else {
 				$location.path('/projects');

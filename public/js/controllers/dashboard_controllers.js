@@ -5,6 +5,15 @@ theApp.controller('dashboardController', ['$scope', '$http', '$log', 'store', '$
 	$scope.allProjects = [];
 	$scope.usersTasks = [];
 
+	// Values for new task
+	$scope.bigVisit = false;
+	$scope.selectedProject = '';
+	$scope.taskValues = {};
+
+	// Value for tasktypes
+	$scope.taskTypes = {};
+	$scope.selectedTaskType = '';
+
 	function getAllProjects() {
 		$http.get('/api/projects')
 			.success(function(results) {
@@ -17,19 +26,13 @@ theApp.controller('dashboardController', ['$scope', '$http', '$log', 'store', '$
 	$interval(getAllProjects, 60000);
 
 	function getUsersTasks() {
-		$http.get('/api/tasks/user/' + store.get('userid'))
+		$http.get('/api/tasks/user/' + store.get('userid') + '/limit/5')
 			.success(function(tasks) {
 				$scope.usersTasks = tasks;
-			})
+			});
 	}
 
 	getUsersTasks();
-
-	// Values for new task
-	$scope.machineTime = '';
-	$scope.bigVisit = false;
-	$scope.selectedProject = '';
-	$scope.dirtyWork = {};
 
 	$scope.startTask = function() {
 
@@ -38,21 +41,15 @@ theApp.controller('dashboardController', ['$scope', '$http', '$log', 'store', '$
 		setup.userId = store.get('userid');
 		setup.projectId = $scope.selectedProject;
 		setup.bigVisit = $scope.bigVisit;
-		setup.dirtyWork = 0;
-
-
-		if($scope.machineTime !== '') {
-			setup.machineTime = $scope.machineTime;
-		} else {
-			setup.machineTime = 0;
-		}
+		setup.taskTypeId = $scope.selectedTaskType;
 
 		$http.post('/api/tasks', setup)
 			.success(function(result) {
 				$log.info(result);
 				$scope.selectedProject = '';
 				$scope.bigVisit = false;
-				$scope.machineTime = '';
+				$scope.machineTime = 0;
+				$scope.overtime = 0;
 				getUsersTasks();
 			})
 	}
@@ -65,9 +62,10 @@ theApp.controller('dashboardController', ['$scope', '$http', '$log', 'store', '$
 		update.projectId = task.projectId._id;
 		update.userId = task.userId._id;
 		update.bigVisit = task.bigVisit;
-		update.machineTime = task.machineTime;
-		$log.info($scope.dirtyWork.value);
-		update.dirtyWork = +$scope.dirtyWork.value;
+		update.taskTypeId = task.taskTypeId;
+		update.machineTime = +$scope.taskValues.machineTime;
+		update.overtime = +$scope.taskValues.overtime;
+		update.dirtyWork = +$scope.taskValues.dirtyWork;
 		update.end = true;
 
 		$http.put('/api/task/' + task._id, update)
@@ -76,5 +74,48 @@ theApp.controller('dashboardController', ['$scope', '$http', '$log', 'store', '$
 				getUsersTasks();
 			})
 	}
+
+	$scope.tasksOnRange = [];
+
+	$scope.startDate = new Date();
+	$scope.endDate = new Date();
+
+	$scope.notFound = false;
+
+	$scope.totalHours = 0;
+
+	$scope.getUsersTasksAtRange = function() {
+		$http.post('/api/tasks/user/' + store.get('userid') + '/range', {
+				startDate: Date.parse($scope.startDate),
+				endDate: Date.parse($scope.endDate)
+			})
+			.success(function(results) {
+				$scope.tasksOnRange = results;
+				if($scope.tasksOnRange.length == 0) {
+					$scope.notFound = true
+				} else {
+					$scope.notFound = false;
+
+					// Calculate total hours
+					var totalHours = 0;
+
+					for(var i = 0; i < $scope.tasksOnRange.length; i++) {
+						totalHours += $scope.tasksOnRange[i].hours;
+					}
+
+					$scope.totalHours = totalHours;
+				}
+			})
+	}
+
+	// Get all tasktypes
+	function getAllTaskTypes() {
+		$http.get('/api/tasktypes')
+			.success(function(results) {
+				$scope.taskTypes = results;
+			})
+	}
+
+	getAllTaskTypes();
 
 }]);

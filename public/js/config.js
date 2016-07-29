@@ -64,6 +64,39 @@ theApp.config(function($routeProvider, $httpProvider, paginationTemplateProvider
             }
 		})
 
+		.when('/customers/create', {
+			templateUrl: 'assets/pages/customers/create_customer.html',
+			controller: 'createCustomerController',
+			resolve : {
+                //This function is injected with the AuthService where you'll put your authentication logic
+                'auth' : function(Authenticate){
+                    return Authenticate.authenticate();
+                }
+            }
+		})
+
+		.when('/customers/:id', {
+			templateUrl: 'assets/pages/customers/show_customers.html',
+			controller: 'showCustomerController',
+			resolve : {
+                //This function is injected with the AuthService where you'll put your authentication logic
+                'auth' : function(Authenticate){
+                    return Authenticate.authenticate();
+                }
+            }
+		})
+
+		.when('/customers', {
+			templateUrl: 'assets/pages/customers/index_customers.html',
+			controller: 'customerController',
+			resolve : {
+                //This function is injected with the AuthService where you'll put your authentication logic
+                'auth' : function(Authenticate){
+                    return Authenticate.authenticate();
+                }
+            }
+		})
+
 		.when('/settings', {
 			templateUrl: 'assets/pages/settings/index_settings.html',
 			controller: 'settingsController',

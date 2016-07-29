@@ -12,11 +12,20 @@ module.exports = mongoose.model('Task', new Schema({
 		ref: 'User',
 		required: true
 	},
+	taskTypeId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Tasktype',
+		required: true
+	},
 	bigVisit: {
 		type: Boolean,
 		default: null
 	},
 	machineTime: {
+		type: Number,
+		default: null
+	},
+	overtime: {
 		type: Number,
 		default: null
 	},

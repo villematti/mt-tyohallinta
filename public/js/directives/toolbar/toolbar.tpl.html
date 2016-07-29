@@ -6,15 +6,16 @@
 				</div>
 
 				<ul ng-if="token.isAuthenticated()" class="nav navbar-nav navbar-right">
-					<li><a href="#/dashboard">Home</a></li>
-					<li><a href="#/projects">Projects</a></li>
-					<li ng-if="token.isAdmin()"><a href="#/tasks">Tasks</a></li>
-					<li ng-if="token.isAdmin()"><a href="#/users">Users</a></li>
-					<li ng-if="token.isAdmin()"><a href="#/settings">Settings</a></li>
-					<li><a href="#/auth/logout">Logout</a></li>
+					<li><a href="#/dashboard">{{ 'HOME' | translate}}</a></li>
+					<li ng-if="token.isAdmin()"><a href="#/projects">{{ 'PROJECTS_TITLE' | translate}}</a></li>
+					<li ng-if="token.isAdmin()"><a href="#/tasks">{{ 'TASKS_TITLE' | translate}}</a></li>
+					<li ng-if="token.isAdmin()"><a href="#/users">{{ 'USERS_TITLE' | translate}}</a></li>
+					<li ng-if="token.isAdmin()"><a href="#/customers">{{ 'CUSTOMERS_TITLE' | translate}}</a></li>
+					<li ng-if="token.isAdmin()"><a href="#/settings">{{ 'SETTINGS_TITLE' | translate}}</a></li>
+					<li><a href="#/auth/logout">{{ 'LOGOUT' | translate }}</a></li>
 				</ul>
 				<ul ng-if="!token.isAuthenticated()" class="nav navbar-nav navbar-right">
-					<li><a href="#/auth/login">Login</li>
+					<li><a href="#/auth/login">{{ 'LOGOUT' | translate }}</li>
 				</ul>
 			</div>
 		</nav>

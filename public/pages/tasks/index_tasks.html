@@ -1,43 +1,65 @@
 <md-content style="margin-bottom: 25px;">
 	
-	<div ng-if="exportReady" class="alert alert-info">Download the export at: <a href="http://localhost:3000/assets/export.csv">http://localhost:3000/assets/export.csv</a>.</div>
+	<div ng-if="exportReady" class="alert alert-info">{{ 'DOWNLOAD_REPORT_AT' | translate }}: <a href="http://localhost:3000/assets/export.csv">http://localhost:3000/assets/export.csv</a>.</div>
 
-	<h3>Tasks</h3>
-	<div class="col-md-4">
-		<label>Start date:</label><br />
-		<md-datepicker ng-model="startDate" md-placeholder="Enter date"></md-datepicker>
+	<h3>{{ 'TASKS_TITLE' | translate}}</h3>
+	<div class="col-md-12">
+		<div class="col-md-4">
+			<label>{{ 'START_DATE' | translate }}</label><br />
+			<md-datepicker ng-model="startDate" md-placeholder="Enter date"></md-datepicker>
+		</div>
+		<div class="col-md-4">
+			<label>{{ 'END_DATE' | translate }}</label><br />
+			<md-datepicker ng-model="endDate" md-placeholder="Enter date"></md-datepicker>
+		</div>
+		<div class="col-md-2">
+			<label>{{ 'NO_DATE_RANGE' | translate }}</label><br />
+			<input class="form-control" type="checkbox" ng-model="noTime" />
+		</div>
+		<div class="col-md-2">
+			<label>{{ 'SELECT_USER' | translate }}: </label><br />
+			<select class="form-control" ng-model="selectedUser" style="margin-top: 5px;">
+				<option value="0" selected>{{ 'ALL_USERS' | translate }}</option>
+				<option ng-repeat="user in users" value="{{ user._id }}">{{ user.name }}</option>
+			</select>
+		</div>
 	</div>
-	<div class="col-md-4">
-		<label>End date: </label><br />
-		<md-datepicker ng-model="endDate" md-placeholder="Enter date"></md-datepicker>
-	</div>
-	<div class="col-md-2">
-		<label>Select user: </label><br />
-		<select ng-model="selectedUser" style="margin-top: 11px;">
-			<option value="0" selected>All Users</option>
-			<option ng-repeat="user in users" value="{{ user._id }}">{{ user.name }}</option>
-		</select>
-	</div>
-	<div class="col-md-1">
-		<button style="margin-top: 29px;" class="btn btn-primary btn-sm" ng-click="getTasksOnTime()">Get Tasks</button>
-	</div>
-	<div class="col-md-1">
-		<button ng-disabled="tasks.length === 0" style="margin-top: 29px;" class="btn btn-warning btn-sm" ng-click="exportToCsv()">Export</button>
+	<div class="col-md-12" style="margin-top: 10px;">
+		<div class="col-md-6">
+			<label>{{ 'SELECT_PROJECT' | translate }}: </label><br />
+			<select class="form-control" ng-model="selectedProject" style="margin-top: 11px;">
+				<option value="0" selected>{{ 'ALL_PROJECTS' | translate }}</option>
+				<option ng-repeat="project in projects" value="{{ project._id }}">{{ project.name }}</option>
+			</select>
+		</div>
+		<div class="col-md-2">
+			<label>{{ 'ACTIVE_PROJECTS' | translate }}</label><br />
+			<input class="form-control" type="checkbox" ng-model="activeProjects" style="margin-top: 11px;" />
+		</div>
+		<div class="col-md-2">
+			<button style="margin-top: 36px;" class="form-control btn btn-primary btn-sm" ng-click="getTasksOnTime()">{{ 'GET_TASKS' | translate }}</button>
+		</div>
+		<div class="col-md-2">
+			<button ng-disabled="tasks.length === 0" style="margin-top: 36px;" class="form-control btn btn-warning btn-sm" ng-click="exportToCsv()">{{ 'EXPORT' | translate }}</button>
+		</div>
 	</div>
 
 </md-content>
-<div ng-if="notFound == true" class="alert alert-warning">No results found...</div>
+<div ng-if="notFound == true" class="alert alert-warning">{{ 'NO_RESULTS_FOUND_ERROR' | translate }}</div>
 <table ng-if="tasks.length !== 0" class="table">
 	<thead>
 		<tr>
-			<th>Start Time</th>
-			<th>End Time</th>
-			<th>Hours</th>
-			<th>Project name</th>
-			<th>Username</th>
-			<th>Big Visit</th>
-			<th>Dirty Work</th>
-			<th>Machine Time</th>
+			<th>{{ 'START_TIME' | translate }}</th>
+			<th>{{ 'END_TIME' | translate }}</th>
+			<th>{{ 'HOURS' | translate }}</th>
+			<th>{{ 'PROJECT_NAME' | translate }}</th>
+			<th>{{ 'TASKTYPE' | translate }}</th>
+			<th>{{ 'USERNAME' | translate }}</th>
+			<th>{{ 'BIG_VISIT' | translate }}</th>
+			<th>{{ 'OVERTIME' | translate }}</th>
+			<th>{{ 'DIRTY_WORK' | translate }}</th>
+			<th>{{ 'MACHINE_TIME' | translate }}</th>
+			<th></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -46,23 +68,27 @@
 			<td>{{ task.endedAt | date: "dd-MM-yyyy HH:mm" }}</td>
 			<td>{{ task.hours | number: 1 }} h</td>
 			<td>{{ task.projectId.name }}</td>
+			<td>{{ task.taskTypeId.name }}</td>
 			<td>{{ task.userId.name }}</td>
 			<td>
 				<input ng-disabled="true" ng-if="!task.bigVisit" type="checkbox" />
 				<input ng-disabled="true" ng-if="task.bigVisit" type="checkbox" checked />
 			</td>
+			<td>{{ task.overtime }}</td>
 			<td>{{ task.dirtyWork }}</td>
 			<td>{{ task.machineTime }}</td>
+			<td><button class="btn btn-danger" ng-click="deleteTask(task._id)">{{ 'EDIT' | translate }}</button></td>
 		</tr>
 		<tr>
 			<td></td>
 			<td></td>
-			<td><b>Total: {{ totalHours | number: 1 }}h</b></td>
+			<td><b>{{ 'TOTAL' | translate }}: {{ totalHours | number: 1 }}h</b></td>
 			<td></td>
 			<td></td>
-			<td><b>Total: {{ totalBigVisits | number: 0 }}</b></td>
-			<td><b>Total: {{ totalDirtyWork | number: 1 }}h</td>
-			<td><b>Total: {{ totalMachineTime | number: 1 }}h</b></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
 		</tr>
 	</tbody>
 </tabel>

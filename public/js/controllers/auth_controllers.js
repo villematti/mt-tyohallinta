@@ -5,7 +5,7 @@ theApp.controller('authController', ['$scope', 'store', '$location', '$http', '$
 	$scope.password = '';
 
 	$scope.errorMessage = '';
-
+	
 	$scope.login = function() {
 		var username = $scope.username;
 		$http.post('/api/auth', {

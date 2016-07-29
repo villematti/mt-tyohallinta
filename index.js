@@ -21,6 +21,8 @@ var Status = require('./models/Status');
 var Type = require('./models/Type');
 var Project = require('./models/Project');
 var Task = require('./models/Task');
+var Customer = require('./models/Customer');
+var Tasktype = require('./models/Tasktype');
 mongoose.connect(config.database);
 app.set('superSecret', config.secret);
 
@@ -39,7 +41,7 @@ app.use(cors());
 // Protect API routes
 var apiRoutes = express.Router();
 
-apiRoutes.post('/auth', function(req, res, next) {
+apiRoutes.post('/auth', function(req, res) {
 
 	req.setEncoding('utf8');
 	// find the user
@@ -47,7 +49,7 @@ apiRoutes.post('/auth', function(req, res, next) {
 		name: req.body.name
 	}, function(err, user) {
 
-		if(err) return next(err);
+		if(err) return res.json({message: "Error!"});
 
 		if(!user) {
 			res.json({ success: false, message: 'Authentication failed. User not found!'});			
@@ -87,6 +89,47 @@ apiRoutes.post('/auth', function(req, res, next) {
 	})
 });
 
+// Create new user
+apiRoutes.post('/users', function(req, res) {
+	console.log(req.body.name);
+	User.findOne({
+		name: req.body.name
+	}, function(err, userData) {
+		if(err) return next(err);
+		console.log(userData);
+		if(userData) {
+			res.json({ success: "Failure",
+			message: "Username is already in use." });
+		} else {
+
+			if(typeof req.body.name == 'string' && typeof req.body.password == 'string') {
+				// create user model
+				var newUser = new User({
+					name: req.body.name,
+					password: password.hashPwd(req.body.password),
+					admin: req.body.admin
+				});
+
+				newUser.save(function(err) {
+					if(err) {
+						res.json(err);
+					} else {
+						console.log('User succesfully created!');
+						res.json({ success: "Success" });
+					}
+				
+				});
+			} else {
+				res.json({success: "Failure",
+					message: "Aren't stirngs!"
+				});
+			}
+
+			
+		}
+	});
+});
+
 // route middleware to veryfy a token
 apiRoutes.use(function(req, res, next) {
 	console.log(req.headers);
@@ -116,6 +159,77 @@ apiRoutes.use(function(req, res, next) {
 		});s
 	}
 });
+
+// ROUTES FOR CUSTOMERS
+
+// Find customers
+apiRoutes.get('/customers', function(req, res, next) {
+	Customer.find({}, function(error, results) {
+		if(error) return next(error);
+
+		res.json(results);
+	})
+});
+
+// Find spesific customer
+apiRoutes.get('/customer/:id', function(req, res, next) {
+	Customer.findOne({ _id: req.params.id}, function(error, customer) {
+		if(error) return next(error);
+
+		res.json(customer);
+	});
+});
+
+// Add new customer
+apiRoutes.post('/customers', function(req, res, next) {
+	Customer.findOne({ name: req.body.name }, function(err,customer) {
+
+		if(customer) {
+			res.json({ success: "Failure",
+			message: "Customer of this name has already been created." });
+		} else {
+			var newCustomer = new Customer({
+				name: req.body.name
+			});
+
+			newCustomer.save(function(error) {
+				if(error) return error;
+
+				res.json({ success: "Success", message: "New customer was succesfully created!" });
+			})
+		}
+	});
+});
+
+// Delete spesific customer
+apiRoutes.delete('./customer/:id/delete', function(req, res, next) {
+	Project.findOne({ customerId: req.params.id }, function(error, project) {
+		if(project) {
+			res.json({ success: "Failure",
+			message: "Customer is associated with a project already. It can not be deleted." });
+		} else {
+			Customer.findByIdAndRemove(req.params.id, function(err) {
+				if(err) return next(err);
+
+				res.json({ success: "Success", message: "Customer has been deleted!" });
+			})
+		}
+	})
+})
+
+// Update spesific customer
+apiRoutes.put('/customer/:id', function(req, res, next) {
+
+	Customer.update({ _id: req.params.id }, {
+		$set: { name: req.body.name, modifiedAt: Date.now() }},
+		function(error, result) {
+			if(error) return next(error);
+
+			res.json(result);
+		}
+	)
+});
+
 
 
 // ROUTES FOR STATUSES
@@ -274,25 +388,42 @@ apiRoutes.get('/project/:id', function(req, res, next) {
 
 // Routes for creating new project
 apiRoutes.post('/projects', function(req, res, next){
-	Project.findOne({ name: req.body.name }, function(err, project) {
-		if(err) return next(err);
+	console.log(req.body);
+	if(req.body.customerId !== '' && req.body.name !== '' && req.body.number !== '' && req.body.statusId !== '') {
+		console.log("We get here!");
+		Customer.findOne({_id: req.body.customerId}, function(error, customer) {
+			if(error) return next(error);
 
-		if(project) {
-			res.json({ success: "Failure",
-			message: "Project name is already in use." });
+			if(customer) {
+				var projectName = req.body.number + '-' + customer.name + '-' + req.body.name;
+
+				Project.findOne({ name: projectName }, function(err, project) {
+					if(err) return next(err);
+
+					if(project) {
+						res.json({ success: "Failure", message: "Project name is already in use." });
+					} else {
+						var newProject = new Project({
+							name: projectName,
+							statusId: req.body.statusId
+						});
+
+						newProject.save(function(err) {
+							if(err) return next(err);
+
+							res.json({ success: "Success", message: "Project was successfully created." });
+						});
+					}
+				});
 		} else {
-			var newProject = new Project({
-				name: req.body.name,
-				statusId: req.body.statusId
-			});
-
-			newProject.save(function(err) {
-				if(err) return next(err);
-				console.log('Project was succesfully created!');
-				res.json({ success: "Success" });
-			});
+			res.json({ success: "Failure", message: "Invalid customer." });
 		}
 	});
+
+
+	} else {
+		res.json({ success: "Failure", message: "Fill out all fields." });
+	}
 });
 
 // ROUTES FOR USERS
@@ -306,34 +437,7 @@ apiRoutes.get('/users', function(req, res, next) {
 	});
 });
 
-// Create new user
-apiRoutes.post('/users', function(req, res, next) {
 
-	User.findOne({
-		name: req.body.name
-	}, function(err, user) {
-		if(err) return next(err);
-
-		if(user) {
-			res.json({ success: "Failure",
-			message: "Username is already in use." });
-		} else {
-			// create user model
-			var newUser = new User({
-				name: req.body.name,
-				password: password.hashPwd(req.body.password),
-				admin: req.body.admin
-			});
-
-			newUser.save(function(err) {
-			if(err) return next(err);
-
-			console.log('User succesfully created!');
-			res.json({ success: "Success" });
-			});
-		}
-	});
-});
 
 apiRoutes.get('/users/:id', function(req, res, next) {
 	var userId = req.params.id;
@@ -375,6 +479,8 @@ apiRoutes.put('/task/:id', function(req, res, next) {
 		update.bigVisit = req.body.bigVisit;
 		update.machineTime = req.body.machineTime;
 		update.dirtyWork = req.body.dirtyWork;
+		update.overtime = req.body.overtime;
+		update.taskTypeId = req.body.taskTypeId;
 
 		console.log(foundTask);
 
@@ -410,19 +516,9 @@ apiRoutes.post('/tasks', function(req, res, next) {
 	current.userId = req.body.userId;
 	current.bigVisit = req.body.bigVisit;
 	current.dirtyWork = req.body.dirtyWork;
-
-	if(req.body.machineTime !== 0) {
-		var setMachineTime = new Date();
-		current.machineTime = req.body.machineTime;
-
-		var timeToAdd = 60 * req.body.machineTime;
-
-		current.endedAt = setMachineTime.setMinutes(setMachineTime.getMinutes() + timeToAdd);
-		current.hours = timeToAdd / 60;
-	
-	} else {
-		current.machineTime = req.body.machineTime;
-	}
+	current.machineTime = req.body.machineTime;
+	current.overtime = req.body.overtime;
+	current.taskTypeId = req.body.taskTypeId;
 
 	var newTask = new Task(current);
 
@@ -468,24 +564,135 @@ apiRoutes.delete('/task/:id', function(req, res, next) {
 // Get all tasks from every user.
 apiRoutes.post('/tasks/all', function(req, res, next) {
 
-	var criteria = { createdAt: {'$gte': req.body.startDate, '$lte': req.body.endDate}}
+	var criteria = {};
 
-	if(req.body.userId !== 0) {
-		criteria.userId = req.body.userId;
-	}
+	if(req.body.activeProjects == true) {
 
-	console.log(new Date(req.body.startDate));
-	console.log(new Date(req.body.endDate));
+		if(req.body.noTime == false) {
+		criteria.createdAt = {'$gte': req.body.startDate, '$lte': req.body.endDate};
+		}
 
-	Task.find(criteria)
+		if(req.body.userId != 0) {
+			criteria.userId = req.body.userId;
+		}
+
+		Status.findOne({name: "Pending"}, function(err, status) {
+			if(err) return next(err);
+
+			
+			Project.find({statusId: status._id}, function(error, projects) {
+				if(error) return next(error);
+
+				var activeIds = [];
+				
+				for(var i=0; i<projects.length; i++) {
+
+						activeIds.push(projects[i]._id)
+				}
+
+				Task.find(criteria)
+					.where('projectId')
+					.in(activeIds)
+					.populate('userId')
+					.populate('taskTypeId')
+					.populate('projectId')
+					.exec(function(e, results) {
+						if(e) return next(e);
+
+					res.json(results);
+				});
+
+			})
+
+			
+
+		})
+
+	} else {
+
+		if(req.body.noTime == false) {
+		criteria.createdAt = {'$gte': req.body.startDate, '$lte': req.body.endDate};
+		}
+
+		if(req.body.userId != 0) {
+			criteria.userId = req.body.userId;
+		}
+
+		if(req.body.projectId != 0 && req.body.activeProjects == false) {
+			criteria.projectId = req.body.projectId;
+		}
+
+		if(req.body.noTime == true && req.body.userId == 0 && req.body.projectId == 0) {
+			return next();
+		}
+
+		Task.find(criteria)
 		.populate('userId')
 		.populate('projectId')
+		.populate('taskTypeId')
 		.exec(function(error, results) {
 			if(error) return next(error);
 
 			res.json(results);
-	});
+		});
+	}
+
+	
+
+	
 });
+
+// Find last 5 tasks what belong to spesific user
+apiRoutes.get('/tasks/user/:id/limit/:limit', function(req, res, next) {
+	
+	User.findOne({_id: req.params.id}, function(err, user) {
+		if(err) return next(err);
+
+		if(!user) {
+			res.json({ success: false, message: "No user was not found!" })
+		} else {
+			Task.find({ userId: req.params.id })
+				.sort({createdAt: -1})
+				.limit(Number(req.params.limit))
+				.populate('userId')
+				.populate('projectId')
+				.exec(function(err, results) {
+					if(err) return next(err);
+
+					res.json(results);
+			});
+		}
+	})
+});
+
+apiRoutes.post('/tasks/user/:id/range',function(req, res, next){
+	console.log(req.body);
+	if(req.body.startDate != null && req.body.endDate != null) {
+		User.findOne({_id: req.params.id}, function(err, user) {
+
+			if(user) {
+				var criteria = {};
+				criteria.createdAt = {'$gte': req.body.startDate, '$lte': req.body.endDate};
+				Task.find(criteria)
+					.populate('projectId')
+					.exec(function(error, results) {
+						if(error, results) {
+							if(error) return next(error);
+
+							res.json(results);
+						}
+					})
+			} else {
+				res.send([]);
+			}
+		})
+	} else {
+		res.json({ success: "Failure", message: "You have to set the date range." })
+	}
+
+	
+});
+
 
 // Find tasks what belong to spesific user
 apiRoutes.get('/tasks/user/:id', function(req, res, next) {
@@ -520,12 +727,62 @@ apiRoutes.get('/task/:id', function(req, res, next) {
 		})
 });
 
+// TASKTYPES ROUTING
+
+// Find all tasktypes
+apiRoutes.get('/tasktypes', function(req, res, next) {
+	Tasktype.find({}, function(error, results) {
+		if(error) return next(error);
+
+		res.json(results);
+	})
+})
+
+// Create new tasktype
+apiRoutes.post('/tasktypes', function(req, res, next) {
+	Tasktype.findOne({name: req.body.name}, function(error, tasktype) {
+		if(error) return next(error);
+
+		if(tasktype) {
+			res.json({success: false, message: "Tasktype name already in use."})
+		} else {
+			var newTaskType = new Tasktype({
+				name: req.body.name
+			});
+
+			newTaskType.save(function(err) {
+				if(err) return next(err);
+
+				res.json({success: true, message: "New tasktype created succesfully!"});
+			})
+		}
+	})
+})
+
+apiRoutes.delete('/tasktypes/:id/delete', function(req, res, next) {
+	Task.findOne({taskTypeId: req.params.id}, function(err, task) {
+		if(err) return next(err);
+
+		if(task) {
+			res.json({success: false, message: "This tasktype is already associated with a task and it cannot be deleted."});
+		} else {
+			Tasktype.findByIdAndRemove(req.params.id, function(error, result) {
+				if(error) return next(error);
+
+				res.json({ success: true, message: "Tasktype has been deleted!" });
+			})
+		}
+	})
+})
+
+// Delete spesific tasktype
+
 // CSV EXPORT ROUTES
 apiRoutes.post('/export/tasks', function(req, res, next) {
 	json2csv(req.body.data, function(err, csv) {
 		if(err) return next(err);
 
-		fs.writeFile('./public/export.csv', csv, function(error) {
+		fs.writeFile('./public/export.csv', csv, 'ascii', function(error) {
 			if(error) return next(error);
 			res.send({success: true, message: 'Export is ready. Donwload it at http://localhost:3000/assets/export.csv.'});
 		});
