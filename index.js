@@ -7,6 +7,16 @@ var crypto = require('crypto');
 var password = require('./utils/password');
 var json2csv = require('json2csv');
 var fs = require('fs');
+var i18n = require('i18n');
+
+i18n.configure({
+	locales: ['fi_FI'],
+	directory: __dirname + '/locales',
+	defaultLocale: 'fi_FI',
+	extension: '.json'
+})
+
+app.use(i18n.init);
 
 var jwt = require('jsonwebtoken');
 var config = require('./config.js');
@@ -49,10 +59,10 @@ apiRoutes.post('/auth', function(req, res) {
 		name: req.body.name
 	}, function(err, user) {
 
-		if(err) return res.json({message: "Error!"});
+		if(err) return res.json({message: i18n.__('ERROR')});
 
 		if(!user) {
-			res.json({ success: false, message: 'Authentication failed. User not found!'});			
+			res.json({ success: false, message: i18n.__('AUTH_FAILED')});			
 		} else if(user) {
 
 			if(req.body.password != "" && req.body.password != null) {
@@ -62,7 +72,7 @@ apiRoutes.post('/auth', function(req, res) {
 
 				// check if password matches
 				if(user.password != encrypted) {
-					res.json({ success: false, message: 'Authentication failed. Wrong password!'});
+					res.json({ success: false, message: i18n.__('AUTH_FAILED_WRONG_PASS')});
 				} else {
 
 					// if user is found and password is correct, create token
@@ -72,7 +82,7 @@ apiRoutes.post('/auth', function(req, res) {
 
 					res.json({
 						success: true,
-						message: 'Enjoy your token!',
+						message: i18n.__('ENJOY_TOKEN'),
 						userid: user._id,
 						token: token,
 						admin: user.admin,
@@ -82,7 +92,7 @@ apiRoutes.post('/auth', function(req, res) {
 			} else {
 				res.json({
 						success: false,
-						message: 'Provide a password please'
+						message: i18n.__('PROVIDE_PASSWORD')
 					});
 			}
 		}
@@ -99,7 +109,7 @@ apiRoutes.post('/users', function(req, res) {
 		console.log(userData);
 		if(userData) {
 			res.json({ success: "Failure",
-			message: "Username is already in use." });
+			message:i18n.__('USERNAME_IN_USE') });
 		} else {
 
 			if(typeof req.body.name == 'string' && typeof req.body.password == 'string') {
@@ -114,14 +124,13 @@ apiRoutes.post('/users', function(req, res) {
 					if(err) {
 						res.json(err);
 					} else {
-						console.log('User succesfully created!');
 						res.json({ success: "Success" });
 					}
 				
 				});
 			} else {
 				res.json({success: "Failure",
-					message: "Aren't stirngs!"
+					message: i18n__('NO_STIRNGS')
 				});
 			}
 
@@ -142,7 +151,7 @@ apiRoutes.use(function(req, res, next) {
 		// verifies secret and checks exp
 		jwt.verify(token, app.get('superSecret'), function(err, decoded) {
 			if(err) {
-				return res.json({ success: false, message: 'Failed to authenticate token.'});
+				return res.json({ success: false, message: i18n.__('TOKEN_FAILED')});
 			} else {
 				// if everything is good, save to requestfor use in other routes
 				req.decode = decoded;
@@ -155,7 +164,7 @@ apiRoutes.use(function(req, res, next) {
 		// return an error
 		return res.status(403).send({
 			success: false,
-			message: 'No token found.'
+			message: i18n.__('TOKEN_MISSING')
 		});s
 	}
 });
@@ -186,7 +195,7 @@ apiRoutes.post('/customers', function(req, res, next) {
 
 		if(customer) {
 			res.json({ success: "Failure",
-			message: "Customer of this name has already been created." });
+			message: i18n.__('CUSTOMER_NAME_ALREADY_IN_USE') });
 		} else {
 			var newCustomer = new Customer({
 				name: req.body.name
@@ -195,7 +204,7 @@ apiRoutes.post('/customers', function(req, res, next) {
 			newCustomer.save(function(error) {
 				if(error) return error;
 
-				res.json({ success: "Success", message: "New customer was succesfully created!" });
+				res.json({ success: "Success", message: i18n.__('CUSTOMER_CREATED') });
 			})
 		}
 	});
@@ -206,12 +215,12 @@ apiRoutes.delete('./customer/:id/delete', function(req, res, next) {
 	Project.findOne({ customerId: req.params.id }, function(error, project) {
 		if(project) {
 			res.json({ success: "Failure",
-			message: "Customer is associated with a project already. It can not be deleted." });
+			message: i18n.__('CAN_NOT_DELETE_CUSTOMER') });
 		} else {
 			Customer.findByIdAndRemove(req.params.id, function(err) {
 				if(err) return next(err);
 
-				res.json({ success: "Success", message: "Customer has been deleted!" });
+				res.json({ success: "Success", message: i18n.__('CUSTOMER_DELETED') });
 			})
 		}
 	})
@@ -259,7 +268,7 @@ apiRoutes.post('/statuses', function(req, res, next) {
 
 		if(status) {
 			res.json({ success: "Failure",
-			message: "Status of this name has already been created." });
+			message: i18n.__('STATUS_ALREADY_IN_USE') });
 		} else {
 			var newStatus = new Status({
 				name: req.body.name
@@ -267,7 +276,7 @@ apiRoutes.post('/statuses', function(req, res, next) {
 			newStatus.save(function(err) {
 				if(err) return next(err);
 
-				res.json({ success: "Success", message: "New status was succesfully created!" });
+				res.json({ success: "Success", message: i18n.__('STATUS_CREATED') });
 			});
 		}
 	});
@@ -279,12 +288,12 @@ apiRoutes.delete('/statuses/:id', function(req, res, next) {
 
 		if(project) {
 
-			res.json({ success: false, message: "Status is already asscosiated with one project at least."})
+			res.json({ success: false, message: i18n.__('CAN_NOT_DELETE_STATUS')})
 		} else {
 			Status.findByIdAndRemove(req.params.id, function(err, result) {
 				if(err) return next(err);
 
-				res.json({ success: true, message: "Status was deleted!" });
+				res.json({ success: true, message: i18n.__('STATUS_DELETED') });
 			})
 		}
 	});
@@ -307,7 +316,7 @@ apiRoutes.post('/types', function(req, res, next) {
 		if(error) return next(error);
 
 		if(type) {
-			res.json({ success: false, message: "Type whit that name alreade exists." });
+			res.json({ success: false, message: i18n.__('TYPE_NAME_ALREADY_IN_USE') });
 		} else {
 			var newType = new Type({
 				name: req.body.name
@@ -316,7 +325,7 @@ apiRoutes.post('/types', function(req, res, next) {
 			newType.save(function(err) {
 				if(err) return next(err);
 
-				res.json({ success: true, message: "New type was created." })
+				res.json({ success: true, message: i18n.__('TYPE_CREATED') })
 
 			});
 		}
@@ -327,12 +336,12 @@ apiRoutes.post('/types', function(req, res, next) {
 apiRoutes.delete('/types/:id', function(req, res, next) {
 	Project.findOne({ typeId: req.params.id }, function(error, project) {
 		if(project) {
-			res.json({ success: false, message: "Type is associated with a project already." });
+			res.json({ success: false, message: i18n.__('CAN_NOT_DELETE_TYPE') });
 		} else {
 			Type.findByIdAndRemove(req.params.id, function(err, result) {
 				if(err) return next(err);
 
-				res.json({ success: true, message: "Type was deleted!" });
+				res.json({ success: true, message: i18n.__('TYPE_DELETED') });
 			})
 		}
 	})
@@ -370,7 +379,7 @@ apiRoutes.delete('/project/:id', function(req, res, next) {
 	Project.findByIdAndRemove(req.params.id, function(err, result) {
 				if(err) return next(err);
 
-				res.json({ success: true, message: "Project was deleted!" });
+				res.json({ success: true, message: i18n.__('PROJECT_DELETED') });
 			})
 
 })
@@ -401,7 +410,7 @@ apiRoutes.post('/projects', function(req, res, next){
 					if(err) return next(err);
 
 					if(project) {
-						res.json({ success: "Failure", message: "Project name is already in use." });
+						res.json({ success: "Failure", message: i18n.__('PROJECT_NAME_ALREADY_IN_USE') });
 					} else {
 						var newProject = new Project({
 							name: projectName,
@@ -411,18 +420,18 @@ apiRoutes.post('/projects', function(req, res, next){
 						newProject.save(function(err) {
 							if(err) return next(err);
 
-							res.json({ success: "Success", message: "Project was successfully created." });
+							res.json({ success: "Success", message: i18n.__('PROJECT_CREATED') });
 						});
 					}
 				});
 		} else {
-			res.json({ success: "Failure", message: "Invalid customer." });
+			res.json({ success: "Failure", message: i18n.__('INVALID_CUSTOMER') });
 		}
 	});
 
 
 	} else {
-		res.json({ success: "Failure", message: "Fill out all fields." });
+		res.json({ success: "Failure", message: i18n.__('FILL_ALL_FIELDS') });
 	}
 });
 
@@ -460,7 +469,7 @@ apiRoutes.delete('/users/:id', function(req, res, next) {
 	User.findByIdAndRemove(req.params.id, function(err, result) {
 		if(err) return next(err);
 
-		res.json({ success: "Success", message: "User was deleted!" });
+		res.json({ success: "Success", message: i18n.__('USER_DELETED') });
 	})
 });
 
@@ -510,15 +519,15 @@ apiRoutes.put('/task/:id/edit', function(req, res, next) {
 								})
 
 							} else {
-								res.json({ success: false, message: "Invalid tasktype!" });
+								res.json({ success: false, message: i18n.__('INVALID_TASKTYPE') });
 							}
 						})
 					} else {
-						res.json({ success: false, message: "Invalid user!" });
+						res.json({ success: false, message: i18n.__('INVALID_USER') });
 					}
 				})
 			} else {
-				res.json({ success: false, message: "Invalid project number!" });
+				res.json({ success: false, message: i18n.__('INVALID_PROJECT_NUMBER') });
 			}
 		})		
 	});
@@ -590,7 +599,7 @@ apiRoutes.post('/tasks', function(req, res, next) {
 								function(error, result) {
 								if(error) return next(error);
 
-								res.json({ success: true, message: "New task has been created and last active has been ended." });
+								res.json({ success: true, message: i18n.__('TASK_STARTED_AND_LAST_ONE_ENTED') });
 						});
 					};
 				});
@@ -599,7 +608,7 @@ apiRoutes.post('/tasks', function(req, res, next) {
 				newTask.save(function(err) {
 					if(err) return next(err);
 
-					res.json({ success: true, message: "New task has been created." })
+					res.json({ success: true, message: i18n.__('NEW_TASK_CREATED') })
 				});
 			}
 	});
@@ -610,7 +619,7 @@ apiRoutes.delete('/task/:id', function(req, res, next) {
 	Task.findByIdAndRemove(req.params.id, function(err, result) {
 		if(err) return next(err);
 
-		res.json({ success: true, message: "Task was deleted!" });
+		res.json({ success: true, message: i18n.__('TASK_DELETED') });
 	})
 });
 
@@ -702,7 +711,7 @@ apiRoutes.get('/tasks/user/:id/limit/:limit', function(req, res, next) {
 		if(err) return next(err);
 
 		if(!user) {
-			res.json({ success: false, message: "No user was not found!" })
+			res.json({ success: false, message: i18n.__('USER_NOT_FOUND') })
 		} else {
 			Task.find({ userId: req.params.id })
 				.sort({createdAt: -1})
@@ -740,7 +749,7 @@ apiRoutes.post('/tasks/user/:id/range',function(req, res, next){
 			}
 		})
 	} else {
-		res.json({ success: "Failure", message: "You have to set the date range." })
+		res.json({ success: "Failure", message: i18n.__('SET_DATA_RANGE') })
 	}
 
 	
@@ -754,7 +763,7 @@ apiRoutes.get('/tasks/user/:id', function(req, res, next) {
 		if(err) return next(err);
 
 		if(!user) {
-			res.json({ success: false, message: "No was not found!" })
+			res.json({ success: false, message: i18n.__('USER_NOT_FOUND') })
 		} else {
 			Task.find({ userId: req.params.id })
 				.populate('userId')
@@ -808,7 +817,7 @@ apiRoutes.post('/tasktypes', function(req, res, next) {
 		if(error) return next(error);
 
 		if(tasktype) {
-			res.json({success: false, message: "Tasktype name already in use."})
+			res.json({success: false, message: i18n.__('TASKTYPE_NAME_ALREADY_IN_USE') })
 		} else {
 			var newTaskType = new Tasktype({
 				name: req.body.name
@@ -817,7 +826,7 @@ apiRoutes.post('/tasktypes', function(req, res, next) {
 			newTaskType.save(function(err) {
 				if(err) return next(err);
 
-				res.json({success: true, message: "New tasktype created succesfully!"});
+				res.json({success: true, message: i18n.__('NEW_TASKTYPE_CREATED') });
 			})
 		}
 	})
@@ -828,12 +837,12 @@ apiRoutes.delete('/tasktypes/:id/delete', function(req, res, next) {
 		if(err) return next(err);
 
 		if(task) {
-			res.json({success: false, message: "This tasktype is already associated with a task and it cannot be deleted."});
+			res.json({success: false, message: i18n.__('CAN_NOT_DELETE_TASKTYPE')});
 		} else {
 			Tasktype.findByIdAndRemove(req.params.id, function(error, result) {
 				if(error) return next(error);
 
-				res.json({ success: true, message: "Tasktype has been deleted!" });
+				res.json({ success: true, message: i18n.__('TASKTYPE_DELETED') });
 			})
 		}
 	})
@@ -848,7 +857,7 @@ apiRoutes.post('/export/tasks', function(req, res, next) {
 
 		fs.writeFile('./public/export.csv', csv, 'ascii', function(error) {
 			if(error) return next(error);
-			res.send({success: true, message: 'Export is ready. Donwload it at http://localhost:3000/assets/export.csv.'});
+			res.send({success: true, message: i18n.__('DOWNLOAD_EXPORT') });
 		});
 	});
 });
