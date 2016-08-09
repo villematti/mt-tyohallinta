@@ -466,11 +466,22 @@ apiRoutes.get('/users', function(req, res, next) {
 });
 
 apiRoutes.delete('/users/:id', function(req, res, next) {
-	User.findByIdAndRemove(req.params.id, function(err, result) {
-		if(err) return next(err);
 
-		res.json({ success: "Success", message: i18n.__('USER_DELETED') });
+	Task.findOne( {userId: req.params.id}, function(error, task) {
+		if(error) return next(error);
+
+		if(task) {
+			res.json({ success: "Failure", message: i18n.__('CAN_NOT_DELETE_USER') });
+		} else {
+
+			User.findByIdAndRemove(req.params.id, function(err, result) {
+			if(err) return next(err);
+				res.json({ success: "Success", message: i18n.__('USER_DELETED') });
+			})
+		}
 	})
+
+	
 });
 
 // ROUTES FOR TASKS

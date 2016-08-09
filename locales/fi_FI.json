@@ -38,5 +38,6 @@
 	"NEW_TASKTYPE_CREATED": "Työvaihe luotu onnistuneesti.",
 	"CAN_NOT_DELETE_TASKTYPE": "Työvaihe on jo käytössä projektissa, joten sitä ei voi poistaa.",
 	"TASKTYPE_DELETED": "Työvaihe poistettu onnistuneesti.",
-	"DOWNLOAD_EXPORT": "Tuonti on valmis. Lataa tiedosto täältä: http://localhost:3000/assets/export.csv."
+	"DOWNLOAD_EXPORT": "Tuonti on valmis. Lataa tiedosto täältä: http://localhost:3000/assets/export.csv.",
+	"CAN_NOT_DELETE_USER": "Käyttäjä on jo tehnyt töitä eikä sitä voi poistaa."
 }
