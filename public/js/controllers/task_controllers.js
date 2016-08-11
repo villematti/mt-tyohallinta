@@ -105,7 +105,18 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 
 		$scope.exportReady = false;
 
-		var fields = ['Start Time', 'End Time', 'Hours', 'Project name', 'Tasktype', 'Username', 'Big Visit', 'Overtime', 'Dirty Work', 'Machine Time'];
+		var fields = [
+			'Aloitusaika',
+			'Lopetusaika', 
+			'Tunnit', 
+			'Projektin nimi', 
+			'Työvaihe', 
+			'Käyttäjä', 
+			'Isokäynti', 
+			'Ylityöt', 
+			'Likainen työ', 
+			'Yksinkäynti'
+		];
 
 		var fieldData = [];
 
@@ -115,29 +126,29 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 
 			if($scope.tasks[i].bigVisit) {
 				fieldData[i] = {
-					"Start Time": new Date($scope.tasks[i].createdAt).toLocaleString('fi-FI', timeOptions),
-					"End Time": new Date($scope.tasks[i].endedAt).toLocaleString('fi-FI', timeOptions),
-					"Hours": $scope.tasks[i].hours,
-					"Project name": $scope.tasks[i].projectId.name,
-					"Tasktype": $scope.tasks[i].taskTypeId.name,
-					"Username": $scope.tasks[i].userId.name,
-					"Big Visit": 1,
-					"Overtime": $scope.tasks[i].overtime,
-					"Dirty Work": $scope.tasks[i].dirtyWork,
-					"Machine Time": $scope.tasks[i].machineTime
+					"Aloitusaika": new Date($scope.tasks[i].createdAt).toLocaleString('fi-FI', timeOptions),
+					"Lopetusaika": new Date($scope.tasks[i].endedAt).toLocaleString('fi-FI', timeOptions),
+					"Tunnit": $scope.tasks[i].hours,
+					"Projektin nimi": $scope.tasks[i].projectId.name,
+					"Työvaihe": $scope.tasks[i].taskTypeId.name,
+					"Käyttäjä": $scope.tasks[i].userId.name,
+					"Isokäynti": 1,
+					"Ylityöt": $scope.tasks[i].overtime,
+					"Likainen työ": $scope.tasks[i].dirtyWork,
+					"Yksinkäynti": $scope.tasks[i].machineTime
 				}
 			} else {
 				fieldData[i] = {
-					"Start Time": new Date($scope.tasks[i].createdAt).toLocaleString('fi-FI', timeOptions),
-					"End Time": new Date($scope.tasks[i].endedAt).toLocaleString('fi-FI', timeOptions),
-					"Hours": $scope.tasks[i].hours,
-					"Project name": $scope.tasks[i].projectId.name,
-					"Tasktype": $scope.tasks[i].taskTypeId.name,
-					"Username": $scope.tasks[i].userId.name,
-					"Big Visit": 0,
-					"Overtime": $scope.tasks[i].overtime,
-					"Dirty Work": $scope.tasks[i].dirtyWork,
-					"Machine Time": $scope.tasks[i].machineTime
+					"Aloitusaika": new Date($scope.tasks[i].createdAt).toLocaleString('fi-FI', timeOptions),
+					"Lopetusaika": new Date($scope.tasks[i].endedAt).toLocaleString('fi-FI', timeOptions),
+					"Tunnit": $scope.tasks[i].hours,
+					"Projektin nimi": $scope.tasks[i].projectId.name,
+					"Työvaihe": $scope.tasks[i].taskTypeId.name,
+					"Käyttäjä": $scope.tasks[i].userId.name,
+					"Isokäynti": 0,
+					"Ylityöt": $scope.tasks[i].overtime,
+					"Likainen työ": $scope.tasks[i].dirtyWork,
+					"Yksinkäynti": $scope.tasks[i].machineTime
 				}
 			}
 		}
@@ -147,11 +158,13 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 			.success(function(result) {
 				if(result.success) {
 					$scope.exportReady = true;
+					$scope.exportMessage = result.message;
 				}
 			})
 	}
 
 	$scope.exportReady = false;
+	$scope.exportMessage = "";
 	
 }]);
 

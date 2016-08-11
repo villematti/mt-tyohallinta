@@ -2,7 +2,7 @@
 <h2>{{ 'DASHBOARD_WELCOME' | translate }}</h2>
 <h3>{{ 'START_WORKING' | translate }}</h3>
 	<div class="form-group">
-		<label>Select a project:</label>
+		<label>{{ 'SELECT_PROJECT' | translate }}:</label>
 		<select class="form-control" ng-model="selectedProject">
 			<option ng-if="project.statusId.name !== 'Done'" ng-repeat="project in 	allProjects" value="{{ project._id }}">{{ project.name }}</option>
 		</select>

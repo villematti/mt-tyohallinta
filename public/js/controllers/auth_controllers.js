@@ -27,6 +27,12 @@ theApp.controller('authController', ['$scope', 'store', '$location', '$http', '$
 		});
 	}
 
+	$scope.onKeyUp = function(value) {
+		if(value.keyCode == 13) {
+			$scope.login();
+		}
+	}
+
 	$scope.$watch(function(newValue, oldValue) {
 		if($location.path() === '/auth/logout') {
 		store.remove('token');

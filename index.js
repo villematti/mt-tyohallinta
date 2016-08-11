@@ -868,7 +868,7 @@ apiRoutes.post('/export/tasks', function(req, res, next) {
 
 		fs.writeFile('./public/export.csv', csv, 'ascii', function(error) {
 			if(error) return next(error);
-			res.send({success: true, message: i18n.__('DOWNLOAD_EXPORT') });
+			res.send({success: true, message: i18n.__('DOWNLOAD_REPORT_AT') });
 		});
 	});
 });

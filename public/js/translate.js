@@ -74,7 +74,9 @@ theApp.config(function($translateProvider) {
         TASK_ENDED: 'Lopetettu',
         SEARCH_TASKS_WITH_DATE_RANGE: 'Etsi menneitä tehtäviä päivämäärähaarukan mukaan.',
         DASHBOARD_WELCOME: 'Tervetuloa hallintapaneliin',
-        USER: 'Käyttäjä'
+        USER: 'Käyttäjä',
+        SELECT_PROJECT: 'Valitse projekti',
+        DOWNLOAD_RAPORT_AT: 'Tuonti on valmis. Lataa tiedosto täältä:'
 
 
     });

@@ -2,10 +2,10 @@
 <div class="alert alert-danger" ng-hide="errorMessage == ''">{{ errorMessage }}</div>
 <p>
 <label>{{ 'USERNAME' | translate }}:</label>
-<input class="form-control" type="text" ng-model="username" />
+<input ng-keyup="onKeyUp($event)" class="form-control" type="text" ng-model="username" />
 </p>
 <p>
 <label>{{ 'PASSWORD' | translate }}:</label>
-<input class="form-control" type="password" ng-model="password" />
+<input ng-keyup="onKeyUp($event)" class="form-control" type="password" ng-model="password" />
 </p>
 <button class="btn btn-primary" ng-click="login()">{{ 'LOGIN' | translate }}</button>
