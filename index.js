@@ -86,6 +86,7 @@ apiRoutes.post('/auth', function(req, res) {
 						userid: user._id,
 						token: token,
 						admin: user.admin,
+						pm: user.projectManager,
 						username: user.name
 					});
 				}
@@ -117,7 +118,8 @@ apiRoutes.post('/users', function(req, res) {
 				var newUser = new User({
 					name: req.body.name,
 					password: password.hashPwd(req.body.password),
-					admin: req.body.admin
+					admin: req.body.admin,
+					projectManager: req.body.pm
 				});
 
 				newUser.save(function(err) {

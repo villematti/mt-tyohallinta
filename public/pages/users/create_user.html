@@ -20,5 +20,9 @@
 		<input type="checkbox" ng-model="admin" />
 	</div>
 	<div class="form-group">
+		<label>{{ 'IS_PM' | translate }}</label>
+		<input type="checkbox" ng-model="pm" />
+	</div>
+	<div class="form-group">
 		<input type="button" value="Create new" ng-click="createNewUser()" ng-disabled="repeat !== password || password === '' || username.length < 5" class="btn btn-primary" />
 	</div>

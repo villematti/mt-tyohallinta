@@ -21,5 +21,9 @@ theApp.service('AuthService', function(store) {
 		return store.get('admin');
 	}
 
+	authVariables.isPm = function() {
+		return store.get('pm');
+	}
+
 	return authVariables;
 })

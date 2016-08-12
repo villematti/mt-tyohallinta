@@ -14,5 +14,9 @@ module.exports = mongoose.model('User', new Schema({
 	admin: {
 		type: Boolean,
 		required: true
+	},
+	projectManager: {
+		type: Boolean,
+		required: true
 	}
 }));

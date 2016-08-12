@@ -243,11 +243,8 @@ theApp.controller('showTaskController', ['$scope', '$http', '$log', 'store', '$r
 			values.overtime = +$scope.task.overtime;
 			values.machineTime = +$scope.task.machineTime;
 
-			console.log(values);
-
 			$http.put('/api/task/' + task._id + '/edit', {values})
 				.success(function(result) {
-					console.log(result);
 					$location.path('/tasks');
 				})
 		}

@@ -24,6 +24,7 @@ theApp.controller('userController', ['$scope', '$log', '$http', '$routeParams', 
 	$scope.password = '';
 	$scope.repeat = '';
 	$scope.admin = false;
+	$scope.pm = false;
 
 	// Error message for creating user
 	$scope.usercreationerror = '';
@@ -33,7 +34,9 @@ theApp.controller('userController', ['$scope', '$log', '$http', '$routeParams', 
 		$http.post('/api/users', {
 			name: $scope.username,
 			password: $scope.password,
-			admin: $scope.admin})
+			admin: $scope.admin,
+			pm: $scope.pm
+		})
 		.success(function(result) {
 			$log.info(result);
 			if(result.success === "Failure") {

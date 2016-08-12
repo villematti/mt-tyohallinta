@@ -7,10 +7,10 @@
 
 				<ul ng-if="token.isAuthenticated()" class="nav navbar-nav navbar-right">
 					<li><a href="#/dashboard">{{ 'HOME' | translate}}</a></li>
-					<li ng-if="token.isAdmin()"><a href="#/projects">{{ 'PROJECTS_TITLE' | translate}}</a></li>
+					<li ng-if="token.isAdmin() || token.isPm()"><a href="#/projects">{{ 'PROJECTS_TITLE' | translate}}</a></li>
 					<li ng-if="token.isAdmin()"><a href="#/tasks">{{ 'TASKS_TITLE' | translate}}</a></li>
 					<li ng-if="token.isAdmin()"><a href="#/users">{{ 'USERS_TITLE' | translate}}</a></li>
-					<li ng-if="token.isAdmin()"><a href="#/customers">{{ 'CUSTOMERS_TITLE' | translate}}</a></li>
+					<li ng-if="token.isAdmin() || token.isPm()"><a href="#/customers">{{ 'CUSTOMERS_TITLE' | translate}}</a></li>
 					<li ng-if="token.isAdmin()"><a href="#/settings">{{ 'SETTINGS_TITLE' | translate}}</a></li>
 					<li><a href="#/auth/logout">{{ 'LOGOUT' | translate }}</a></li>
 				</ul>

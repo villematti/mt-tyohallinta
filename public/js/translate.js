@@ -63,6 +63,7 @@ theApp.config(function($translateProvider) {
         REPEAT_PASSWORD: 'Toista salasana',
         PASSWORD_DOES_NOT_MACH: 'Salasanat eivät täsmää.',
         IS_ADMIN: 'Järjestelmävalvoja?',
+        IS_PM: 'Projektinhallinta?',
         USER_ID: 'Käyttäjänumero',
         DELETE_USER: 'Poista käyttäjä',
         START_TASK: 'Aloita työ',
