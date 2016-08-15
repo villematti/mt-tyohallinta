@@ -1,13 +1,24 @@
 theApp.controller('authController', ['$scope', 'store', '$location', '$http', '$log',
 		function($scope, store, $location, $http, $log) {
 
-	$scope.username = '';
+	$scope.usernames = '';
+
+	function getAllUsernames() {
+		$http.get('/api/usernames')
+			.success(function(result) {
+				$scope.usernames = result;
+			})
+	}
+
+	getAllUsernames();
+
+	$scope.username = { value: $scope.usernames[0] };
 	$scope.password = '';
 
 	$scope.errorMessage = '';
 	
 	$scope.login = function() {
-		var username = $scope.username;
+		var username = $scope.username.value;
 		$http.post('/api/auth', {
 			name: username,
 			password: $scope.password

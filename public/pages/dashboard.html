@@ -2,10 +2,18 @@
 <h2>{{ 'DASHBOARD_WELCOME' | translate }}</h2>
 <h3>{{ 'START_WORKING' | translate }}</h3>
 	<div class="form-group">
-		<label>{{ 'SELECT_PROJECT' | translate }}:</label>
-		<select class="form-control" ng-model="selectedProject">
-			<option ng-if="project.statusId.name !== 'Done'" ng-repeat="project in 	allProjects" value="{{ project._id }}">{{ project.name }}</option>
-		</select>
+		<label>{{ 'SELECT_PROJECT' | translate }}</label>
+		
+	<ui-select theme="bootstrap" reset-search-input="true" ng-model="selectedProject.value">
+    	<ui-select-match>
+        	<span ng-bind="$select.selected.name"></span>
+    	</ui-select-match>
+    	<ui-select-choices repeat="project in (allProjects | filter: $select.search) track by project._id">
+        	<span ng-bind="project.name"></span>
+    	</ui-select-choices>
+	</ui-select>
+
+
 	</div>
 	<div class="form-inline">
 		<div class="form-group">

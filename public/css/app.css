@@ -22,6 +22,11 @@ a.list-group-item {
   color: #555 !important;
 }
 
+
+.ui-select-bootstrap .ui-select-choices-row.active a {
+  color: #FFF !important;
+}
+
 a {
   color: #337ab7 !important;
 }
@@ -33,3 +38,6 @@ table th {
 table td a {
   color: #fff !important;
 }
+
+
+

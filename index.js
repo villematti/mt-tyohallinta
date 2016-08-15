@@ -51,6 +51,16 @@ app.use(cors());
 // Protect API routes
 var apiRoutes = express.Router();
 
+apiRoutes.get('/usernames', function(req, res) {
+	var usernames = [];
+	User.find({}, function(err, users) {
+		users.map(function(user) {
+			usernames.push(user.name);
+		})
+		res.send(usernames);
+	})
+})
+
 apiRoutes.post('/auth', function(req, res) {
 
 	req.setEncoding('utf8');
@@ -72,7 +82,7 @@ apiRoutes.post('/auth', function(req, res) {
 
 				// check if password matches
 				if(user.password != encrypted) {
-					res.json({ success: false, message: i18n.__('AUTH_FAILED_WRONG_PASS')});
+					res.json({ success: false, message: i18n.__('AUTH_FAILED_WRONG_PASSWORD')});
 				} else {
 
 					// if user is found and password is correct, create token

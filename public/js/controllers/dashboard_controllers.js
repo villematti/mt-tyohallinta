@@ -7,7 +7,7 @@ theApp.controller('dashboardController', ['$scope', '$http', '$log', 'store', '$
 
 	// Values for new task
 	$scope.bigVisit = false;
-	$scope.selectedProject = '';
+	$scope.selectedProject = { value: $scope.allProjects[0] };
 	$scope.taskValues = {};
 
 	// Value for tasktypes
@@ -39,14 +39,13 @@ theApp.controller('dashboardController', ['$scope', '$http', '$log', 'store', '$
 		var setup = {};
 
 		setup.userId = store.get('userid');
-		setup.projectId = $scope.selectedProject;
+		setup.projectId = $scope.selectedProject.value._id;
 		setup.bigVisit = $scope.bigVisit;
 		setup.taskTypeId = $scope.selectedTaskType;
 
 		$http.post('/api/tasks', setup)
 			.success(function(result) {
 				$scope.selectedTaskType = '';
-				$scope.selectedProject = '';
 				$scope.bigVisit = false;
 				$scope.machineTime = 0;
 				$scope.overtime = 0;

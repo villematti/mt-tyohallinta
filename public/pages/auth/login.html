@@ -1,11 +1,19 @@
 <h3>{{ LOGIN_TITLE | translate }}</h3>
 <div class="alert alert-danger" ng-hide="errorMessage == ''">{{ errorMessage }}</div>
+
 <p>
-<label>{{ 'USERNAME' | translate }}:</label>
-<input ng-keyup="onKeyUp($event)" class="form-control" type="text" ng-model="username" />
+	<label>{{ 'USERNAME' | translate }}:</label>
+	<ui-select theme="bootstrap" reset-search-input="true" ng-model="username.value">
+    	<ui-select-match>
+        	<span ng-bind="$select.selected"></span>
+    	</ui-select-match>
+    	<ui-select-choices repeat="user in (usernames | filter: $select.search) track by user">
+        	<span ng-bind="user"></span>
+    	</ui-select-choices>
+	</ui-select>
 </p>
 <p>
-<label>{{ 'PASSWORD' | translate }}:</label>
-<input ng-keyup="onKeyUp($event)" class="form-control" type="password" ng-model="password" />
+	<label>{{ 'PASSWORD' | translate }}:</label>
+	<input ng-keyup="onKeyUp($event)" class="form-control" type="password" ng-model="password" />
 </p>
 <button class="btn btn-primary" ng-click="login()">{{ 'LOGIN' | translate }}</button>
