@@ -482,8 +482,6 @@ apiRoutes.get('/users', function(req, res, next) {
 	});
 });
 
-
-
 apiRoutes.get('/users/:id', function(req, res, next) {
 	var userId = req.params.id;
 	User.findOne({_id: userId}, function(err, result) {
@@ -493,13 +491,18 @@ apiRoutes.get('/users/:id', function(req, res, next) {
 	});
 });
 
-apiRoutes.get('/users', function(req, res, next) {
-	User.find({}, function(err, results) {
+apiRoutes.put('/user/:id', function(req, res, next) {
+	var userId = req.params.id;
+	User.findOne({_id: userId}, function(err, user) {
 		if(err) return next(err);
 
-		res.json(results);
+		if(user) {
+			// UPDATE USER INFO HERE!
+		} else {
+			res.json({success: false, message: "User not found!"});
+		}
 	})
-});
+})
 
 apiRoutes.delete('/users/:id', function(req, res, next) {
 
