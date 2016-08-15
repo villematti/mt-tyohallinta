@@ -77,7 +77,9 @@ theApp.config(function($translateProvider) {
         DASHBOARD_WELCOME: 'Tervetuloa hallintapaneliin',
         USER: 'Käyttäjä',
         SELECT_PROJECT: 'Valitse projekti',
-        DOWNLOAD_RAPORT_AT: 'Tuonti on valmis. Lataa tiedosto täältä:'
+        DOWNLOAD_RAPORT_AT: 'Tuonti on valmis. Lataa tiedosto täältä:',
+        SHOW_ALL_PROJECTS: 'Näytä kaikki',
+        SHOW_ACTIVE_PROJECTS: 'Näytä aktiiviset'
 
 
     });

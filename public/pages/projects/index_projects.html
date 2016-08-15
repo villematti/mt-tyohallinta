@@ -1,6 +1,8 @@
 <div class="col-md-6 col-md-offset-3">
 	<h3>{{ 'PROJECTS_TITLE' | translate }}</h3>
 	<a class="btn btn-primary" href="#/projects/create">{{ 'NEW_PROJECT_TITLE' | translate }}</a>
+	<button ng-click="getActiveProjects()" class="btn btn-warning">{{ 'SHOW_ACTIVE_PROJECTS' | translate }}</button>
+	<button ng-click="getAllProjects()" class="btn btn-danger">{{ 'SHOW_ALL_PROJECTS' | translate }}</button>
 	<hr />
 	<ul class="list-group" dir-paginate="project in projects | orderBy: 'modifiedAt':true | itemsPerPage: 10">
 		<a href="#/projects/{{ project._id }}" class="list-group-item">

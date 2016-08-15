@@ -351,6 +351,30 @@ apiRoutes.delete('/types/:id', function(req, res, next) {
 
 // ROUTES FOR PROJECTS
 
+// Get active projects
+apiRoutes.get('/projects/active', function(req, res, next) {
+	Status.find({}, function(err, statuses) {
+		var projects = [];
+		if(statuses) {
+			statuses.map(function(status) {
+				if(status.name == 'Pending') {
+
+					Project.find({statusId: status._id})
+						.populate('statusId')
+						.exec(function(error, results) {
+							if(error) return next(error);
+
+							console.log(results);
+							res.json(results);
+					});
+				}
+			});
+		}
+	})
+
+	
+});
+
 // Get all projects
 apiRoutes.get('/projects', function(req, res, next) {
 	Project.find({})

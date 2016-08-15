@@ -3,15 +3,24 @@ theApp.controller('projectController', ['$scope', '$http', '$log', '$location', 
 
 	$scope.projects = [];
 
-	function getProjects() {
-		$http.get('/api/projects')
+	$scope.getAllProjects = function() {
+		if(confirm('Oletko varma? Tämä kuormittaa tietokantaa erittäin paljon.')) {
+			$http.get('/api/projects')
 			.success(function(result) {
-				$log.info(result);
 				$scope.projects = result;
 			})
+		}
 	}
 
-	getProjects();
+	$scope.getActiveProjects = function() {
+		if(confirm('Oletko varma? Tämä kuormittaa tietokantaa jonkin verran.')) {
+			$http.get('/api/projects/active')
+			.success(function(result) {
+				$scope.projects = result
+			})
+		}
+	}
+
 }]);
 
 theApp.controller('showProjectController', ['$scope', '$http', '$log', '$location', '$routeParams', 
