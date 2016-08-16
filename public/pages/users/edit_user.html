@@ -1,0 +1,22 @@
+<div class="col-md-6 col-md-offset-3">
+	<h3>{{ 'EDIT_USER_TITLE' | translate }}: {{ currentuser.username }}</h3>
+	<div class="form-group">
+		<label>{{ 'NEW_PASSWORD' | translate }}:</label>
+		<input class="form-control" type="password" ng-model="currentuser.new_password" />
+	</div>
+	<div class="form-group">
+		<label>{{ 'REPEAT_NEW_PASSWORD' | translate }}:</label>
+		<input class="form-control" type="password" ng-model="currentuser.new_password_repeat" />
+		<div class="alert alert-warning" ng-show="currentuser.new_password !== currentuser.new_password_repeat">{{ 'PASSWORD_DOES_NOT_MACH' | translate }}</div>
+	</div>
+	<div class="form-group">
+		<label>{{ 'IS_ADMIN' | translate }}</label>
+		<input type="checkbox" ng-model="currentuser.admin" />
+	</div>
+	<div class="form-group">
+		<label>{{ 'IS_PM' | translate }}</label>
+		<input type="checkbox" ng-model="currentuser.pm" />
+	</div>
+	<div class="form-group">
+		<input type="button" value="Update user" ng-click="updateUser()" ng-disabled="currentuser.new_password !== '' && currentuser.new_password !== currentuser.new_password_repeat" class="btn btn-primary" />
+	</div>

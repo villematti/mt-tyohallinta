@@ -165,7 +165,7 @@ apiRoutes.use(function(req, res, next) {
 			if(err) {
 				return res.json({ success: false, message: i18n.__('TOKEN_FAILED')});
 			} else {
-				// if everything is good, save to requestfor use in other routes
+				// if everything is good, save to request for use in other routes
 				req.decode = decoded;
 				next();
 			}
@@ -492,16 +492,42 @@ apiRoutes.get('/users/:id', function(req, res, next) {
 });
 
 apiRoutes.put('/user/:id', function(req, res, next) {
-	var userId = req.params.id;
-	User.findOne({_id: userId}, function(err, user) {
-		if(err) return next(err);
+	console.log(req.body);
+	if(req.decode._doc.admin == true) {
+		var userId = req.params.id;
+		User.findOne({_id: userId}, function(err, user) {
+			if(err) return next(err);
 
-		if(user) {
-			// UPDATE USER INFO HERE!
-		} else {
-			res.json({success: false, message: "User not found!"});
-		}
-	})
+			if(user) {
+				// UPDATE USER INFO HERE!
+				var pwd = req.body.password;
+				if(pwd != undefined) {
+					user.password = password.hashPwd(pwd);
+				}
+				
+				if(req.body.admin != undefined) {
+					user.admin = req.body.admin;
+				} else {
+					user.admin = false;
+				}
+
+				if(req.body.pm != undefined) {
+					user.projectManager = req.body.pm;
+				} else {
+					user.projectManager = false;
+				}
+				user.save(function(result) {
+					res.json(result);
+				})
+
+			} else {
+				res.json({success: false, message: "User not found!"});
+			}
+		})
+	} else {
+		res.json({success: false, message: "Only admin can edit userinfo!"});
+	}
+	
 })
 
 apiRoutes.delete('/users/:id', function(req, res, next) {

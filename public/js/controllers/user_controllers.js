@@ -92,4 +92,54 @@ theApp.controller('showUserController', ['$scope', '$log', '$http', '$routeParam
 			})
 	}
 
+	$scope.editUser = function() {
+		$location.path('/users/' + $routeParams.id + '/edit')
+	}
+
 }]);
+
+theApp.controller('editUserController', ['$scope', '$log', '$http', '$routeParams', '$location', 'store',
+	function($scope, $log, $http, $routeParams, $location, store) {
+
+	$scope.currentuser = {};
+
+	var userinfo = function() {
+		$http.get('/api/users/' + $routeParams.id)
+			.success(function(result) {
+				console.log(result);
+				$scope.currentuser.username = result.name;
+				$scope.currentuser.admin = result.admin;
+				$scope.currentuser.pm = result.projectManager;
+		})
+		.error(function(data, code) {
+			$log.error(data);
+		});
+	}
+
+	$scope.updateUser = function() {
+
+		if($scope.currentuser.admin == undefined) {
+			$scope.currentuser.admin = false;
+		}
+
+		if($scope.currentuser.pm == undefined) {
+			$scope.currentuser.pm = false;
+		}
+
+
+		$http.put('/api/user/' + $routeParams.id, {
+			name: $scope.currentuser.username,
+			password: $scope.currentuser.new_password,
+			admin: $scope.currentuser.admin,
+			pm: $scope.currentuser.pm
+		})
+		.success(function(result) {
+			console.log(result);
+			$location.path('/users/' + $routeParams.id);
+		})
+	}
+
+
+	userinfo();
+
+}])

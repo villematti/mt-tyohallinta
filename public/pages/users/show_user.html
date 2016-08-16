@@ -3,6 +3,7 @@
 <p><label>{{ 'USERNAME' | translate }}: </label>{{ currentuser.name }}</p>
 <p><label>{{ 'IS_ADMIN' | translate }}: </label>{{ currentuser.admin }}</p>
 <p><label>{{ 'IS_PM' | translate }}: </label>{{ currentuser.projectManager }}</p>
-<p><button ng-click="deleteUser(currentuser._id)" class="btn btn-warning">{{ 'DELETE_USER' | translate }}</button></p>
+<p><button ng-click="deleteUser(currentuser._id)" class="btn btn-warning">{{ 'DELETE_USER' | translate }}</button>
+<button ng-click="editUser(currentuser)" class="btn btn-danger">{{ 'EDIT_USER' | translate }}</button></p>
 </div>
 

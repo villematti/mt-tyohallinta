@@ -42,6 +42,17 @@ theApp.config(function($routeProvider, $httpProvider, paginationTemplateProvider
             }
 		})
 
+		.when('/users/:id/edit', {
+			templateUrl: 'assets/pages/users/edit_user.html',
+			controller: 'editUserController',
+			resolve : {
+                //This function is injected with the AuthService where you'll put your authentication logic
+                'auth' : function(Authenticate){
+                    return Authenticate.authenticate();
+                }
+            }
+		})
+
 		.when('/users/:id', {
 			templateUrl: 'assets/pages/users/show_user.html',
 			controller: 'showUserController',
