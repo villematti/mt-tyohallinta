@@ -84,7 +84,8 @@ theApp.config(function($translateProvider) {
         EDIT_USER: 'Muokkaa käyttäjää',
         CREATE_USER: 'Luo uusi käyttäjä',
         NEW_PASSWORD: 'Uusi salasana',
-        REPEAT_NEW_PASSWORD: 'Toista uusi salasana'
+        REPEAT_NEW_PASSWORD: 'Toista uusi salasana',
+        TASKTYPE_REQUIRED: 'Valitse työvaihe!'
 
 
     });

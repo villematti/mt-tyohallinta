@@ -3,6 +3,7 @@
 <h3>{{ 'START_WORKING' | translate }}</h3>
 	<div class="form-group">
 		<label>{{ 'SELECT_PROJECT' | translate }}</label>
+		<div class="alert alert-danger" ng-if="startTaskErrorMessage !== ''">{{ startTaskErrorMessage }}</div>
 		
 	<ui-select theme="bootstrap" reset-search-input="true" ng-model="selectedProject.value">
     	<ui-select-match>
@@ -109,7 +110,7 @@
 		<tr ng-repeat="task in tasksOnRange">
 			<td>{{ task.createdAt | date: "dd-MM HH:mm" }}</td>
 			<td>{{ task.endedAt | date: "dd-MM HH:mm" }}</td>
-			<td>{{ task.hours | number: 1 }} h</td>
+			<td>{{ task.hours | number: 2 }} h</td>
 			<td>{{ task.projectId.name }}</td>
 			<td>
 				<input ng-disabled="true" ng-if="!task.bigVisit" type="checkbox" />
@@ -122,7 +123,7 @@
 		<tr>
 			<td></td>
 			<td></td>
-			<td><b>{{ 'TOTAL' | translate }}: {{ totalHours | number: 1 }}h</b></td>
+			<td><b>{{ 'TOTAL' | translate }}: {{ totalHours | number: 2 }}h</b></td>
 			<td></td>
 			<td></td>
 			<td></td>

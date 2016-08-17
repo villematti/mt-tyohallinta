@@ -40,5 +40,6 @@
 	"TASKTYPE_DELETED": "Työvaihe poistettu onnistuneesti.",
 	"DOWNLOAD_REPORT_AT": "Tuonti on valmis. Lataa tiedosto täältä: <a href='http://localhost:3000/assets/export.csv'>http://localhost:3000/assets/export.csv</a>.",
 	"CAN_NOT_DELETE_USER": "Käyttäjä on jo tehnyt töitä eikä sitä voi poistaa.",
-	"AUTH_FAILED_WRONG_PASS": "AUTH_FAILED_WRONG_PASS"
+	"CAN_NOT_DELETE_PROJECT": "Projektille on jo merkattu töitä, joten sitä ei voi poistaa.",
+	"TASKTYPE_REQUIRED": "Työvaihe on pakollinen!"
 }

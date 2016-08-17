@@ -177,7 +177,7 @@ apiRoutes.use(function(req, res, next) {
 		return res.status(403).send({
 			success: false,
 			message: i18n.__('TOKEN_MISSING')
-		});s
+		});
 	}
 });
 
@@ -412,11 +412,21 @@ apiRoutes.put('/projects/:id', function(req, res, next) {
 
 // Deleter spesific project
 apiRoutes.delete('/project/:id', function(req, res, next) {
-	Project.findByIdAndRemove(req.params.id, function(err, result) {
+	Task.findOne({ projectId: req.params.id }, function(error, task) {
+		if(error) return next(error);
+
+		if(task) {
+			res.json({ success: false, message: i18n.__('CAN_NOT_DELETE_PROJECT') });
+		} else {
+
+			Project.findByIdAndRemove(req.params.id, function(err, result) {
 				if(err) return next(err);
 
 				res.json({ success: true, message: i18n.__('PROJECT_DELETED') });
-			})
+			})	
+		}
+	})
+	
 
 })
 
@@ -611,7 +621,7 @@ apiRoutes.put('/task/:id/edit', function(req, res, next) {
 
 // Update spesific task
 apiRoutes.put('/task/:id', function(req, res, next) {
-	console.log(req.body);
+
 	var update = {};
 
 	Task.findOne({ _id: req.params.id}, function(err, foundTask) {
@@ -634,8 +644,6 @@ apiRoutes.put('/task/:id', function(req, res, next) {
 			foundTask.hours = hours;
 		}
 
-		console.log(foundTask);
-
 		foundTask.save(function(result) {
 			res.json(result);
 		})
@@ -647,9 +655,9 @@ apiRoutes.put('/task/:id', function(req, res, next) {
 
 // Add new task
 apiRoutes.post('/tasks', function(req, res, next) {
-	console.log(req.body);
 	var current = {};
 
+	current.taskTypeId = req.body.taskTypeId;
 	current.projectId = req.body.projectId;
 	current.userId = req.body.userId;
 	current.bigVisit = req.body.bigVisit;
@@ -658,36 +666,45 @@ apiRoutes.post('/tasks', function(req, res, next) {
 	current.overtime = req.body.overtime;
 	current.taskTypeId = req.body.taskTypeId;
 
-	var newTask = new Task(current);
+	if(current.taskTypeId !== '') {
+		console.log('Its not an empty string');
+		var newTask = new Task(current);
 
-	Task.findOne({userId: req.body.userId, endedAt: null}, function(error, task) {
-			if(task) {
-				newTask.save(function(err) {
-					if(err) {
-						return next(err);
-					} else {
+		Task.findOne({userId: req.body.userId, endedAt: null}, function(error, task) {
+				if(task) {
+					newTask.save(function(err) {
+						if(err) {
+							return next(err);
 
-						var startTime = Date.parse(task.createdAt);
-						var elapsetTime = Date.now() - startTime;
-						var hours = (((elapsetTime / 1000) / 60) / 60);
-						Task.update({_id: task._id,}, {
-							$set: {endedAt: Date.now(), hours: hours}},
-								function(error, result) {
-								if(error) return next(error);
+						} else {
 
-								res.json({ success: true, message: i18n.__('TASK_STARTED_AND_LAST_ONE_ENTED') });
-						});
-					};
-				});
+							var startTime = Date.parse(task.createdAt);
+							var elapsetTime = Date.now() - startTime;
+							var hours = (((elapsetTime / 1000) / 60) / 60);
+							Task.update({_id: task._id,}, {
+								$set: {endedAt: Date.now(), hours: hours}},
+									function(error, result) {
+									if(error) return next(error);
 
-			} else {
-				newTask.save(function(err) {
-					if(err) return next(err);
+									res.json({ success: true, message: i18n.__('TASK_STARTED_AND_LAST_ONE_ENTED') });
+							});
+						};
+					});
 
-					res.json({ success: true, message: i18n.__('NEW_TASK_CREATED') })
-				});
-			}
-	});
+				} else {
+					newTask.save(function(err) {
+						if(err) return next(err);
+
+						res.json({ success: true, message: i18n.__('NEW_TASK_CREATED') })
+					});
+				}
+		});
+	} else {
+		console.log('It IS an empty string');
+		res.json({ success: false, message: i18n.__('TASKTYPE_REQUIRED') });
+	}
+			
+	
 });
 
 // Delete spesific task

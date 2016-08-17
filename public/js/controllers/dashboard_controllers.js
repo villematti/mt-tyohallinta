@@ -14,6 +14,8 @@ theApp.controller('dashboardController', ['$scope', '$http', '$log', 'store', '$
 	$scope.taskTypes = {};
 	$scope.selectedTaskType = '';
 
+	$scope.startTaskErrorMessage = '';
+
 	function getAllProjects() {
 		$http.get('/api/projects')
 			.success(function(results) {
@@ -45,11 +47,17 @@ theApp.controller('dashboardController', ['$scope', '$http', '$log', 'store', '$
 
 		$http.post('/api/tasks', setup)
 			.success(function(result) {
-				$scope.selectedTaskType = '';
-				$scope.bigVisit = false;
-				$scope.machineTime = 0;
-				$scope.overtime = 0;
-				getUsersTasks();
+				if(result.success) {
+					$scope.selectedTaskType = '';
+					$scope.bigVisit = false;
+					$scope.machineTime = 0;
+					$scope.overtime = 0;
+					$scope.startTaskErrorMessage = '';
+					getUsersTasks();
+				} else {
+					$scope.startTaskErrorMessage = result.message;
+				}
+				
 			})
 	}
 
