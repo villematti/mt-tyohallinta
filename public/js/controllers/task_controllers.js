@@ -223,11 +223,16 @@ theApp.controller('showTaskController', ['$scope', '$http', '$log', 'store', '$r
 			$http.delete('/api/task/' + taskId)
 			.success(function(result) {
 				if(result.success === true) {
+					$scope.editTaskErrorMessage = '';
 					$location.path('/tasks');
+				} else {
+					$scope.editTaskErrorMessage = result.message;
 				}
 			});
 		}
 	}
+
+	$scope.editTaskErrorMessage = '';
 
 	$scope.editTask = function(task) {
 		if(confirm('Oletko varma?')) {
@@ -245,7 +250,12 @@ theApp.controller('showTaskController', ['$scope', '$http', '$log', 'store', '$r
 
 			$http.put('/api/task/' + task._id + '/edit', {values})
 				.success(function(result) {
-					$location.path('/tasks');
+					if(result.success) {
+						$scope.editTaskErrorMessage = '';
+						$location.path('/tasks');
+					} else {
+						$scope.editTaskErrorMessage = result.message;
+					}
 				})
 		}
 	}

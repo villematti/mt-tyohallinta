@@ -1,6 +1,6 @@
 {
   "name": "muottituote-nodejs",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Muotituotteen työaikahallintajärjestelmä, NodeJS versio.",
   "main": "index.js",
   "scripts": {

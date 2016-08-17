@@ -112,12 +112,12 @@ apiRoutes.post('/auth', function(req, res) {
 
 // Create new user
 apiRoutes.post('/users', function(req, res) {
-	console.log(req.body.name);
+	
 	User.findOne({
 		name: req.body.name
 	}, function(err, userData) {
 		if(err) return next(err);
-		console.log(userData);
+		
 		if(userData) {
 			res.json({ success: "Failure",
 			message:i18n.__('USERNAME_IN_USE') });
@@ -153,7 +153,7 @@ apiRoutes.post('/users', function(req, res) {
 
 // route middleware to veryfy a token
 apiRoutes.use(function(req, res, next) {
-	console.log(req.headers);
+	
 	// check header or url parameters or post parameters for token
 	var token = req.body.token || req.query.token || req.headers['authorization'];
 
@@ -374,7 +374,6 @@ apiRoutes.get('/projects/active', function(req, res, next) {
 						.exec(function(error, results) {
 							if(error) return next(error);
 
-							console.log(results);
 							res.json(results);
 					});
 				}
@@ -392,7 +391,6 @@ apiRoutes.get('/projects', function(req, res, next) {
 		 .exec(function(error, results) {
 		 	if(error) return next(error);
 
-		console.log(results);
 		res.json(results);
 		 });
 });
@@ -443,9 +441,9 @@ apiRoutes.get('/project/:id', function(req, res, next) {
 
 // Routes for creating new project
 apiRoutes.post('/projects', function(req, res, next){
-	console.log(req.body);
+
 	if(req.body.customerId !== '' && req.body.name !== '' && req.body.number !== '' && req.body.statusId !== '') {
-		console.log("We get here!");
+		
 		Customer.findOne({_id: req.body.customerId}, function(error, customer) {
 			if(error) return next(error);
 
@@ -502,7 +500,7 @@ apiRoutes.get('/users/:id', function(req, res, next) {
 });
 
 apiRoutes.put('/user/:id', function(req, res, next) {
-	console.log(req.body);
+	
 	if(req.decode._doc.admin == true) {
 		var userId = req.params.id;
 		User.findOne({_id: userId}, function(err, user) {
@@ -565,58 +563,60 @@ apiRoutes.delete('/users/:id', function(req, res, next) {
 apiRoutes.put('/task/:id/edit', function(req, res, next) {
 
 	var update = {};
-
-	Task.findOne({ _id: req.params.id}, function(err, foundTask) {
+	console.log(req.body.values.endedAt);
+	if(req.body.values.endedAt !== null) {
+		Task.findOne({ _id: req.params.id}, function(err, foundTask) {
 		if(err) return next(err);
 
-		Project.findOne({_id: req.body.values.projectId}, function(projectError, project) {
+			Project.findOne({_id: req.body.values.projectId}, function(projectError, project) {
 
-			if(project) {
-				foundTask.projectId = project._id;
+				if(project) {
+					foundTask.projectId = project._id;
 
-				User.findOne({ _id: req.body.values.userId }, function(userError, user) {
+					User.findOne({ _id: req.body.values.userId }, function(userError, user) {
 
-					if(user) {
+						if(user) {
 
-						foundTask.userId = user._id;
+							foundTask.userId = user._id;
 
-						Tasktype.findOne({ _id: req.body.values.taskTypeId}, function(taskTypeError, taskType) {
+							Tasktype.findOne({ _id: req.body.values.taskTypeId}, function(taskTypeError, taskType) {
 
-							if(taskType) {
+								if(taskType) {
 
-								foundTask.taskTypeId = taskType._id;
+									foundTask.taskTypeId = taskType._id;
 
-								foundTask.bigVisit = req.body.values.bigVisit;
-								foundTask.machineTime = req.body.values.machineTime;
-								foundTask.dirtyWork = req.body.values.dirtyWork;
-								foundTask.overtime = req.body.values.overtime;
+									foundTask.bigVisit = req.body.values.bigVisit;
+									foundTask.machineTime = req.body.values.machineTime;
+									foundTask.dirtyWork = req.body.values.dirtyWork;
+									foundTask.overtime = req.body.values.overtime;
+									foundTask.createdAt = Date.parse(req.body.values.createdAt);
+									foundTask.endedAt = Date.parse(req.body.values.endedAt);
 
-								if(req.body.end) {
+									var elapsetTime = foundTask.endedAt - foundTask.createdAt;
+									foundTask.hours = (((elapsetTime / 1000) / 60) / 60);
 
-									foundTask.endedAt = Date.now();
-									var startTime = Date.parse(foundTask.createdAt);
-									var elapsetTime = Date.now() - startTime;
-									var hours = (((elapsetTime / 1000) / 60) / 60);
-									foundTask.hours = hours;
+									foundTask.save(function(result) {
+										res.json({ success: true, message: i18n.__('TASK_EDIT_SUCCESSFUL') });
+									})
+
+								} else {
+									res.json({ success: false, message: i18n.__('INVALID_TASKTYPE') });
 								}
+							})
+						} else {
+							res.json({ success: false, message: i18n.__('INVALID_USER') });
+						}
+					})
+				} else {
+					res.json({ success: false, message: i18n.__('INVALID_PROJECT_NUMBER') });
+				}
+			})		
+		});
+	} else {
+		res.json({ success: false, message: i18n.__('TASK_NOT_ENDED') });
+	}
 
-								foundTask.save(function(result) {
-									res.json(result);
-								})
-
-							} else {
-								res.json({ success: false, message: i18n.__('INVALID_TASKTYPE') });
-							}
-						})
-					} else {
-						res.json({ success: false, message: i18n.__('INVALID_USER') });
-					}
-				})
-			} else {
-				res.json({ success: false, message: i18n.__('INVALID_PROJECT_NUMBER') });
-			}
-		})		
-	});
+	
 })
 
 // Update spesific task
@@ -667,7 +667,7 @@ apiRoutes.post('/tasks', function(req, res, next) {
 	current.taskTypeId = req.body.taskTypeId;
 
 	if(current.taskTypeId !== '') {
-		console.log('Its not an empty string');
+		
 		var newTask = new Task(current);
 
 		Task.findOne({userId: req.body.userId, endedAt: null}, function(error, task) {
@@ -700,7 +700,7 @@ apiRoutes.post('/tasks', function(req, res, next) {
 				}
 		});
 	} else {
-		console.log('It IS an empty string');
+		
 		res.json({ success: false, message: i18n.__('TASKTYPE_REQUIRED') });
 	}
 			
@@ -821,7 +821,7 @@ apiRoutes.get('/tasks/user/:id/limit/:limit', function(req, res, next) {
 });
 
 apiRoutes.post('/tasks/user/:id/range',function(req, res, next){
-	console.log(req.body);
+	
 	if(req.body.startDate != null && req.body.endDate != null) {
 		User.findOne({_id: req.params.id}, function(err, user) {
 

@@ -73,7 +73,12 @@ theApp.controller('showProjectController', ['$scope', '$http', '$log', '$locatio
 		if(confirm('Are you sure?')) {
 			$http.delete('/api/project/' + $routeParams.id)
 				.success(function(result) {
-					$location.path('/projects');
+					if(result.success) {
+						$location.path('/projects');
+					} else {
+						$scope.projectDeleteErrorMessage = result.message;
+					}
+					
 			})
 		}
 	}

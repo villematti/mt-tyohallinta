@@ -41,5 +41,7 @@
 	"DOWNLOAD_REPORT_AT": "Tuonti on valmis. Lataa tiedosto täältä: <a href='http://localhost:3000/assets/export.csv'>http://localhost:3000/assets/export.csv</a>.",
 	"CAN_NOT_DELETE_USER": "Käyttäjä on jo tehnyt töitä eikä sitä voi poistaa.",
 	"CAN_NOT_DELETE_PROJECT": "Projektille on jo merkattu töitä, joten sitä ei voi poistaa.",
-	"TASKTYPE_REQUIRED": "Työvaihe on pakollinen!"
+	"TASKTYPE_REQUIRED": "Työvaihe on pakollinen!",
+	"TASK_NOT_ENDED": "Tehtävän on oltava päättynyt, jotta voit sitä muokata.",
+	"TASK_EDIT_SUCCESSFUL": "Tehtävän muokkaus onnistui."
 }
