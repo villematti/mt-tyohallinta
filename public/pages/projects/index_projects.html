@@ -4,7 +4,9 @@
 	<button ng-click="getActiveProjects()" class="btn btn-warning">{{ 'SHOW_ACTIVE_PROJECTS' | translate }}</button>
 	<button ng-click="getAllProjects()" class="btn btn-danger">{{ 'SHOW_ALL_PROJECTS' | translate }}</button>
 	<hr />
-	<ul class="list-group" dir-paginate="project in projects | orderBy: 'modifiedAt':true | itemsPerPage: 10">
+	<input placeholder="{{ 'FILTER_PROJECTS_TEXT' | translate }}" class="form-control" ng-model="searchText" />
+	<hr />
+	<ul class="list-group" dir-paginate="project in projects | orderBy: 'modifiedAt':true | itemsPerPage: 10 | filter: searchText">
 		<a href="#/projects/{{ project._id }}" class="list-group-item">
 			<h4 class="list-group-item-heading">{{ project.name }}</h4>
 			<p class="list-group-item-text">

@@ -3,6 +3,8 @@ theApp.controller('projectController', ['$scope', '$http', '$log', '$location', 
 
 	$scope.projects = [];
 
+	$scope.searchText = '';
+
 	$scope.getAllProjects = function() {
 		if(confirm('Oletko varma? Tämä kuormittaa tietokantaa erittäin paljon.')) {
 			$http.get('/api/projects')
