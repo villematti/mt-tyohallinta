@@ -962,5 +962,7 @@ app.get('/', function(req, res) {
 	res.render('index');
 });
 
+var projectRoutes = require('./routes/project')(apiRoutes);
+
 app.listen(port);
 console.log('Magic happens at http://localhost:' + port);
