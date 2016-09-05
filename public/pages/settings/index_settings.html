@@ -21,4 +21,13 @@
 <ul class="list-group" ng-repeat="type in types">
 	<li class="list-group-item">{{ type.name }} | <button class="btn btn-warning" ng-click="deleteType(type._id)">{{ 'DELETE' | translate }}</button></li>
 </ul>
+<hr />
+<h3>Setting elements</h3>
+<input type="text" ng-model="newSettingName" placeholder="Setting name" />
+<input type="text" ng-model="newSettingValue" placeholder="Setting value" />
+<button ng-disabled="newSettingName === '' && newSettingValue === ''" class="btn btn-primary" ng-click="createNewType()">Add new setting</button>
+<hr />
+<ul class="list-group" ng-repeat="setting in settings">
+	<li class="list-group-item">{{ setting.name }}: {{ setting.value }} | <button class="btn btn-warning" ng-click="deleteSetting(setting._id)">{{ 'DELETE' | translate }}</button></li>
+</ul>
 </div>

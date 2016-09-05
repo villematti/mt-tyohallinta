@@ -88,11 +88,14 @@ theApp.controller('showProjectController', ['$scope', '$http', '$log', '$locatio
 
 }]);
 
-theApp.controller('createNewProjectController', ['$scope', '$http', '$log', '$location', '$routeParams', 
-	function($scope, $http, $log, $location, $routeParams) {
+theApp.controller('createNewProjectController', ['$scope', '$http', '$log', '$location', '$routeParams', 'store', 
+	function($scope, $http, $log, $location, $routeParams, store) {
+
+	var settings = store.get('settings');
 
 	$scope.creationErrorMessage = '';
 	$scope.projectStatuses = '';
+	$scope.projectTypes = '';
 	$scope.customers = '';
 
 	function getCustomers() {
@@ -105,27 +108,41 @@ theApp.controller('createNewProjectController', ['$scope', '$http', '$log', '$lo
 	function getStatuses() {
 		$http.get('/api/statuses')
 			.success(function(result) {
-				$scope.projectStatuses = result
+				$scope.projectStatuses = result;
 		});
+	}
+
+	function getTypes() {
+		$http.get('/api/types')
+			.success((result) => {
+				$scope.projectTypes = result;
+			})
 	}
 
 	getStatuses();
 	getCustomers();
+	getTypes();
 
 	$scope.newProjectStatus = '';
 	$scope.newProjectNumber = '';
 	$scope.newProjectName = '';
 	$scope.newProjectCustomer = '';
+	$scope.newProjectType = '';
+	$scope.newProjectVersion = '';
 
 	$scope.createNewProject = function() {
-		$http.post('/api/projects', {
+		// old api: '/api/projects'
+		$http.post('/api/create-new-project', {
 			name: $scope.newProjectName,
 			number: $scope.newProjectNumber,
 			statusId: $scope.newProjectStatus,
-			customerId: $scope.newProjectCustomer
+			customerId: $scope.newProjectCustomer,
+			type: $scope.newProjectType,
+			version: $scope.newProjectVersion,
+			year: settings.year
 		})
 		.success(function(result) {
-			if(result.success === "Failure") {
+			if(result.success === false) {
 				$scope.creationErrorMessage = result.message;
 			} else {
 				$location.path('/projects');

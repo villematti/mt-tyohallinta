@@ -11,6 +11,22 @@ module.exports = mongoose.model('Project', new Schema({
 		type: String,
 		default: null
 	},
+	number: {
+		type: String,
+		required: true
+	},
+	year: {
+		type: String,
+		required: true
+	},
+	version: {
+		type: String,
+		default: '00'
+	},
+	typeId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Type'
+	},
 	statusId: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Status'

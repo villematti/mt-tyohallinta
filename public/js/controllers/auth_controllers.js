@@ -31,8 +31,9 @@ theApp.controller('authController', ['$scope', 'store', '$location', '$http', '$
 				store.set('token', result.token);
 				store.set('userid', result.userid);
 				store.set('admin', result.admin);
-				store.set('username', result.username)
-				store.set('pm', result.pm)
+				store.set('username', result.username);
+				store.set('pm', result.pm);
+				store.set('settings', result.settings);
 				$log.info(store.get('token'));
 				$location.path('/');
 			}

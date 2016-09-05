@@ -33,6 +33,7 @@ var Project = require('./models/Project');
 var Task = require('./models/Task');
 var Customer = require('./models/Customer');
 var Tasktype = require('./models/Tasktype');
+var Settings = require('./models/Settings')
 mongoose.connect(config.database);
 app.set('superSecret', config.secret);
 
@@ -90,15 +91,28 @@ apiRoutes.post('/auth', function(req, res) {
 						expiresIn: '1440m' // expires in 24h
 					});
 
-					res.json({
-						success: true,
-						message: i18n.__('ENJOY_TOKEN'),
-						userid: user._id,
-						token: token,
-						admin: user.admin,
-						pm: user.projectManager,
-						username: user.name
-					});
+					var settingValues = {};
+
+					Settings.find({}, (settingsError, settings) => {
+						var settingsMap = settings.map((value) => {
+							settingValues[value.name] = value.value;
+							return true;
+						})
+						console.log(settings)
+
+						res.json({
+							success: true,
+							message: i18n.__('ENJOY_TOKEN'),
+							userid: user._id,
+							token: token,
+							admin: user.admin,
+							pm: user.projectManager,
+							username: user.name,
+							settings: settingValues
+						});
+					})
+
+					
 				}
 			} else {
 				res.json({
@@ -963,6 +977,6 @@ app.get('/', function(req, res) {
 });
 
 var projectRoutes = require('./routes/project')(apiRoutes);
+var settingsRoutes = require('./routes/settings')(apiRoutes);
 
-app.listen(port);
-console.log('Magic happens at http://localhost:' + port);
+module.exports = app;

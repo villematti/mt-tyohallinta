@@ -133,4 +133,32 @@ theApp.controller('settingsController', ['$scope', '$http', '$log',
 			});
 	}
 
+
+	// SETTINGS VARIABLES AND METHODS
+
+	$scope.settings = [];
+
+	$scope.newSettingsName = '';
+	$scope.newSettingsValue = '';
+
+	function getAllSettings() {
+		$http.get('/api/get-all-settings')
+			.success((result) => {
+				$scope.settings = result;
+			})
+	}
+
+	getAllSettings();
+
+	$scope.deleteSetting = function(settingId) {
+		$http.delete('/api/delete-setting/' + settingId)
+			.success((result) => {
+				if(result.success === false) {
+					$scope.settingsMessage = result.message;
+				} else {
+					$scope.settingsMessage = result.message;
+					getAllSettings();
+				}
+			})
+	}
 }]);
