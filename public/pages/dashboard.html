@@ -7,10 +7,10 @@
 		
 	<ui-select theme="bootstrap" reset-search-input="true" ng-model="selectedProject.value">
     	<ui-select-match>
-        	<span ng-bind="$select.selected.name"></span>
+        	<span ng-bind="$select.selected.displayName"></span>
     	</ui-select-match>
     	<ui-select-choices repeat="project in (allProjects | filter: $select.search) track by project._id">
-        	<span ng-bind="project.name"></span>
+        	<span ng-bind="project.displayName"></span>
     	</ui-select-choices>
 	</ui-select>
 

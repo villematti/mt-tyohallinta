@@ -119,6 +119,17 @@ theApp.config(function($routeProvider, $httpProvider, paginationTemplateProvider
             }
 		})
 
+		.when('/projects/new_version/:id', {
+			templateUrl: 'assets/pages/projects/new_version_project.html',
+			controller: 'newVersionProjectController',
+			resolve : {
+                //This function is injected with the AuthService where you'll put your authentication logic
+                'auth' : function(Authenticate){
+                    return Authenticate.authenticate();
+                }
+            }
+		})
+
 		.when('/projects/create', {
 			templateUrl: 'assets/pages/projects/create_project.html',
 			controller: 'createNewProjectController',

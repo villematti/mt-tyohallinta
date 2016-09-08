@@ -1,0 +1,19 @@
+<div class="col-md-12">
+	<h3>{{ 'CREATE_NEW_PROJECT_VERSION_TITLE' | translate }} - {{ projectDisplayName }}</h3>
+	<div class="alert alert-warning" ng-if="creationErrorMessage !== ''">{{ creationErrorMessage }}</div>
+
+	<div class="form-group col-xs-12 col-md-12">
+		<label for="projectname" class="control-label">{{ 'PROJECT_NAME' | translate }}:</label>
+		<input id="projectname" class="form-control" ng-model="newProjectName" />
+	</div>
+
+	<div class="form-group col-xs-4 col-md-4">
+		<label for="customer" class="control-label">{{ 'PROJECT_VERSION' | translate }}:</label>
+		<input id="projectname" class="form-control" ng-model="newProjectVersion" />
+	</div>
+	
+	<div class="form-group col-xs-12 col-md-12">
+		<button class="btn btn-primary" ng-click="createNewProjectVersion()">{{ 'CREATE_PROJECT_VERSION' | translate }}</button>
+	</div>
+
+</div>

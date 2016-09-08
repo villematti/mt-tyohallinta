@@ -385,8 +385,10 @@ apiRoutes.get('/projects/active', function(req, res, next) {
 
 					Project.find({statusId: status._id})
 						.populate('statusId')
+						.populate('customerId')
+						.populate('typeId')
 						.exec(function(error, results) {
-							if(error) return next(error);
+							if(error) {return next(error);}
 
 							res.json(results);
 					});
@@ -394,14 +396,14 @@ apiRoutes.get('/projects/active', function(req, res, next) {
 			});
 		}
 	})
-
-	
 });
 
 // Get all projects
 apiRoutes.get('/projects', function(req, res, next) {
 	Project.find({})
 		 .populate('statusId')
+		 .populate('customerId')
+		 .populate('typeId')
 		 .exec(function(error, results) {
 		 	if(error) return next(error);
 
@@ -412,14 +414,22 @@ apiRoutes.get('/projects', function(req, res, next) {
 // Update spesific project
 apiRoutes.put('/projects/:id', function(req, res, next) {
 
-	Project.update({ _id: req.params.id }, {
-		$set: { name: req.body.name, statusId: req.body.statusId, modifiedAt: Date.now() }},
-		function(error, result) {
-			if(error) return next(error);
+	Project.findOne({ _id: req.params.id }, (error, oldProject) => {
 
-			res.json(result);
-		}
-	)
+		Project.update({ _id: req.params.id }, {
+			$set: { 
+				name: req.body.name, 
+				statusId: req.body.statusId,
+				customerId: req.body.customerId,
+				statusId: req.body.statusId,
+				modifiedAt: Date.now() }},
+			function(error, result) {
+				if(error) return next(error);
+
+				res.json(result);
+			}
+		)
+	})
 });
 
 // Deleter spesific project

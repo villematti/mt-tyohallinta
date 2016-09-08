@@ -43,5 +43,8 @@
 	"CAN_NOT_DELETE_PROJECT": "Projektille on jo merkattu töitä, joten sitä ei voi poistaa.",
 	"TASKTYPE_REQUIRED": "Työvaihe on pakollinen!",
 	"TASK_NOT_ENDED": "Tehtävän on oltava päättynyt, jotta voit sitä muokata.",
-	"TASK_EDIT_SUCCESSFUL": "Tehtävän muokkaus onnistui."
+	"TASK_EDIT_SUCCESSFUL": "Tehtävän muokkaus onnistui.",
+	"VERSIO_EXCISTS": "Versio on jo olemassa!",
+	"CAN_NOT_NEW_VERSION_CREATED": "Uutta versiota ei voi luoda! Ota yhteys järjestelmävalvojaan!",
+	"NEW_VERSION_CREATED": "Uusi versio luotiin onnistuneesti."
 }

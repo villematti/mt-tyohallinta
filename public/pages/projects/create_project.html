@@ -1,30 +1,33 @@
 <div class="col-md-12">
 	<h3>{{ 'NEW_PROJECT_TITLE' | translate }}</h3>
 	<div class="alert alert-warning" ng-if="creationErrorMessage !== ''">{{ creationErrorMessage }}</div>
-		
-	<div class="form-group col-xs-4 col-md-4">
-		<label for="projectnumber" class="control-label">{{ 'PROJECT_NUMBER' | translate }}</label>
-		<input class="form-control" id="projectnumber" ng-model="newProjectNumber" />
-	</div>
 
-	<div class="form-group col-xs-4 col-md-4">
-		<label for="customer" class="control-label">{{ 'CUSTOMER_NAME' | translate }}</label>
-		<select id="customer" class="form-control" ng-model="newProjectCustomer">
-			<option ng-repeat="customer in customers" value="{{ customer._id }}">{{ customer.name }}</option>
-		</select>
-	</div>
-	<div class="form-group col-xs-4 col-md-4">
-		<label for="projectname" class="control-label">{{ 'PROJECT_NAME' | translate }}</label>
+	<div class="form-group col-xs-12 col-md-12">
+		<label for="projectname" class="control-label">{{ 'PROJECT_NAME' | translate }}:</label>
 		<input id="projectname" class="form-control" ng-model="newProjectName" />
 	</div>
 
-	
-	<div class="form-group col-xs-4 col-md-4">
+	<div class="form-group col-xs-2 col-md-2">
+		<label>{{ 'PROJECT_TYPE' | translate }}:</label>
+		<select class="form-control" ng-model="newProjectType">
+			<option ng-repeat="type in projectTypes" value="{{ type._id }}">{{ type.name }}</option>
+		</select>
+	</div>
+
+	<div class="form-group col-xs-2 col-md-2">
 		<label>{{ 'PROJECT_STATUS' | translate }}:</label>
 		<select class="form-control" ng-model="newProjectStatus">
 			<option ng-repeat="status in projectStatuses" value="{{ status._id }}">{{ status.name }}</option>
 		</select>
 	</div>
+
+	<div class="form-group col-xs-8 col-md-8">
+		<label for="customer" class="control-label">{{ 'CUSTOMER_NAME' | translate }}:</label>
+		<select id="customer" class="form-control" ng-model="newProjectCustomer">
+			<option ng-repeat="customer in customers" value="{{ customer._id }}">{{ customer.name }}</option>
+		</select>
+	</div>
+	
 	<div class="form-group col-xs-12 col-md-12">
 		<button class="btn btn-primary" ng-click="createNewProject()">{{ 'CREATE_PROJECT' | translate }}</button>
 	</div>

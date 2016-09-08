@@ -1,19 +1,37 @@
-<div class="col-md-6 col-md-offset-3">
-	<h3>{{ 'UPDATE_PROJECT_TITLE' | translate }}</h3>
+<div class="col-md-8 col-md-offset-2">
+	<h3>{{ 'UPDATE_PROJECT_TITLE' | translate }} - {{ projectDisplayName }}</h3>
 
-	<div class="form-group">
+	<div class="form-group col-xs-12 col-md-12">
 		<label>{{ 'PROJECT_NAME' | translate }}:</label>
 		<input class="form-control" ng-model="newProjectName" />
 	</div>
-	<div class="form-group">
+
+	<div class="form-group col-xs-3 col-md-3">
+		<label>{{ 'PROJECT_TYPE' | translate }}:</label>
+		<select class="form-control" ng-model="newProjectType">
+			<option ng-repeat="type in projectTypes" value="{{ type._id }}">{{ type.name }}</option>
+		</select>
+	</div>
+
+	<div class="form-group col-xs-3 col-md-3">
 		<label>{{ 'PROJECT_STATUS' | translate }}:</label>
-		<select ng-model="newProjectStatus">
+		<select class="form-control" ng-model="newProjectStatus">
 			<option ng-repeat="status in projectStatuses" value="{{ status._id }}">{{ status.name }}</option>
 		</select>
 	</div>
-	<div class="form-group">
-		<button class="btn btn-warning" ng-click="cancel()">{{ 'CANCEL' | translate }}</button>
+
+	<div class="form-group col-xs-6 col-md-6">
+		<label for="customer" class="control-label">{{ 'CUSTOMER_NAME' | translate }}:</label>
+		<select id="customer" class="form-control" ng-model="newProjectCustomer">
+			<option ng-repeat="customer in customers" value="{{ customer._id }}">{{ customer.name }}</option>
+		</select>
+	</div>
+
+	<div class="form-group col-xs-12 col-md-12">
+		
+		<button class="btn btn-info" ng-click="createNewVersion()">{{ 'CREATE_NEW_VERSION' | translate }}</button>
 		<button class="btn btn-primary" ng-click="updateProject()">{{ 'UPDATE_PROJECT' | translate }}</button>
 		<button class="btn btn-danger" ng-click="deleteProject()">{{ 'DELETE_PROJECT' | translate }}</button>
+		<button class="btn btn-warning" ng-click="cancel()">{{ 'CANCEL' | translate }}</button>
 	</div>
 </div>

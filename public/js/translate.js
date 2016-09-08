@@ -7,14 +7,17 @@ theApp.config(function($translateProvider) {
     	PASSWORD: 'Salasana',
     	LOGIN: 'Kirjaudu',
     	NEW_CUSTOMER_TITLE: 'Luo uusi asiakas',
-    	CUSTOMER_NAME: 'Asiakkaan nimi',
+    	CUSTOMER_NAME: 'Asiakas',
     	CREATE_CUSTOMER: 'Luo asiakas',
     	CUSTOMER_TITLE: 'Asiakkaat',
     	NEW_PROJECT_TITLE: 'Uusi projekti',
     	PROJECT_NUMBER: 'Projektinumero',
-    	PROJECT_NAME: 'Projektin nimi',
-    	PROJECT_STATUS: 'Projektin tila',
+    	PROJECT_NAME: 'Nimi',
+    	PROJECT_STATUS: 'Tila',
+        PROJECT_TYPE: 'Tyyppi',
+        PROJECT_VERSION: 'Versionumero',
     	CREATE_PROJECT: 'Luo Uusi Projekti',
+        CREATE_PROJECT_VERSION: 'Luo uusi projektiversio',
     	PROJECTS_TITLE: 'Projektit',
     	STATUS: 'Tila',
     	STARTED: 'Aloitettu',
@@ -86,7 +89,9 @@ theApp.config(function($translateProvider) {
         NEW_PASSWORD: 'Uusi salasana',
         REPEAT_NEW_PASSWORD: 'Toista uusi salasana',
         TASKTYPE_REQUIRED: 'Valitse työvaihe!',
-        FILTER_PROJECTS_TEXT: 'Kirjoita suodatin...'
+        FILTER_PROJECTS_TEXT: 'Kirjoita suodatin...',
+        CREATE_NEW_VERSION: 'Luo uusi verio',
+        CREATE_NEW_PROJECT_VERSION_TITLE: 'Luo uusi version projektista'
 
 
     });

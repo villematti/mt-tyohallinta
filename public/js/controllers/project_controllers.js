@@ -15,12 +15,10 @@ theApp.controller('projectController', ['$scope', '$http', '$log', '$location', 
 	}
 
 	$scope.getActiveProjects = function() {
-		if(confirm('Oletko varma? Tämä kuormittaa tietokantaa jonkin verran.')) {
-			$http.get('/api/projects/active')
-			.success(function(result) {
-				$scope.projects = result
-			})
-		}
+		$http.get('/api/projects/active')
+		.success(function(result) {
+			$scope.projects = result
+		})
 	}
 
 }]);
@@ -28,19 +26,41 @@ theApp.controller('projectController', ['$scope', '$http', '$log', '$location', 
 theApp.controller('showProjectController', ['$scope', '$http', '$log', '$location', '$routeParams', 
 	function($scope, $http, $log, $location, $routeParams) {
 
-	$scope.projectStatuses = '';
-
 	$scope.newProjectStatus = '';
 	$scope.newProjectName = '';
+	$scope.newProjectCustomer = '';
+	$scope.newProjectType = '';
+
+	$scope.projectDisplayName = '';
+
+	$scope.projectStatuses = '';
+	$scope.projectTypes = '';
+	$scope.customers = '';
+
+	function getCustomers() {
+		$http.get('/api/customers')
+			.success(function(result) {
+				$scope.customers = result;
+		});
+	}
 
 	function getStatuses() {
 		$http.get('/api/statuses')
 			.success(function(result) {
-				$scope.projectStatuses = result
+				$scope.projectStatuses = result;
 		});
 	}
 
+	function getTypes() {
+		$http.get('/api/types')
+			.success((result) => {
+				$scope.projectTypes = result;
+			})
+	}
+
 	getStatuses();
+	getCustomers();
+	getTypes();
 
 	$scope.project = '';
 
@@ -50,22 +70,31 @@ theApp.controller('showProjectController', ['$scope', '$http', '$log', '$locatio
 				$log.info(result);
 				$scope.newProjectStatus = result.statusId._id;
 				$scope.newProjectName = result.name;
+				$scope.newProjectCustomer = result.customerId;
+				$scope.newProjectType = result.typeId;
+				$scope.projectDisplayName = result.displayName
 			})
 	}
 
 	getProject();
 
 	$scope.updateProject = function() {
-		$http.put('/api/projects/' + $routeParams.id, {
+		$http.put('/api/update-project-with-id/' + $routeParams.id, {
 			_id: $routeParams,
 			name: $scope.newProjectName,
-			statusId: $scope.newProjectStatus
+			statusId: $scope.newProjectStatus,
+			typeId: $scope.newProjectType,
+			customerId: $scope.newProjectCustomer
 		})
 		.success(function(result) {
 			$log.info(result);
 			$location.path('/projects');
 		});
 	};
+
+	$scope.createNewVersion = function() {
+		$location.path('/projects/new_version/' + $routeParams.id)
+	}
 
 	$scope.cancel = function() {
 		$location.path('/projects');
@@ -124,7 +153,6 @@ theApp.controller('createNewProjectController', ['$scope', '$http', '$log', '$lo
 	getTypes();
 
 	$scope.newProjectStatus = '';
-	$scope.newProjectNumber = '';
 	$scope.newProjectName = '';
 	$scope.newProjectCustomer = '';
 	$scope.newProjectType = '';
@@ -134,7 +162,6 @@ theApp.controller('createNewProjectController', ['$scope', '$http', '$log', '$lo
 		// old api: '/api/projects'
 		$http.post('/api/create-new-project', {
 			name: $scope.newProjectName,
-			number: $scope.newProjectNumber,
 			statusId: $scope.newProjectStatus,
 			customerId: $scope.newProjectCustomer,
 			type: $scope.newProjectType,
@@ -150,4 +177,54 @@ theApp.controller('createNewProjectController', ['$scope', '$http', '$log', '$lo
 		});
 	}
 
+}]);
+
+theApp.controller('newVersionProjectController', ['$scope', '$http', '$log', '$location', '$routeParams', 'store', 
+	function($scope, $http, $log, $location, $routeParams, store) {
+
+	$scope.creationErrorMessage = '';
+
+	$scope.newProjectName = '';
+	$scope.newProjectVersion = '';
+	$scope.oldProjectVersion = '';
+
+	$scope.projectDisplayName = '';
+
+	$scope.project = '';
+
+	function getProject() {
+		$http.get('/api/project/' + $routeParams.id)
+			.success(function(result) {
+				$scope.newProjectName = result.name;
+				$scope.newProjectVersion = result.version;
+				$scope.oldProjectVersion = result.version;
+				$scope.projectDisplayName = result.displayName
+			})
+	}
+
+	getProject();
+
+	$scope.createNewProjectVersion = function() {
+		if ($scope.newProjectVersion !== '' && $scope.newProjectVersion !== '00' && $scope.newProjectVersion !== $scope.oldProjectVersion) {
+
+			$scope.creationErrorMessage = '';
+
+			$http.post('/api/create-new-project-version', {
+				name: $scope.newProjectName,
+				version: $scope.newProjectVersion,
+				parentProjectId: $routeParams.id
+			})
+			.success(function(result) {
+				if (result.success === false) {
+					$scope.creationErrorMessage = result.message;
+				} else {
+					$scope.creationErrorMessage = '';
+					$location.path('/projects');
+				}
+			})
+		} else {
+			$scope.creationErrorMessage = 'Aseta uusi projektinumero!';
+		}
+		
+	}
 }]);

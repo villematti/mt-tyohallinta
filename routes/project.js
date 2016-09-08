@@ -1,35 +1,223 @@
 const Project = require('../models/Project');
+const Settings = require('./../models/Settings');
+const Type = require('./../models/Type');
+const Customer = require('./../models/Customer');
+var i18n = require('i18n');
 
 module.exports = (router) => {
 	router.post('/create-new-project', (req, res, next) => {
-		
-		var projectData = {};
 
-		projectData.name = req.body.name;
-		projectData.number = req.body.number;
-		projectData.year = req.body.year;
-		projectData.version = req.body.version;
-		projectData.typeId = req.body.typeId;
-		projectData.statusId = req.body.statusId;
-		projectData.customerId = req.body.customerId;
+		Settings.findOne({ name: 'projectNumber' }, (error, numberObject) => {
 
-		Project.findOne({ 
-			number: projectData.number,
-			year: projectData.year,
-			version: projectData.version,
-			typeId: projectData.typeId,
-		}, (err, project) => {
-			if (err) {return next(err);}
+			var projectNumberObject;
+			var projectData = {};
 
-			if (project) {
-				res.json({ success: false, message: "Project name already in use." })
+			if (numberObject) {
+				projectNumberObject = numberObject;
 			} else {
-				if (projectData.name === '') {
-					res.json({success: false, message: "Project name is required!" })
-				} else {
-					console.log("Error: name is: ", projectData.name)
-				}
+				projectNumber = 0;
+
+				var newProjectNumber = new Settings({
+					name: 'projectNumber',
+					value: 0
+				})
+
+				newProjectNumber.save();
+				projectNumberObject = newProjectNumber;
 			}
+
+			console.log("Number object: ", projectNumberObject.value);
+
+			projectData.name = req.body.name;
+			projectData.number = projectNumberObject.value;
+			projectData.year = req.body.year;
+			projectData.version = req.body.version;
+			projectData.typeId = req.body.type;
+			projectData.statusId = req.body.statusId;
+			projectData.customerId = req.body.customerId;
+
+			Project.findOne({ number: projectData.number }, (err, project) => {
+				if (err) {return next(err);}
+
+				console.log(project)
+				if (project) {
+					if (project.year === projectData.year) {
+
+						res.json({ success: false, message: "Invalid project number." })
+						
+					} else {
+
+						Type.findOne({ _id: projectData.typeId }, (typeErr, type) => {
+
+							Customer.findOne({ _id: projectData.customerId }, (customerErr, customer) => {
+								projectData.displayName = '';
+
+								projectData.displayName += type.name + '-' + projectData.number + projectData.year;
+
+								if (projectData.version !== '' && projectData.version !== '00') {
+									projectData.displayName += '-' + projectData.version
+								}
+
+								projectData.displayName += '-' + customer.name + '-' + projectData.name;
+
+								createNewProject(projectData, projectNumberObject, res);
+							})
+						})
+
+											
+					}
+				} else {
+					
+					Type.findOne({ _id: projectData.typeId }, (typeErr, type) => {
+
+						Customer.findOne({ _id: projectData.customerId }, (customerErr, customer) => {
+							projectData.displayName = '';
+
+							projectData.displayName += type.name + '-' + projectData.number + projectData.year;
+
+							if (projectData.version !== '' && projectData.version !== '00') {
+								projectData.displayName += '-' + projectData.version
+							}
+
+							projectData.displayName += '-' + customer.name + '-' + projectData.name;
+
+							createNewProject(projectData, projectNumberObject, res);
+						})
+					})
+				}
+			})
 		})
 	});
+
+
+	// Update spesific project with id
+	router.put('/update-project-with-id/:id', function(req, res, next) {
+
+		Project.findOne({ _id: req.params.id }, (oldProjectError, oldProject) => {
+			Type.findOne({ _id: req.body.typeId }, (typeError, newType) => {
+				Customer.findOne({ _id: req.body.customerId }, (customerError, newCustomer) => {
+
+					var displayName = '';
+					displayName += newType.name + '-' + oldProject.number + oldProject.year;
+					if (oldProject.verion !== '' && oldProject.version !== '00') {
+						displayName += '-' + oldProject.version;
+					}
+
+					displayName += newCustomer.name + '-' + req.body.name;
+
+					Project.update({ _id: req.params.id }, {
+						$set: { 
+							name: req.body.name, 
+							statusId: req.body.statusId,
+							customerId: req.body.customerId,
+							typeId: req.body.typeId,
+							displayName: displayName,
+							modifiedAt: Date.now() }},
+						function(error, result) {
+							if(error) return next(error);
+
+							res.json(result);
+						}
+					)
+				})
+			})
+
+			
+		})
+	});
+
+	router.post('/create-new-project-version', (req, res, next) => {
+		Project.findOne({ _id: req.body.parentProjectId }, (oldProjectError, parentProject) => {
+			Type.findOne({ _id: parentProject.typeId }, (typeError, newType) => {
+				Customer.findOne({ _id: parentProject.customerId }, (customerError, newCustomer) => {
+
+					var displayName = '';
+					displayName += newType.name + '-' + parentProject.number + parentProject.year;
+					displayName += '-' + req.body.version;
+					displayName += '-' + newCustomer.name + '-' + req.body.name;
+
+					var newProjectVersion = new Project({
+						name: req.body.name,
+						version: req.body.version,
+						number: parentProject.number,
+						year: parentProject.year,
+						statusId: parentProject.statusId,
+						customerId: parentProject.customerId,
+						typeId: parentProject.typeId,
+						displayName: displayName
+					})
+
+					console.log(newProjectVersion);
+
+
+
+					Project.find({ number: parentProject.number }, (error, projects) => {
+						if (error) {return next(error)}
+
+						if (projects) {
+							var withCorrectYear = projects.map((project) => {
+								if (project.year === parentProject.year) {
+									return project;
+								}
+							})
+
+							var withCorrectVersion = projects.map((project) => {
+								if (project.version === req.body.version) {
+									return project;
+								}
+							})
+
+							console.log(withCorrectVersion.length)
+
+							var x;
+							var versionValidation = true;
+							for (x = 0 ; x < withCorrectVersion.length ; x += 1) {
+								if (withCorrectVersion[x] !== undefined) {
+									versionValidation = false;
+									console.log("If statement was called!");
+								}
+								console.log("Loop was called!");
+							}
+
+							if (versionValidation === false) {
+								res.json({success: false, message: i18n.__('VERSIO_EXCISTS')})
+							} else {
+								newProjectVersion.save((creationError) => {
+									if (creationError) {
+										console.log(creationError.errors);
+										res.json({success: false, message: i18n.__('CAN_NOT_NEW_VERSION_CREATED')})
+									} else {
+										res.json({success: true, message: i18n.__('NEW_VERSION_CREATED')})
+									}
+								})
+							}
+						}
+					})
+				})
+			})
+		})
+	})
+}
+
+function createNewProject(projectData, numberObject, res) {
+	var newProject = new Project(projectData);
+
+	newProject.save((error) => {
+		if (error) {
+			console.log(error);
+			res.json({success: false, message: error.message});
+		} else {
+
+			Settings.update({ _id: numberObject._id }, {
+				$set: { value: Number(numberObject.value) + 1, modifiedAt: Date.now() }},
+				function(error, result) {
+					if(error) {res.json({success: false, message: error.message});
+					} else {
+						res.json({success: true, message: "Project created successfully."});
+					}
+				}
+			)
+			
+		}
+	})
 }

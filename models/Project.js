@@ -25,7 +25,8 @@ module.exports = mongoose.model('Project', new Schema({
 	},
 	typeId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Type'
+		ref: 'Type',
+		required: true
 	},
 	statusId: {
 		type: mongoose.Schema.Types.ObjectId,

@@ -1,4 +1,4 @@
-const Settings = require('../models/Settings');
+const Settings = require('../models/settings');
 
 module.exports = (router) => {
 	router.post('/create-new-setting', (req, res, next) => {
