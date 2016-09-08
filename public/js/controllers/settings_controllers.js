@@ -152,7 +152,9 @@ theApp.controller('settingsController', ['$scope', '$http', '$log',
 				$scope.settingsMessage = result.message;
 			} else {
 				$scope.settingsMessage = result.message;
-				getTaskTypes();
+				getAllSettings();
+				$scope.newSettingsName = '';
+				$scope.newSettingsValue = '';
 			}
 		});
 	}
