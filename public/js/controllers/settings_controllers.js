@@ -140,6 +140,22 @@ theApp.controller('settingsController', ['$scope', '$http', '$log',
 
 	$scope.newSettingsName = '';
 	$scope.newSettingsValue = '';
+	
+	$scope.createNewSetting = function() {
+		$http.post('/api/create-new-setting', {
+			name: $scope.newSettingName,
+			value: $scope.newSettingValue
+		})
+		.success(function(result){
+			$scope.settingsMessage = '';
+			if(result.success === false) {
+				$scope.settingsMessage = result.message;
+			} else {
+				$scope.settingsMessage = result.message;
+				getTaskTypes();
+			}
+		});
+	}
 
 	function getAllSettings() {
 		$http.get('/api/get-all-settings')
