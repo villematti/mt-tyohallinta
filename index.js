@@ -778,7 +778,11 @@ apiRoutes.post('/tasks/all', function(req, res, next) {
 					.exec(function(e, results) {
 						if(e) return next(e);
 
-					res.json(results);
+					Customer.populate(results, {
+						path: 'projectId.customerId'
+					}, (err, newResult) => {
+						res.json(newResult);
+					})
 				});
 
 			})

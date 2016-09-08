@@ -67,7 +67,7 @@
 				<b>{{ 'BIG_VISIT' | translate }}? </b>
 				<input ng-disabled="true" ng-if="!task.bigVisit" type="checkbox" />
 				<input ng-disabled="true" ng-if="task.bigVisit" type="checkbox" checked />
-				<span><b>{{ 'HOURS' | translate }}: </b>{{ task.hours | number: 1 }}h</span>
+				<span><b>{{ 'HOURS' | translate }}: </b>{{ task.hours | number: 2 }}h</span>
 				<span ng-if="task.machineTime !== null"><b>{{ 'MACHINE_TIME' | translate }}: </b>{{ task.machineTime | number: 1 }}h</span>
 				<span ng-if="task.dirtyWork !== null"><b>{{ 'DIRTY_WORK' | translate }}: </b>{{ task.dirtyWork | number: 1 }}h</span>
 				<span ng-if="task.overtime !== null"><b>{{ 'OVERTIME' | translate }}: </b>{{ task.overtime | number: 1 }}h</span>
