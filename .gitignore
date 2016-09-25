@@ -9,7 +9,7 @@ pids
 *.seed
 
 # Deamon folder
-deamon
+daemon
 
 #Export file
 public/export.csv
