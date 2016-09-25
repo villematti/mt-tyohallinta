@@ -46,14 +46,17 @@
 
 </md-content>
 <div ng-if="notFound == true" class="alert alert-warning">{{ 'NO_RESULTS_FOUND_ERROR' | translate }}</div>
-<table ng-if="tasks.length !== 0" class="table table-bordered" style="text-align: center; margin-left: -50px;">
+<table ng-if="tasks.length !== 0" class="table table-bordered col-md-12" style="text-align: center; margin-left: -70px;">
 	<thead>
 		<tr>
 			<th>{{ 'START_TIME' | translate }}</th>
 			<th>{{ 'END_TIME' | translate }}</th>
 			<th>{{ 'HOURS' | translate }}</th>
-			<th>{{ 'PROJECT_NAME' | translate }}</th>
+			<th>{{ 'PROJECT_TYPE' | translate }}</ht>
+			<th>{{ 'PROJECT_NUMBER' | translate }}</th>
+			<th>{{ 'PROJECT_YEAR' | translate }}</th>
 			<th>{{ 'CUSTOMER_NAME' | translate }}
+			<th>{{ 'PROJECT_NAME' | translate }}</th>
 			<th>{{ 'TASKTYPE' | translate }}</th>
 			<th>{{ 'USERNAME' | translate }}</th>
 			<th>{{ 'BIG_VISIT' | translate }}</th>
@@ -68,8 +71,11 @@
 			<td>{{ task.createdAt | date: "dd-MM-yyyy HH:mm" }}</td>
 			<td>{{ task.endedAt | date: "dd-MM-yyyy HH:mm" }}</td>
 			<td>{{ task.hours | number: 2 }} h</td>
-			<td>{{ task.projectId.displayName }}</td>
+			<td>{{ task.projectId.typeId.name }}</td>
+			<td>{{ task.projectId.number }}</td>
+			<td>{{ task.projectId.year }}</td>
 			<td>{{ task.projectId.customerId.name }}</td>
+			<td>{{ task.projectId.name }}</td>
 			<td>{{ task.taskTypeId.name }}</td>
 			<td>{{ task.userId.name }}</td>
 			<td>
@@ -84,7 +90,7 @@
 		<tr>
 			<td></td>
 			<td></td>
-			<td><b>{{ 'TOTAL' | translate }}: {{ totalHours | number: 1 }}h</b></td>
+			<td><b>{{ 'TOTAL' | translate }}: {{ totalHours | number: 2 }}h</b></td>
 			<td></td>
 			<td></td>
 			<td></td>

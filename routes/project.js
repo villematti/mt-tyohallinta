@@ -9,69 +9,90 @@ module.exports = (router) => {
 
 		projectNumberString = '';
 
-		console.log(req.body.type)
+		if (req.body.type !== undefined && req.body.name !== '' && req.body.customerId !== undefined && req.body.statusId !== undefined) {
 
-		Type.findOne({_id: req.body.type}, (typeError, selectedType) => {
+			Type.findOne({_id: req.body.type}, (typeError, selectedType) => {
 
-			console.log("Selected type: ", selectedType)
+				console.log("Selected type: ", selectedType)
 
-			switch(selectedType.name) {
-				case 'T':
-					projectNumberString = 'taskProjectNumber';
-				break;
-				case 'M':
-					projectNumberString = 'modelProjectNumber';
-				break;
-				default:
-					projectNumberString = 'taskProjectNumber';
-				break;
-			}
-		
-			console.log("Number string: ", projectNumberString)
-
-			Settings.findOne({ name: projectNumberString }, (error, numberObject) => {
-
-				var projectNumberObject;
-				var projectData = {};
-
-				if (numberObject) {
-					projectNumberObject = numberObject;
-				} else {
-					projectNumber = 0;
-
-					var newProjectNumber = new Settings({
-						name: projectNumberString,
-						value: 0
-					})
-
-					newProjectNumber.save();
-					projectNumberObject = newProjectNumber;
+				switch(selectedType.name) {
+					case 'T':
+						projectNumberString = 'taskProjectNumber';
+					break;
+					case 'M':
+						projectNumberString = 'modelProjectNumber';
+					break;
+					default:
+						projectNumberString = 'taskProjectNumber';
+					break;
 				}
+			
+				console.log("Number string: ", projectNumberString)
 
-				projectData.name = req.body.name;
-				projectData.number = projectNumberObject.value;
-				projectData.year = req.body.year;
-				projectData.version = req.body.version;
-				projectData.typeId = req.body.type;
-				projectData.statusId = req.body.statusId;
-				projectData.customerId = req.body.customerId;
+				Settings.findOne({ name: projectNumberString }, (error, numberObject) => {
 
-				Project.findOne({ number: projectData.number }, (err, project) => {
-					if (err) {return next(err);}
+					var projectNumberObject;
+					var projectData = {};
 
-					if (project) {
-						if (project.year === projectData.year && project.typeId === projectData.typeId) {
+					if (numberObject) {
+						projectNumberObject = numberObject;
+					} else {
+						projectNumber = 0;
 
-							res.json({ success: false, message: "Invalid project number." })
-							
+						var newProjectNumber = new Settings({
+							name: projectNumberString,
+							value: 0
+						})
+
+						newProjectNumber.save();
+						projectNumberObject = newProjectNumber;
+					}
+
+					projectData.name = req.body.name;
+					projectData.number = projectNumberObject.value;
+					projectData.year = req.body.year;
+					projectData.version = req.body.version;
+					projectData.typeId = req.body.type;
+					projectData.statusId = req.body.statusId;
+					projectData.customerId = req.body.customerId;
+
+					Project.findOne({ number: projectData.number }, (err, project) => {
+						if (err) {return next(err);}
+
+						if (project) {
+							if (project.year === projectData.year && project.typeId === projectData.typeId) {
+
+								res.json({ success: false, message: "Invalid project number." })
+								
+							} else {
+
+								Type.findOne({ _id: projectData.typeId }, (typeErr, type) => {
+
+									Customer.findOne({ _id: projectData.customerId }, (customerErr, customer) => {
+										projectData.displayName = '';
+
+										projectData.displayName += type.name + projectData.number + projectData.year;
+
+										if (projectData.version !== '' && projectData.version !== '00') {
+											projectData.displayName += '-' + projectData.version
+										}
+
+										projectData.displayName += '-' + customer.name + '-' + projectData.name;
+
+										createNewProject(projectData, projectNumberObject, res);
+									})
+								})
+
+													
+							}
 						} else {
-
+							
 							Type.findOne({ _id: projectData.typeId }, (typeErr, type) => {
 
 								Customer.findOne({ _id: projectData.customerId }, (customerErr, customer) => {
 									projectData.displayName = '';
 
-									projectData.displayName += type.name + projectData.number + projectData.year;
+									projectData.displayName += type.name  + projectData.number + projectData.year;
 
 									if (projectData.version !== '' && projectData.version !== '00') {
 										projectData.displayName += '-' + projectData.version
@@ -82,31 +103,14 @@ module.exports = (router) => {
 									createNewProject(projectData, projectNumberObject, res);
 								})
 							})
-
-												
 						}
-					} else {
-						
-						Type.findOne({ _id: projectData.typeId }, (typeErr, type) => {
-
-							Customer.findOne({ _id: projectData.customerId }, (customerErr, customer) => {
-								projectData.displayName = '';
-
-								projectData.displayName += type.name  + projectData.number + projectData.year;
-
-								if (projectData.version !== '' && projectData.version !== '00') {
-									projectData.displayName += '-' + projectData.version
-								}
-
-								projectData.displayName += '-' + customer.name + '-' + projectData.name;
-
-								createNewProject(projectData, projectNumberObject, res);
-							})
-						})
-					}
+					})
 				})
 			})
-		})
+
+		} else {
+			res.json({success: false, message: "Fill all fields!"});
+		}
 	});
 
 

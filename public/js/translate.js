@@ -91,9 +91,9 @@ theApp.config(function($translateProvider) {
         TASKTYPE_REQUIRED: 'Valitse työvaihe!',
         FILTER_PROJECTS_TEXT: 'Kirjoita suodatin...',
         CREATE_NEW_VERSION: 'Luo uusi verio',
-        CREATE_NEW_PROJECT_VERSION_TITLE: 'Luo uusi version projektista'
-
-
+        CREATE_NEW_PROJECT_VERSION_TITLE: 'Luo uusi version projektista',
+        PROJECT_NUMBER: 'Numero',
+        PROJECT_YEAR: 'Vuosi'
     });
 
     $translateProvider.preferredLanguage('fi');
