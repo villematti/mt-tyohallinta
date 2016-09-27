@@ -46,5 +46,6 @@
 	"TASK_EDIT_SUCCESSFUL": "Tehtävän muokkaus onnistui.",
 	"VERSIO_EXCISTS": "Versio on jo olemassa!",
 	"CAN_NOT_NEW_VERSION_CREATED": "Uutta versiota ei voi luoda! Ota yhteys järjestelmävalvojaan!",
-	"NEW_VERSION_CREATED": "Uusi versio luotiin onnistuneesti."
+	"NEW_VERSION_CREATED": "Uusi versio luotiin onnistuneesti.",
+	"NO_WORKING_USERS": "Kukaan ei ole tällä hetkellä töissä."
 }

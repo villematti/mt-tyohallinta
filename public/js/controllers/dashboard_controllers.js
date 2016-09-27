@@ -16,6 +16,23 @@ theApp.controller('dashboardController', ['$scope', '$http', '$log', 'store', '$
 
 	$scope.startTaskErrorMessage = '';
 
+	// Find working users
+	$scope.workingUsers = '';
+
+	function getWorkingUsers() {
+		$http.get('/api/get-working-users')
+			.success(function(results) {
+				$scope.workingUsers = results;
+			})
+	}
+
+	getWorkingUsers();
+
+	$scope.updateWorkingUsers = function() {
+		$scope.workingUsers = '';
+		$interval(getWorkingUsers, 1000, 1);
+	}
+
 	function getAllProjects() {
 		$http.get('/api/projects')
 			.success(function(results) {
@@ -23,9 +40,17 @@ theApp.controller('dashboardController', ['$scope', '$http', '$log', 'store', '$
 			})
 	}
 
-	getAllProjects()
+	getAllProjects();
 
-	$interval(getAllProjects, 60000);
+	// Run defined intervals
+	$interval(timedIntervals, 60000);
+
+	// Define intervals required for dashboard
+	function timedIntervals() {
+		getAllProjects();
+		getWorkingUsers();
+		console.log("Interwal was called!");
+	}
 
 	function getUsersTasks() {
 		$http.get('/api/tasks/user/' + store.get('userid') + '/limit/5')
@@ -125,5 +150,30 @@ theApp.controller('dashboardController', ['$scope', '$http', '$log', 'store', '$
 	}
 
 	getAllTaskTypes();
+
+	$scope.workingHours = undefined;
+	$scope.todaysTasks = [];
+
+	$scope.getWorkingHours = function() {
+		$http.get('/api/get-todays-worked-hours')
+			.success(function(results) {
+				$scope.todaysTasks = results;
+
+				if($scope.todaysTasks.length == 0) {
+					$scope.workingHours = 0;
+				} else {
+
+					// Calculate total hours
+					var totalHours = 0;
+
+					for(var i = 0; i < $scope.todaysTasks.length; i++) {
+						totalHours += $scope.todaysTasks[i].hours;
+					}
+
+					$scope.workingHours = totalHours;
+				}
+				
+			})
+	}
 
 }]);

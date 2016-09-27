@@ -39,5 +39,17 @@ table td a {
   color: #fff !important;
 }
 
+.disclude-projects-filter {
+  margin-top: 4px;
+}
+
+.disclude-projects-filter-title {
+  margin-left: 17px;
+}
+
+.disclude-projects-filter-select {
+  height: 32px;
+}
+
 
 

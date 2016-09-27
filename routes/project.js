@@ -127,7 +127,7 @@ module.exports = (router) => {
 						displayName += '-' + oldProject.version;
 					}
 
-					displayName += newCustomer.name + '-' + req.body.name;
+					displayName += '-' + newCustomer.name + '-' + req.body.name;
 
 					Project.update({ _id: req.params.id }, {
 						$set: { 
@@ -159,7 +159,7 @@ module.exports = (router) => {
 					displayName += newType.name + parentProject.number + parentProject.year;
 					displayName += '-' + req.body.version;
 					displayName += '-' + newCustomer.name + '-' + req.body.name;
-
+					console.log("New displayName: ", displayName);
 					var newProjectVersion = new Project({
 						name: req.body.name,
 						version: req.body.version,

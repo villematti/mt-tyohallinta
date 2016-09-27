@@ -25,6 +25,25 @@
 		</div>
 	</div>
 	<div class="col-md-12" style="margin-top: 10px;">
+		<div class="col-md-3">
+			<label>{{ 'SELECT_TASKTYPE' | translate }}: </label><br />
+			<select class="form-control" ng-model="selectedTasktype" style="margin-top: 5px;">
+				<option value="0" selected>{{ 'ALL' | translate }}</option>
+				<option ng-repeat="tasktype in tasktypes" value="{{ tasktype._id }}">{{ tasktype.name }}</option>
+			</select>
+		</div>
+		<div class="col-md-9">
+			<label class="disclude-projects-filter-title">{{ 'PROJECT_FILTER_TITLE' | translate }}: </label>
+			<md-input-container class="col-md-12 disclude-projects-filter">
+		        <md-select class="disclude-projects-filter-select" ng-model="filteredProjects" multiple>
+		          <md-optgroup label="{{ 'PROJECT_FILTER' | translate }}">
+		            <md-option ng-value="project._id" ng-repeat="project in projects">{{project.displayName}}</md-option>
+		          </md-optgroup>
+		        </md-select>
+		      </md-input-container>
+		</div>
+	</div>
+	<div class="col-md-12" style="margin-top: 10px;">
 		<div class="col-md-6">
 			<label>{{ 'SELECT_PROJECT' | translate }}: </label><br />
 			<select class="form-control" ng-model="selectedProject" style="margin-top: 11px;">

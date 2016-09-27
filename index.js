@@ -745,16 +745,27 @@ apiRoutes.post('/tasks/all', function(req, res, next) {
 
 	var criteria = {};
 
-	if(req.body.activeProjects == true) {
+	console.log("TaskTypeId: ", req.body.taskTypeId)
 
-		if(req.body.noTime == false) {
+	if(req.body.taskTypeId !== 0 && req.body.taskTypeId !== "0") {
+		criteria.taskTypeId = req.body.taskTypeId;
+	}
+
+	if(req.body.filteredProjects.length > 0) {
+		criteria.projectId = {'$nin': req.body.filteredProjects};
+	}
+
+	if(req.body.activeProjects === true) {
+
+		if(req.body.noTime === false) {
 		criteria.createdAt = {'$gte': req.body.startDate, '$lte': req.body.endDate};
 		}
 
-		if(req.body.userId != 0) {
+		if(req.body.userId !== "0" && req.body.userId !== 0) {
 			criteria.userId = req.body.userId;
 		}
 
+		// This reporting methods only searches projects that are at Pending state.
 		Status.findOne({name: "Pending"}, function(err, status) {
 			if(err) return next(err);
 
@@ -790,26 +801,23 @@ apiRoutes.post('/tasks/all', function(req, res, next) {
 				});
 
 			})
-
-			
-
 		})
 
 	} else {
 
-		if(req.body.noTime == false) {
-		criteria.createdAt = {'$gte': req.body.startDate, '$lte': req.body.endDate};
+		if(req.body.noTime === false) {
+			criteria.createdAt = {'$gte': req.body.startDate, '$lte': req.body.endDate};
 		}
 
-		if(req.body.userId != 0) {
+		if(req.body.userId !== "0" && req.body.userId !== 0) {
 			criteria.userId = req.body.userId;
 		}
 
-		if(req.body.projectId != 0 && req.body.activeProjects == false) {
+		if(req.body.projectId !== 0 && req.body.projectId !== "0" && req.body.activeProjects === false) {
 			criteria.projectId = req.body.projectId;
 		}
 
-		if(req.body.noTime == true && req.body.userId == 0 && req.body.projectId == 0) {
+		if(req.body.noTime === true && req.body.userId === 0 && req.body.userId !== "0" && req.body.projectId !== 0 && req.body.projectId !== "0") {
 			return next();
 		}
 
@@ -820,13 +828,17 @@ apiRoutes.post('/tasks/all', function(req, res, next) {
 		.exec(function(error, results) {
 			if(error) return next(error);
 
-			res.json(results);
+			Type.populate(results, {
+				path: 'projectId.typeId'
+			});
+
+			Customer.populate(results, {
+				path: 'projectId.customerId'
+			}, () => {
+				res.json(results);
+			})
 		});
 	}
-
-	
-
-	
 });
 
 // Find last 5 tasks what belong to spesific user
@@ -996,5 +1008,7 @@ app.get('/', function(req, res) {
 
 var projectRoutes = require('./routes/project')(apiRoutes);
 var settingsRoutes = require('./routes/settings')(apiRoutes);
+var userRoutes = require('./routes/user')(apiRoutes);
+var taskRoutes = require('./routes/task')(apiRoutes);
 
 module.exports = app;

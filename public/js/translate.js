@@ -93,7 +93,13 @@ theApp.config(function($translateProvider) {
         CREATE_NEW_VERSION: 'Luo uusi verio',
         CREATE_NEW_PROJECT_VERSION_TITLE: 'Luo uusi version projektista',
         PROJECT_NUMBER: 'Numero',
-        PROJECT_YEAR: 'Vuosi'
+        PROJECT_YEAR: 'Vuosi',
+        WORKING_USERS: 'Töissä olevat käyttäjät',
+        PROJECT_DISPLAY_NAME: 'Projekti',
+        GET_TODAYS_HOURS: 'Työaika tänään',
+        SELECT_TASKTYPE: 'Valitse työvaihe',
+        PROJECT_FILTER: 'Valitse suodatettavat projektit',
+        PROJECT_FILTER_TITLE: 'Projektisuodatin'
     });
 
     $translateProvider.preferredLanguage('fi');

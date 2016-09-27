@@ -25,7 +25,9 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 
 	$scope.selectedUser = 0;
 	$scope.selectedProject = 0;
+	$scope.selectedTasktype = 0;
 	$scope.activeProjects = false;
+	$scope.filteredProjects = [];
 
 	$scope.notFound = false;
 
@@ -38,8 +40,10 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 	$scope.getTasksOnTime = function() {
 		$scope.exportReady = false;
 		$http.post('/api/tasks/all', {
+				filteredProjects: $scope.filteredProjects,
 				activeProjects: $scope.activeProjects,
 				userId: $scope.selectedUser,
+				taskTypeId: $scope.selectedTasktype,
 				noTime: $scope.noTime,
 				projectId: $scope.selectedProject,
 				startDate: Date.parse($scope.startDate), 
@@ -100,6 +104,17 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 
 	getAllProjects();
 
+	$scope.tasktypes = {};
+
+	function getAllTasktypes() {
+		$http.get('/api/tasktypes')
+			.success(function(results) {
+				$scope.tasktypes = results;
+			})
+	}
+
+	getAllTasktypes();
+
 	// Export to CSV
 	$scope.exportToCsv = function() {
 
@@ -127,11 +142,20 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 		var timeOptions = {hour12: false}
 
 		for(var i=0;i < $scope.tasks.length;i++) {
+			
+			var endDate = '';
+			if($scope.tasks[i].endedAt !== null) {
+				endDate = new Date($scope.tasks[i].endedAt).toLocaleString('fi-FI', timeOptions);
+			} else {
+				endDate = null;
+			}
 
 			if($scope.tasks[i].bigVisit) {
+				
+
 				fieldData[i] = {
 					"Aloitusaika": new Date($scope.tasks[i].createdAt).toLocaleString('fi-FI', timeOptions),
-					"Lopetusaika": new Date($scope.tasks[i].endedAt).toLocaleString('fi-FI', timeOptions),
+					"Lopetusaika": endDate,
 					"Tunnit": $scope.tasks[i].hours,
 					"Tyyppi": $scope.tasks[i].projectId.typeId.name,
 					"Numero": $scope.tasks[i].projectId.number,
