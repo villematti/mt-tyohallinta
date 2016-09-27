@@ -32,15 +32,11 @@
 				<option ng-repeat="tasktype in tasktypes" value="{{ tasktype._id }}">{{ tasktype.name }}</option>
 			</select>
 		</div>
-		<div class="col-md-9">
-			<label class="disclude-projects-filter-title">{{ 'PROJECT_FILTER_TITLE' | translate }}: </label>
-			<md-input-container class="col-md-12 disclude-projects-filter">
-		        <md-select class="disclude-projects-filter-select" ng-model="filteredProjects" multiple>
-		          <md-optgroup label="{{ 'PROJECT_FILTER' | translate }}">
-		            <md-option ng-value="project._id" ng-repeat="project in projects">{{project.displayName}}</md-option>
-		          </md-optgroup>
-		        </md-select>
-		      </md-input-container>
+		<div class="col-md-9" style="margin-top: 5px;">
+			<label>{{ 'PROJECT_FILTER_TITLE' | translate }}: </label><br />
+		        <select class="form-control" ng-model="filteredProjects">
+		          <option ng-repeat="project in projects" value="{{ project._id }}">{{ project.displayName }}</option>
+		        </select>
 		</div>
 	</div>
 	<div class="col-md-12" style="margin-top: 10px;">

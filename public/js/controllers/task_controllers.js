@@ -41,7 +41,7 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 		$scope.exportReady = false;
 		$http.post('/api/tasks/all', {
 				filteredProjects: $scope.filteredProjects,
-				activeProjects: $scope.activeProjects,
+				activeProjects: [ $scope.activeProjects ],
 				userId: $scope.selectedUser,
 				taskTypeId: $scope.selectedTasktype,
 				noTime: $scope.noTime,
