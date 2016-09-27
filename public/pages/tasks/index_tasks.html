@@ -32,11 +32,18 @@
 				<option ng-repeat="tasktype in tasktypes" value="{{ tasktype._id }}">{{ tasktype.name }}</option>
 			</select>
 		</div>
-		<div class="col-md-9" style="margin-top: 5px;">
+		<div class="col-md-6" style="margin-top: 5px;">
 			<label>{{ 'PROJECT_FILTER_TITLE' | translate }}: </label><br />
 		        <select class="form-control" ng-model="filteredProjects">
 		          <option ng-repeat="project in projects" value="{{ project._id }}">{{ project.displayName }}</option>
 		        </select>
+		</div>
+		<div class="col-md-3">
+			<label>{{ 'SELECT_CUSTOMER' | translate }}: </label><br />
+			<select class="form-control" ng-model="selectedCustomer" style="margin-top: 5px;">
+				<option value="0" selected>{{ 'ALL' | translate }}</option>
+				<option ng-repeat="customer in customers" value="{{ customer._id }}">{{ customer.name }}</option>
+			</select>
 		</div>
 	</div>
 	<div class="col-md-12" style="margin-top: 10px;">

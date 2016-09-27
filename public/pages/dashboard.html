@@ -84,9 +84,8 @@
 		<dir-pagination-controls></dir-pagination-controls>
 	</div>
 	<div class="col-md-12">
-		<h3>{{ 'WORKING_USERS' | translate }} <i ng-click="updateWorkingUsers()" class="fa fa-refresh" aria-hidden="true"></i>
-</h3>
-		<ul ng-repeat="task in workingUsers" class="col-md-6 list-group">
+		<h3>{{ 'WORKING_USERS' | translate }} <i ng-click="updateWorkingUsers()" class="fa fa-refresh" aria-hidden="true"></i></h3>
+		<ul ng-if="workingUsers.length > 0" ng-repeat="task in workingUsers" class="col-md-6 list-group">
 			<a class="list-group-item">
 				<h4 class="list-group-item-heading">
 					<b>{{ task.userId.name }}</b>

@@ -751,7 +751,7 @@ apiRoutes.post('/tasks/all', function(req, res, next) {
 		criteria.taskTypeId = req.body.taskTypeId;
 	}
 
-	if(req.body.filteredProjects.length > 0) {
+	if(req.body.filteredProjects[0] !== '') {
 		criteria.projectId = {'$nin': req.body.filteredProjects};
 	}
 
@@ -769,8 +769,16 @@ apiRoutes.post('/tasks/all', function(req, res, next) {
 		Status.findOne({name: "Pending"}, function(err, status) {
 			if(err) return next(err);
 
+			var activeStatus = {};
+
+			activeStatus.statusId = status._id;
+
+			if(req.body.customerId !== 0 && req.body.customerId !== "0") {
+				activeStatus.customerId = req.body.customerId;
+			}
+
 			
-			Project.find({statusId: status._id}, function(error, projects) {
+			Project.find(activeStatus, function(error, projects) {
 				if(error) return next(error);
 
 				var activeIds = [];
@@ -805,21 +813,32 @@ apiRoutes.post('/tasks/all', function(req, res, next) {
 
 	} else {
 
-		if(req.body.noTime === false) {
+		console.log("No time value: ", req.body.noTime)
+		if(req.body.noTime !== true) {
 			criteria.createdAt = {'$gte': req.body.startDate, '$lte': req.body.endDate};
+			console.log("No Time Was Called!")
 		}
 
 		if(req.body.userId !== "0" && req.body.userId !== 0) {
 			criteria.userId = req.body.userId;
+			console.log("User ID Was Called!")
 		}
 
-		if(req.body.projectId !== 0 && req.body.projectId !== "0" && req.body.activeProjects === false) {
+		if(req.body.projectId !== 0 && req.body.projectId !== "0") {
 			criteria.projectId = req.body.projectId;
+			console.log("Project ID Was Called!")
 		}
 
-		if(req.body.noTime === true && req.body.userId === 0 && req.body.userId !== "0" && req.body.projectId !== 0 && req.body.projectId !== "0") {
-			return next();
+		if(req.body.noTime === false) {
+			if(req.body.userId === 0 && req.body.userId === "0") {
+				if(req.body.projectId === 0 && req.body.projectId === "0") {
+					console.log("Error Was Called!")
+					return next();
+				}
+			}
 		}
+		
+		console.log("Criteria: ", criteria)
 
 		Task.find(criteria)
 		.populate('userId')

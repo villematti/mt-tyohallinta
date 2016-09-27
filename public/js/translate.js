@@ -99,7 +99,8 @@ theApp.config(function($translateProvider) {
         GET_TODAYS_HOURS: 'Työaika tänään',
         SELECT_TASKTYPE: 'Valitse työvaihe',
         PROJECT_FILTER: 'Valitse suodatettavat projektit',
-        PROJECT_FILTER_TITLE: 'Projektisuodatin'
+        PROJECT_FILTER_TITLE: 'Projektisuodatin',
+        SELECT_CUSTOMER: 'Valitse asiakas'
     });
 
     $translateProvider.preferredLanguage('fi');

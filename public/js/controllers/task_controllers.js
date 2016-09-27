@@ -27,7 +27,8 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 	$scope.selectedProject = 0;
 	$scope.selectedTasktype = 0;
 	$scope.activeProjects = false;
-	$scope.filteredProjects = [];
+	$scope.filteredProjects = '';
+	$scope.selectedCustomer = 0;
 
 	$scope.notFound = false;
 
@@ -40,9 +41,10 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 	$scope.getTasksOnTime = function() {
 		$scope.exportReady = false;
 		$http.post('/api/tasks/all', {
-				filteredProjects: $scope.filteredProjects,
-				activeProjects: [ $scope.activeProjects ],
+				filteredProjects: [ $scope.filteredProjects ],
+				activeProjects: $scope.activeProjects,
 				userId: $scope.selectedUser,
+				customerId: $scope.selectedCustomer,
 				taskTypeId: $scope.selectedTasktype,
 				noTime: $scope.noTime,
 				projectId: $scope.selectedProject,
@@ -92,6 +94,17 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 	}
 
 	getAllUsers();
+
+	$scope.customers = {};
+
+	function getAllCustomers() {
+		$http.get('/api/customers')
+			.success(function(results) {
+				$scope.customers = results;
+			})
+	}
+
+	getAllCustomers();
 
 	$scope.projects = {};
 

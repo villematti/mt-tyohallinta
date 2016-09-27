@@ -17,7 +17,7 @@ theApp.controller('dashboardController', ['$scope', '$http', '$log', 'store', '$
 	$scope.startTaskErrorMessage = '';
 
 	// Find working users
-	$scope.workingUsers = '';
+	$scope.workingUsers = [];
 
 	function getWorkingUsers() {
 		$http.get('/api/get-working-users')
@@ -29,7 +29,7 @@ theApp.controller('dashboardController', ['$scope', '$http', '$log', 'store', '$
 	getWorkingUsers();
 
 	$scope.updateWorkingUsers = function() {
-		$scope.workingUsers = '';
+		$scope.workingUsers = [];
 		$interval(getWorkingUsers, 1000, 1);
 	}
 
