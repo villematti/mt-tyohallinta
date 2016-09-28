@@ -34,7 +34,7 @@ theApp.controller('dashboardController', ['$scope', '$http', '$log', 'store', '$
 	}
 
 	function getAllProjects() {
-		$http.get('/api/projects')
+		$http.get('/api/projects/active')
 			.success(function(results) {
 				$scope.allProjects = results;
 			})
@@ -49,7 +49,6 @@ theApp.controller('dashboardController', ['$scope', '$http', '$log', 'store', '$
 	function timedIntervals() {
 		getAllProjects();
 		getWorkingUsers();
-		console.log("Interwal was called!");
 	}
 
 	function getUsersTasks() {
