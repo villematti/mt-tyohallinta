@@ -34,9 +34,14 @@
 		</div>
 		<div class="col-md-6" style="margin-top: 5px;">
 			<label>{{ 'PROJECT_FILTER_TITLE' | translate }}: </label><br />
-		        <select class="form-control" ng-model="filteredProjects">
-		          <option ng-repeat="project in projects" value="{{ project._id }}">{{ project.displayName }}</option>
-		        </select>
+		     <ui-select theme="bootstrap" reset-search-input="false" ng-model="filteredProjects.value">
+		    	<ui-select-match allow-clear="true">
+		        	<span ng-bind="$select.selected.displayName"></span>
+		    	</ui-select-match>
+		    	<ui-select-choices repeat="project in (projects | filter: $select.search) track by project._id">
+		        	<span ng-bind="project.displayName"></span>
+		    	</ui-select-choices>
+			</ui-select>
 		</div>
 		<div class="col-md-3">
 			<label>{{ 'SELECT_CUSTOMER' | translate }}: </label><br />

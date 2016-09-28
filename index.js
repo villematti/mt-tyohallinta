@@ -751,8 +751,8 @@ apiRoutes.post('/tasks/all', function(req, res, next) {
 		criteria.taskTypeId = req.body.taskTypeId;
 	}
 
-	if(req.body.filteredProjects[0] !== '') {
-		criteria.projectId = {'$nin': req.body.filteredProjects};
+	if(req.body.filteredProjects[0] !== null) {
+		criteria.projectId = {'$nin': req.body.filteredProjects[0]._id};
 	}
 
 	if(req.body.activeProjects === true) {
