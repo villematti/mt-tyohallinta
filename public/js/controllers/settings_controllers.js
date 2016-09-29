@@ -168,6 +168,8 @@ theApp.controller('settingsController', ['$scope', '$http', '$log',
 
 	getAllSettings();
 
+	$scope.settingsElementMessage = '';
+
 	$scope.updateSetting = function(setting) {
 		console.log(setting);
 		$http.put('/api/update-setting/' + setting._id, {
@@ -175,9 +177,9 @@ theApp.controller('settingsController', ['$scope', '$http', '$log',
 			})
 			.success((result) => {
 				if(result.success === false) {
-					$scope.settingsMessage = result.message;
+					$scope.settingsElementMessage = result.message;
 				} else {
-					$scope.settingsMessage = result.message;
+					$scope.settingsElementMessage = result.message;
 					$scope.newSettingsName = '';
 					$scope.newSettingsValue = '';
 					getAllSettings();

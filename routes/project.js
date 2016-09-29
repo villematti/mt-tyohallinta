@@ -31,8 +31,6 @@ module.exports = (router) => {
 
 			Type.findOne({_id: req.body.type}, (typeError, selectedType) => {
 
-				console.log("Selected type: ", selectedType)
-
 				switch(selectedType.name) {
 					case 'T':
 						projectNumberString = 'taskProjectNumber';
@@ -44,44 +42,50 @@ module.exports = (router) => {
 						projectNumberString = 'taskProjectNumber';
 					break;
 				}
-			
-				console.log("Number string: ", projectNumberString)
 
+				// Check if there is appropiate number for project
 				Settings.findOne({ name: projectNumberString }, (error, numberObject) => {
 
-					var projectNumberObject;
-					var projectData = {};
+					// Check if year setting is set.
+					Settings.findOne( {name: 'year'}, (error, yearObject) => {
 
-					if (numberObject) {
-						projectNumberObject = numberObject;
-					} else {
-						projectNumber = 0;
+						// If year object is not found, return error
+						if (!yearObject) {
+							return next();
+						}
 
-						var newProjectNumber = new Settings({
-							name: projectNumberString,
-							value: 0
-						})
+						var projectNumberObject;
+						var projectData = {};
 
-						newProjectNumber.save();
-						projectNumberObject = newProjectNumber;
-					}
+						if (numberObject) {
+							projectNumberObject = numberObject;
+						} else {
+							projectNumber = 0;
 
-					projectData.name = req.body.name;
-					projectData.number = projectNumberObject.value;
-					projectData.year = req.body.year;
-					projectData.version = req.body.version;
-					projectData.typeId = req.body.type;
-					projectData.statusId = req.body.statusId;
-					projectData.customerId = req.body.customerId;
+							var newProjectNumber = new Settings({
+								name: projectNumberString,
+								value: 0
+							})
 
-					Project.findOne({ number: projectData.number }, (err, project) => {
-						if (err) {return next(err);}
+							newProjectNumber.save();
+							projectNumberObject = newProjectNumber;
+						}
 
-						if (project) {
-							if (project.year === projectData.year && project.typeId === projectData.typeId) {
+						projectData.name = req.body.name;
+						projectData.number = projectNumberObject.value;
+						projectData.year = yearObject.value;
+						projectData.version = req.body.version;
+						projectData.typeId = req.body.type;
+						projectData.statusId = req.body.statusId;
+						projectData.customerId = req.body.customerId;
+
+						Project.findOne( {number: projectData.number, year: projectData.year, typeId: projectData.typeId}, (projectError, project) => {
+							if(projectError) {return next(projectError);}
+
+							if(project) {
 
 								res.json({ success: false, message: "Invalid project number." })
-								
+
 							} else {
 
 								Type.findOne({ _id: projectData.typeId }, (typeErr, type) => {
@@ -100,28 +104,11 @@ module.exports = (router) => {
 										createNewProject(projectData, projectNumberObject, res);
 									})
 								})
-
-													
 							}
-						} else {
-							
-							Type.findOne({ _id: projectData.typeId }, (typeErr, type) => {
 
-								Customer.findOne({ _id: projectData.customerId }, (customerErr, customer) => {
-									projectData.displayName = '';
+						})
 
-									projectData.displayName += type.name  + projectData.number + projectData.year;
 
-									if (projectData.version !== '' && projectData.version !== '00') {
-										projectData.displayName += '-' + projectData.version
-									}
-
-									projectData.displayName += '-' + customer.name + '-' + projectData.name;
-
-									createNewProject(projectData, projectNumberObject, res);
-								})
-							})
-						}
 					})
 				})
 			})

@@ -101,7 +101,8 @@ theApp.config(function($translateProvider) {
         PROJECT_FILTER: 'Valitse suodatettavat projektit',
         PROJECT_FILTER_TITLE: 'Projektisuodatin',
         SELECT_CUSTOMER: 'Valitse asiakas',
-        ADD_OLD_PROJECTS: 'Hae vanhat projektit'
+        ADD_OLD_PROJECTS: 'Hae vanhat projektit',
+        UPDATE: 'Päivitä'
     });
 
     $translateProvider.preferredLanguage('fi');

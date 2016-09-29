@@ -23,11 +23,12 @@
 </ul>
 <hr />
 <h3>Setting elements</h3>
+<div class="alert alert-warning" ng-if="settingsElementMessage !== ''">{{ settingsElementMessage }}</div>
 <input type="text" ng-model="newSettingName" placeholder="Setting name" />
 <input type="text" ng-model="newSettingValue" placeholder="Setting value" />
 <button ng-disabled="newSettingName === '' && newSettingValue === ''" class="btn btn-primary" ng-click="createNewSetting()">Add new setting</button>
 <hr />
 <ul class="list-group" ng-repeat="setting in settings">
-	<li class="list-group-item">{{ setting.name }}: <input type="text" ng-model="setting.value" /> | <button class="btn btn-primary" ng-click="updateSetting(setting)">Update</button> | <button class="btn btn-warning" ng-click="deleteSetting(setting._id)">{{ 'DELETE' | translate }}</button></li>
+	<li class="list-group-item">{{ setting.name }}: <input type="text" ng-model="setting.value" /> | <button class="btn btn-primary" ng-click="updateSetting(setting)">{{ 'UPDATE' | translate }}</button> | <button class="btn btn-warning" ng-click="deleteSetting(setting._id)">{{ 'DELETE' | translate }}</button></li>
 </ul>
 </div>
