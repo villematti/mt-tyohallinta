@@ -100,7 +100,8 @@ theApp.config(function($translateProvider) {
         SELECT_TASKTYPE: 'Valitse työvaihe',
         PROJECT_FILTER: 'Valitse suodatettavat projektit',
         PROJECT_FILTER_TITLE: 'Projektisuodatin',
-        SELECT_CUSTOMER: 'Valitse asiakas'
+        SELECT_CUSTOMER: 'Valitse asiakas',
+        ADD_OLD_PROJECTS: 'Hae vanhat projektit'
     });
 
     $translateProvider.preferredLanguage('fi');

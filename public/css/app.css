@@ -6,9 +6,14 @@ html {
   width: 100%;
 }
 .footer {
+  margin-top: 25px;
   width: 100%;
   height: 60px;
   background-color: #FFF;
+}
+
+.old-projects-btn {
+  margin: 10px;
 }
 
 .datepickerdemoBasicUsage md-content {
@@ -49,6 +54,10 @@ table td a {
 
 .disclude-projects-filter-select {
   height: 32px;
+}
+
+md-content { 
+    overflow: visible;
 }
 
 

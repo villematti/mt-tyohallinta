@@ -5,6 +5,24 @@ const Customer = require('./../models/Customer');
 var i18n = require('i18n');
 
 module.exports = (router) => {
+	router.get('/find-projects-from-last-12-months', (req, res, next) => {
+		var d = new Date();
+		d.setMonth(d.getMonth() - 12);
+
+		console.log("12 months ago: ", d);
+
+		Project.find({createdAt: {'$gte': d}})
+			.populate('statusId')
+			.populate('customerId')
+			.populate('typeId')
+			.exec(function(error, results) {
+				if(error) {return next(error);}
+
+				res.json(results);
+			})
+
+	})
+
 	router.post('/create-new-project', (req, res, next) => {
 
 		projectNumberString = '';

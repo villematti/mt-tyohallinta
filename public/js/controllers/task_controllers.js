@@ -39,6 +39,13 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 	$scope.totalDirtyWork = 0;
 	$scope.totalOvertime = 0;
 
+	$scope.fillWithAllProjects = function() {
+		$http.get('/api/projects')
+			.success(function(results) {
+				$scope.projects = results;
+		})
+	}
+
 	$scope.getTasksOnTime = function() {
 		$scope.exportReady = false;
 		$http.post('/api/tasks/all', {
@@ -108,7 +115,7 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 	getAllCustomers();
 
 	function getAllProjects() {
-		$http.get('/api/projects')
+		$http.get('/api/find-projects-from-last-12-months')
 			.success(function(results) {
 				$scope.projects = results;
 			})
