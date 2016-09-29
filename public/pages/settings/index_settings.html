@@ -28,6 +28,6 @@
 <button ng-disabled="newSettingName === '' && newSettingValue === ''" class="btn btn-primary" ng-click="createNewSetting()">Add new setting</button>
 <hr />
 <ul class="list-group" ng-repeat="setting in settings">
-	<li class="list-group-item">{{ setting.name }}: {{ setting.value }} | <button class="btn btn-warning" ng-click="deleteSetting(setting._id)">{{ 'DELETE' | translate }}</button></li>
+	<li class="list-group-item">{{ setting.name }}: <input type="text" ng-model="setting.value" /> | <button class="btn btn-primary" ng-click="updateSetting(setting)">Update</button> | <button class="btn btn-warning" ng-click="deleteSetting(setting._id)">{{ 'DELETE' | translate }}</button></li>
 </ul>
 </div>

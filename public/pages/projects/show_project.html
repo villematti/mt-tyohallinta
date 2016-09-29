@@ -7,13 +7,6 @@
 	</div>
 
 	<div class="form-group col-xs-3 col-md-3">
-		<label>{{ 'PROJECT_TYPE' | translate }}:</label>
-		<select class="form-control" ng-model="newProjectType">
-			<option ng-repeat="type in projectTypes" value="{{ type._id }}">{{ type.name }}</option>
-		</select>
-	</div>
-
-	<div class="form-group col-xs-3 col-md-3">
 		<label>{{ 'PROJECT_STATUS' | translate }}:</label>
 		<select class="form-control" ng-model="newProjectStatus">
 			<option ng-repeat="status in projectStatuses" value="{{ status._id }}">{{ status.name }}</option>

@@ -30,10 +30,36 @@ module.exports = (router) => {
 	})
 
 	router.delete('/delete-setting/:id', (req, res, next) => {
-		Settings.findByIdAndRemove(req.params.id, function(err, result) {
+		Settings.findByIdAndRemove(req.params.id, (err, result) => {
 				if(err) return next(err);
 
 				res.json({ success: true, message: "Setting was deleted." });
 			})
+	})
+
+	// Update settings function. Simplyfy the year changeing process
+	router.put('/update-setting/:id', (req, res, next) => {
+		Settings.findOne({_id: req.params.id}, (err, setting) => {
+			if(err) {return next(err);}
+
+			if(setting) {
+
+				Settings.update({ _id: req.params.id}, {
+					$set: {
+						name: setting.name,
+						value: req.body.value,
+						modifiedAt: Date.now() 
+					}}, (error, result) => {
+						if(error) {return next(error);}
+
+						res.json({ success: true, message: "Setting " + setting.name + " was updated to value " + req.body.value });
+					}
+				);
+
+				
+			} else {
+				res.json({ success: false, message: "No setting found!" });
+			}
+		})
 	})
 }

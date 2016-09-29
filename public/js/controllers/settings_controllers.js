@@ -168,6 +168,23 @@ theApp.controller('settingsController', ['$scope', '$http', '$log',
 
 	getAllSettings();
 
+	$scope.updateSetting = function(setting) {
+		console.log(setting);
+		$http.put('/api/update-setting/' + setting._id, {
+				value: setting.value
+			})
+			.success((result) => {
+				if(result.success === false) {
+					$scope.settingsMessage = result.message;
+				} else {
+					$scope.settingsMessage = result.message;
+					$scope.newSettingsName = '';
+					$scope.newSettingsValue = '';
+					getAllSettings();
+				}
+			})
+	}
+
 	$scope.deleteSetting = function(settingId) {
 		$http.delete('/api/delete-setting/' + settingId)
 			.success((result) => {
@@ -175,6 +192,8 @@ theApp.controller('settingsController', ['$scope', '$http', '$log',
 					$scope.settingsMessage = result.message;
 				} else {
 					$scope.settingsMessage = result.message;
+					$scope.newSettingsName = '';
+					$scope.newSettingsValue = '';
 					getAllSettings();
 				}
 			})

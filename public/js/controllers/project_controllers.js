@@ -67,7 +67,7 @@ theApp.controller('showProjectController', ['$scope', '$http', '$log', '$locatio
 	function getProject() {
 		$http.get('/api/project/' + $routeParams.id)
 			.success(function(result) {
-				$log.info(result);
+
 				$scope.newProjectStatus = result.statusId._id;
 				$scope.newProjectName = result.name;
 				$scope.newProjectCustomer = result.customerId;
