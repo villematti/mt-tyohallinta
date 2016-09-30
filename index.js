@@ -885,28 +885,25 @@ apiRoutes.get('/tasks/user/:id/limit/:limit', function(req, res, next) {
 
 apiRoutes.post('/tasks/user/:id/range',function(req, res, next){
 	
-	if(req.body.startDate != null && req.body.endDate != null) {
-		User.findOne({_id: req.params.id}, function(err, user) {
+	User.findOne({_id: req.params.id}, function(err, user) {
+		if(user) {
+			var criteria = {};
+			criteria.userId = user._id;
+			criteria.createdAt = {'$gte': req.body.startDate, '$lte': req.body.endDate};
+			Task.find(criteria)
+				.populate('projectId')
+				.exec(function(error, results) {
+					if(error, results) {
+						if(error) return next(error);
 
-			if(user) {
-				var criteria = {};
-				criteria.createdAt = {'$gte': req.body.startDate, '$lte': req.body.endDate};
-				Task.find(criteria)
-					.populate('projectId')
-					.exec(function(error, results) {
-						if(error, results) {
-							if(error) return next(error);
+						res.json(results);
+					}
+				})
+		} else {
+			return next();
+		}
+	})
 
-							res.json(results);
-						}
-					})
-			} else {
-				res.send([]);
-			}
-		})
-	} else {
-		res.json({ success: "Failure", message: i18n.__('SET_DATA_RANGE') })
-	}
 
 	
 });

@@ -134,7 +134,7 @@
 			<td>{{ task.createdAt | date: "dd-MM HH:mm" }}</td>
 			<td>{{ task.endedAt | date: "dd-MM HH:mm" }}</td>
 			<td>{{ task.hours | number: 2 }} h</td>
-			<td>{{ task.projectId.name }}</td>
+			<td>{{ task.projectId.displayName }}</td>
 			<td>
 				<input ng-disabled="true" ng-if="!task.bigVisit" type="checkbox" />
 				<input ng-disabled="true" ng-if="task.bigVisit" type="checkbox" checked />
