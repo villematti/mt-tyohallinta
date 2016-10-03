@@ -127,8 +127,10 @@ module.exports = (router) => {
 				Customer.findOne({ _id: req.body.customerId }, (customerError, newCustomer) => {
 
 					var displayName = '';
+
 					displayName += newType.name + oldProject.number + oldProject.year;
-					if (oldProject.verion !== '' && oldProject.version !== '00') {
+					if (oldProject.version !== '' && oldProject.version !== '00' && oldProject.version !== undefined) {
+						
 						displayName += '-' + oldProject.version;
 					}
 
