@@ -65,7 +65,7 @@
 		</div>
 		<ul ng-if="usersTasks.lenght !== 0" class="list-group" dir-paginate="task in usersTasks | orderBy: 'createdAt':true | itemsPerPage: 5">
 			<a ng-if="task.endedAt !== null" class="list-group-item">
-				<h4 class="list-group-item-heading">{{ task.projectId.name }}</h4>
+				<h4 class="list-group-item-heading">{{ task.projectId.displayName }}</h4>
 				<p class="list-group-item-text">
 					<b>{{ 'TASK_STARTED' | translate }}: </b>{{ task.createdAt | date: "dd-MM-yyyy HH:mm" }}
 					<b>{{ 'TASK_ENDED' | translate }}: </b>{{ task.endedAt | date: "dd-MM-yyyy HH:mm" }}
