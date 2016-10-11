@@ -8,6 +8,7 @@ var password = require('./utils/password');
 var json2csv = require('json2csv');
 var fs = require('fs');
 var i18n = require('i18n');
+var stream = require('stream');
 
 i18n.configure({
 	locales: ['fi_FI'],
@@ -1008,10 +1009,19 @@ apiRoutes.post('/export/tasks', function(req, res, next) {
 	json2csv(req.body.data, function(err, csv) {
 		if(err) return next(err);
 
-		fs.writeFile('./public/export.csv', csv, 'ascii', function(error) {
-			if(error) return next(error);
+		var myWriteStream = fs.createWriteStream('./public/export.csv', {encoding: 'ascii'});
+
+		myWriteStream.on('finish', () => {
 			res.send({success: true, message: i18n.__('DOWNLOAD_REPORT_AT') });
 		});
+
+		myWriteStream.on('error', (error) => {
+			console.log(error);
+			return next(error);
+		})
+
+		myWriteStream.write(csv, 'ascii');
+		myWriteStream.end();
 	});
 });
 

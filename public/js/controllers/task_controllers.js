@@ -72,12 +72,14 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 					var totalMachineTime = 0;
 					var totalBigVisits = 0;
 					var totalDirtyWork = 0;
+					var totalOvertime = 0;
 
 					for(var i = 0; i < $scope.tasks.length; i++) {
 
 						totalHours += $scope.tasks[i].hours;
 						totalMachineTime += $scope.tasks[i].machineTime;
 						totalDirtyWork += $scope.tasks[i].dirtyWork;
+						totalOvertime += $scope.tasks[i].overtime;
 
 						if($scope.tasks[i].bigVisit) {
 							totalBigVisits++;
@@ -88,6 +90,7 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 					$scope.totalMachineTime = totalMachineTime;
 					$scope.totalBigVisits = totalBigVisits;
 					$scope.totalDirtyWork = totalDirtyWork;
+					$scope.totalOvertime = totalOvertime;
 				}
 		});
 	}
