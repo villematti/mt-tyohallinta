@@ -40,8 +40,8 @@ app.set('superSecret', config.secret);
 
 var port = 3000;
 
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(bodyparser.json({limit: '50mb'}));
+app.use(bodyparser.urlencoded({limit: '50mb', extended: true}));
 
 app.use(morgan('dev'));
 
