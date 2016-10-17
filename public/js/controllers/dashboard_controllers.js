@@ -15,6 +15,7 @@ theApp.controller('dashboardController', ['$scope', '$http', '$log', 'store', '$
 	$scope.selectedTaskType = '';
 
 	$scope.startTaskErrorMessage = '';
+	$scope.endTaskErrorMessage = '';
 
 	// Find working users
 	$scope.workingUsers = [];

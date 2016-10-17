@@ -35,6 +35,8 @@
 		</div>
 	</div>
 
+	<div class="alert alert-danger" ng-if="endTaskErrorMessage !== ''">{{ endTaskErrorMessage }}</div>
+
 	<h3>{{ 'CURRENT_TASK' | translate }}</h3>
 	<ul ng-if="usersTasks.lenght !== 0" class="list-group" ng-repeat="task in usersTasks">
 		<div ng-if="task.endedAt === null" class="list-group-item">
