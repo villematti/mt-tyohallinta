@@ -1,7 +1,9 @@
 const Project = require('../models/Project');
 const Settings = require('./../models/Settings');
+const Task = require('./../models/Task');
 const Type = require('./../models/Type');
 const Customer = require('./../models/Customer');
+const Status = require('./../models/Status');
 var i18n = require('i18n');
 
 module.exports = (router) => {
@@ -228,7 +230,51 @@ module.exports = (router) => {
 			})
 		})
 	})
+
+	router.get('/report-from-active-projects', (req, res, next) => {
+		Status.findOne({name: 'Pending'}, (statusErr, status) => {
+			if(statusErr) {return next(statusErr);}
+
+			Project.find({statusId: status._id}, (projectErr, projects) => {
+				var projectWorks = {};
+				var projectIdArray = [];
+				var projectIdBasedObject = {};
+
+				projects.map((project) => {
+					projectIdArray.push(project._id);
+					projectIdBasedObject[project._id] = {
+						displayName: project.displayName
+					}
+				})
+					
+				Task.find({projectId: { $in: projectIdArray }, hours: { $ne: null }}, (taskError, tasks) => {
+					
+					var projectReportObject = {};
+
+					projectIdArray.map((projectId) => {
+						var hourCount = 0;
+
+						tasks.map((task) => {
+
+							if(String(task.projectId) === String(projectId)) {
+								console.log("Tasks projectId: ", task.projectId, "Project's ID: ", projectId)
+								console.log(task.hours);
+								projectReportObject[projectId] = {
+									hours: task.hours,
+									displayName: projectIdBasedObject[projectId].displayName
+								}
+							}
+						});
+					});
+
+					res.json(projectReportObject);
+				})
+			})
+		})
+	});
 }
+
+
 
 function createNewProject(projectData, numberObject, res) {
 	var newProject = new Project(projectData);

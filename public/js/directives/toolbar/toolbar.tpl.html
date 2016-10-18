@@ -9,6 +9,7 @@
 					<li><a href="#/dashboard">{{ 'HOME' | translate}}</a></li>
 					<li ng-if="token.isAdmin() || token.isPm()"><a href="#/projects">{{ 'PROJECTS_TITLE' | translate}}</a></li>
 					<li ng-if="token.isAdmin()"><a href="#/tasks">{{ 'TASKS_TITLE' | translate}}</a></li>
+					<li ng-if="token.isAdmin()"><a href="#/project-reports">{{ 'PROJETCT_RAPORT_TITLE' | translate }}</a></li>
 					<li ng-if="token.isAdmin()"><a href="#/users">{{ 'USERS_TITLE' | translate}}</a></li>
 					<li ng-if="token.isAdmin() || token.isPm()"><a href="#/customers">{{ 'CUSTOMERS_TITLE' | translate}}</a></li>
 					<li ng-if="token.isAdmin()"><a href="#/settings">{{ 'SETTINGS_TITLE' | translate}}</a></li>
