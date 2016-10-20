@@ -33,6 +33,7 @@ module.exports = (router) => {
 
 			Type.findOne({_id: req.body.type}, (typeError, selectedType) => {
 
+				// Required project type defination
 				switch(selectedType.name) {
 					case 'T':
 						projectNumberString = 'taskProjectNumber';
@@ -40,6 +41,17 @@ module.exports = (router) => {
 					case 'M':
 						projectNumberString = 'modelProjectNumber';
 					break;
+					case 'RT':
+						projectNumberString = 'raumaTaskProjectNumber';
+					break;
+					case 'RM':
+						projectNumberString = 'raumaModelProjectNumber';
+					break;
+					case 'JM':
+						projectNumberString = 'joensuuModelProjectNumber';
+					break;
+					case 'JT':
+						projectNumberString = 'joensuuTastProjectNumber';
 					default:
 						projectNumberString = 'taskProjectNumber';
 					break;
