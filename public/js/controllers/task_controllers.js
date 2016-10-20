@@ -172,6 +172,10 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 			} else {
 				endDate = null;
 			}
+			var overtimeValue = 0;
+			if($scope.tasks[i].overtime !== null) {
+				overtimeValue = $scope.tasks[i].overtime.toString().replace(".",",")
+			}
 
 			if($scope.tasks[i].bigVisit) {
 				
@@ -189,9 +193,9 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 					"Työvaihe": $scope.tasks[i].taskTypeId.name,
 					"Käyttäjä": $scope.tasks[i].userId.name,
 					"Isokäynti": 1,
-					"Ylityöt": $scope.tasks[i].overtime.toString().replace(".",","),
-					"Likainen työ": $scope.tasks[i].dirtyWork.toString().replace(".",","),
-					"Yksinkäynti": $scope.tasks[i].machineTime.toString().replace(".",",")
+					"Ylityöt": overtimeValue,
+					"Likainen työ": $scope.tasks[i].dirtyWork,
+					"Yksinkäynti": $scope.tasks[i].machineTime.toString()
 				}
 			} else {
 				fieldData[i] = {
@@ -207,9 +211,9 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 					"Työvaihe": $scope.tasks[i].taskTypeId.name,
 					"Käyttäjä": $scope.tasks[i].userId.name,
 					"Isokäynti": 0,
-					"Ylityöt": +$scope.tasks[i].overtime.toString().replace(".",","),
-					"Likainen työ": +$scope.tasks[i].dirtyWork.toString().replace(".",","),
-					"Yksinkäynti": +$scope.tasks[i].machineTime.toString().replace(".",",")
+					"Ylityöt": overtimeValue,
+					"Likainen työ": +$scope.tasks[i].dirtyWork,
+					"Yksinkäynti": +$scope.tasks[i].machineTime
 				}
 			}
 		}
