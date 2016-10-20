@@ -175,6 +175,7 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 			var overtimeValue = 0;
 			var machineTimeValue = 0;
 			var dirtyWorkValue = 0;
+			var hours = 0;
 			
 			if($scope.tasks[i].overtime !== null) {
 				overtimeValue = $scope.tasks[i].overtime.toString().replace(".",",")
@@ -187,6 +188,10 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 			if($scope.tasks[i].machineTime !== null) {
 			   machineTimeValue = $scope.tasks[i].machineTime.toString().replace(".",",")
 			}
+
+			if($scope.tasks[i].hours != null) {
+				hours = $scope.tasks[i].hours.toString().replace(".",",")
+			}
 			
 
 			if($scope.tasks[i].bigVisit) {
@@ -195,7 +200,7 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 				fieldData[i] = {
 					"Aloitusaika": new Date($scope.tasks[i].createdAt).toLocaleString('fi-FI', timeOptions),
 					"Lopetusaika": endDate,
-					"Tunnit": $scope.tasks[i].hours,
+					"Tunnit": hours,
 					"Tyyppi": $scope.tasks[i].projectId.typeId.name,
 					"Numero": $scope.tasks[i].projectId.number,
 					"Vuosi": $scope.tasks[i].projectId.year,
@@ -213,7 +218,7 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 				fieldData[i] = {
 					"Aloitusaika": new Date($scope.tasks[i].createdAt).toLocaleString('fi-FI', timeOptions),
 					"Lopetusaika": new Date($scope.tasks[i].endedAt).toLocaleString('fi-FI', timeOptions),
-					"Tunnit": $scope.tasks[i].hours,
+					"Tunnit": hours,
 					"Tyyppi": $scope.tasks[i].projectId.typeId.name,
 					"Numero": $scope.tasks[i].projectId.number,
 					"Vuosi": $scope.tasks[i].projectId.year,
