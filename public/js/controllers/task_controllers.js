@@ -189,9 +189,9 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 					"Työvaihe": $scope.tasks[i].taskTypeId.name,
 					"Käyttäjä": $scope.tasks[i].userId.name,
 					"Isokäynti": 1,
-					"Ylityöt": $scope.tasks[i].overtime,
-					"Likainen työ": $scope.tasks[i].dirtyWork,
-					"Yksinkäynti": $scope.tasks[i].machineTime
+					"Ylityöt": +$scope.tasks[i].overtime,
+					"Likainen työ": +$scope.tasks[i].dirtyWork,
+					"Yksinkäynti": +$scope.tasks[i].machineTime
 				}
 			} else {
 				fieldData[i] = {
@@ -207,9 +207,9 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 					"Työvaihe": $scope.tasks[i].taskTypeId.name,
 					"Käyttäjä": $scope.tasks[i].userId.name,
 					"Isokäynti": 0,
-					"Ylityöt": $scope.tasks[i].overtime,
-					"Likainen työ": $scope.tasks[i].dirtyWork,
-					"Yksinkäynti": $scope.tasks[i].machineTime
+					"Ylityöt": +$scope.tasks[i].overtime,
+					"Likainen työ": +$scope.tasks[i].dirtyWork,
+					"Yksinkäynti": +$scope.tasks[i].machineTime
 				}
 			}
 		}
