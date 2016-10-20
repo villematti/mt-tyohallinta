@@ -185,7 +185,7 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 			}
 			
 			if($scope.tasks[i].machineTime !== null) {
-			   dirtyWorkValue = $scope.tasks[i].machineTime.toString().replace(".",",")
+			   machineTimeValue = $scope.tasks[i].machineTime.toString().replace(".",",")
 			}
 			
 

@@ -31,10 +31,22 @@ theApp.controller('projectReportsController', ['$http', '$scope', 'projectReport
 		var timeOptions = {hour12: false}
 
 		Object.keys($scope.response).map(function(data) {
+
+			var hours = 0;
+			var machineTime = 0;
+
+			if($scope.response[data].hours !== null) {
+				hours = $scope.response[data].hours.toString().replace(".",",")
+			}
+
+			if($scope.response[data].machineTime !== null) {
+				machineTime = $scope.response[data].machineTime.toString().replace(".",",")
+			}
+
 			fieldData.push({
 				"Nimi": $scope.response[data].displayName,
-				"Tunnit": $scope.response[data].hours,
-				"Yksinkäynti": $scope.response[data].machineTime
+				"Tunnit": hours,
+				"Yksinkäynti": machineTime
 			})
 		});
 
