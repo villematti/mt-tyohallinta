@@ -260,11 +260,12 @@ module.exports = (router) => {
 							if(String(task.projectId) === String(projectId)) {
 								console.log("Tasks projectId: ", task.projectId, "Project's ID: ", projectId)
 
-								hourCount += task.machineTime;
+								machineTimeCount += task.machineTime;
+								hourCount += task.hours;
 
 								projectReportObject[projectId] = {
-									machineTime: hourCount,
-									hours: task.hours,
+									machineTime: machineTimeCount,
+									hours: hourCount,
 									displayName: projectIdBasedObject[projectId].displayName
 								}
 							}
