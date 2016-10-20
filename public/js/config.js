@@ -163,6 +163,17 @@ theApp.config(function($routeProvider, $httpProvider, paginationTemplateProvider
             }
 		})
 
+		.when('/project-reports', {
+			templateUrl: 'assets/pages/project-reports/index_project_reports.html',
+			controller: 'projectReportsController',
+			resolve : {
+				//This function is injected with the AuthService where you'll put your authentication logic
+                'auth' : function(Authenticate){
+                    return Authenticate.authenticate();
+                }
+			}
+		})
+
 		.when('/task/:id', {
 			templateUrl: 'assets/pages/tasks/show_task.html',
 			controller: 'showTaskController',
