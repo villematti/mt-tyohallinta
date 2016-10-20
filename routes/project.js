@@ -253,13 +253,17 @@ module.exports = (router) => {
 
 					projectIdArray.map((projectId) => {
 						var hourCount = 0;
+						var machineTimeCount = 0;
 
 						tasks.map((task) => {
 
 							if(String(task.projectId) === String(projectId)) {
 								console.log("Tasks projectId: ", task.projectId, "Project's ID: ", projectId)
-								console.log(task.hours);
+
+								hourCount += task.machineTime;
+
 								projectReportObject[projectId] = {
+									machineTime: hourCount,
 									hours: task.hours,
 									displayName: projectIdBasedObject[projectId].displayName
 								}
@@ -273,8 +277,6 @@ module.exports = (router) => {
 		})
 	});
 }
-
-
 
 function createNewProject(projectData, numberObject, res) {
 	var newProject = new Project(projectData);
