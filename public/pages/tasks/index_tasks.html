@@ -96,6 +96,23 @@
 		</tr>
 	</thead>
 	<tbody>
+		<tr>
+			<td></td>
+			<td></td>
+			<td><b>{{ 'TOTAL' | translate }}: {{ totalHours | number: 2 }}h</b></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td><b ng-if="totalBigVisits > 0">{{ 'TOTAL' | translate }}: {{ totalBigVisits }} kpl</b></td>
+			<td><b ng-if="totalOvertime > 0">{{ 'TOTAL' | translate }}: {{ totalOvertime }}h</b></td>
+			<td><b ng-if="totalDirtyWork > 0">{{ 'TOTAL' | translate }}: {{ totalDirtyWork }}h</b></td>
+			<td><b ng-if="totalMachineTime > 0">{{ 'TOTAL' | translate }}: {{ totalMachineTime }}h</b></td>
+		</tr>
 		<tr ng-repeat="task in tasks">
 			<td>{{ task.createdAt | date: "dd-MM-yyyy HH:mm" }}</td>
 			<td>{{ task.endedAt | date: "dd-MM-yyyy HH:mm" }}</td>
