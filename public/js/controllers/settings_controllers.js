@@ -171,7 +171,7 @@ theApp.controller('settingsController', ['$scope', '$http', '$log',
 	$scope.settingsElementMessage = '';
 
 	$scope.updateSetting = function(setting) {
-		console.log(setting);
+		
 		$http.put('/api/update-setting/' + setting._id, {
 				value: setting.value
 			})

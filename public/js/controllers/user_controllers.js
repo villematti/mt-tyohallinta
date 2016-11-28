@@ -106,7 +106,7 @@ theApp.controller('editUserController', ['$scope', '$log', '$http', '$routeParam
 	var userinfo = function() {
 		$http.get('/api/users/' + $routeParams.id)
 			.success(function(result) {
-				console.log(result);
+				
 				$scope.currentuser.username = result.name;
 				$scope.currentuser.admin = result.admin;
 				$scope.currentuser.pm = result.projectManager;
@@ -134,7 +134,7 @@ theApp.controller('editUserController', ['$scope', '$log', '$http', '$routeParam
 			pm: $scope.currentuser.pm
 		})
 		.success(function(result) {
-			console.log(result);
+			
 			$location.path('/users/' + $routeParams.id);
 		})
 	}

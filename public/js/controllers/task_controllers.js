@@ -319,7 +319,7 @@ theApp.controller('showTaskController', ['$scope', '$http', '$log', 'store', '$r
 	$scope.editTask = function(task) {
 		if(confirm('Oletko varma?')) {
 			var values = {};
-			console.log($scope.selectedProject);
+			
 			values.projectId = $scope.selectedProject;
 			values.userId = $scope.selectedUser;
 			values.taskTypeId = $scope.selectedTaskType;
