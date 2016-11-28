@@ -7,6 +7,7 @@ System Requirements:
 Change log on v.0.0.7
 - Fix issue with no search option on task raporting when selecting projects
 - Put big visit selection on ending the task
+- Add full project display name to current task
 
 Change log on v.0.0.5
 - Make users who are logged in visible.

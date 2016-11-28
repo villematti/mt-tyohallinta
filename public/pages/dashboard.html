@@ -40,12 +40,11 @@
 	<h3>{{ 'CURRENT_TASK' | translate }}</h3>
 	<ul ng-if="usersTasks.lenght !== 0" class="list-group" ng-repeat="task in usersTasks">
 		<div ng-if="task.endedAt === null" class="list-group-item">
-			<h4 class="list-group-item-heading">{{ task.projectId.name }}</h4>
+			<h4 class="list-group-item-heading">{{ task.projectId.displayName }}</h4>
 			<p class="list-group-item-text">
 				<b>{{ 'TASK_STARTED' | translate }}: </b>{{ task.createdAt | date: "dd-MM-yyyy HH:mm" }}
 				<b>{{ 'BIG_VISIT' | translate }}? </b>
-				<input ng-disabled="true" ng-if="!task.bigVisit" type="checkbox" />
-				<input ng-disabled="true" ng-if="task.bigVisit" type="checkbox" checked />
+				<input ng-model="task.bigVisit" type="checkbox" />
 			</p>
 			<p class="list-group-item-text">
 				<button ng-click="endTask(task)" class="btn btn-warning">{{ 'END_TASK' | translate }} </button>

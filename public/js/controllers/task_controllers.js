@@ -49,13 +49,13 @@ theApp.controller('allTasksController', ['$scope', '$http', '$log', 'store',
 	$scope.getTasksOnTime = function() {
 		$scope.exportReady = false;
 		$http.post('/api/tasks/all', {
-				filteredProjects: [ $scope.filteredProjects.value ],
+				filteredProjects: [],
 				activeProjects: $scope.activeProjects,
 				userId: $scope.selectedUser,
 				customerId: $scope.selectedCustomer,
 				taskTypeId: $scope.selectedTasktype,
 				noTime: $scope.noTime,
-				projectId: $scope.selectedProject,
+				projectId: ($scope.filteredProjects.value !== undefined) ? $scope.filteredProjects.value._id:null, // $scope.selectedProject,
 				startDate: Date.parse($scope.startDate), 
 				endDate: Date.parse($scope.endDate) 
 			})

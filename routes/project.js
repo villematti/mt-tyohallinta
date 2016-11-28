@@ -262,6 +262,7 @@ module.exports = (router) => {
 				Task.find({projectId: { $in: projectIdArray }, hours: { $ne: null }}, (taskError, tasks) => {
 					
 					var projectReportObject = {};
+					var projectsWithHours = [];
 
 					projectIdArray.map((projectId) => {
 						var hourCount = 0;
@@ -270,7 +271,9 @@ module.exports = (router) => {
 						tasks.map((task) => {
 
 							if(String(task.projectId) === String(projectId)) {
-								console.log("Tasks projectId: ", task.projectId, "Project's ID: ", projectId)
+								
+								// Add project to project with hours
+								projectsWithHours.push(projectId)
 
 								machineTimeCount += task.machineTime;
 								hourCount += task.hours;
@@ -283,6 +286,17 @@ module.exports = (router) => {
 							}
 						});
 					});
+
+					// Add every project with 0 action to the list
+					projectIdArray.map((idWithHours) => {
+						if(projectsWithHours.indexOf(idWithHours) === -1) {
+							projectReportObject[idWithHours] = {
+								machineTime: 0,
+								hours: 0,
+								displayName: projectIdBasedObject[idWithHours].displayName
+							}
+						}
+					})
 
 					res.json(projectReportObject);
 				})

@@ -746,13 +746,11 @@ apiRoutes.post('/tasks/all', function(req, res, next) {
 
 	var criteria = {};
 
-	console.log("TaskTypeId: ", req.body.taskTypeId)
-
 	if(req.body.taskTypeId !== 0 && req.body.taskTypeId !== "0") {
 		criteria.taskTypeId = req.body.taskTypeId;
 	}
 
-	if(req.body.filteredProjects[0] !== null) {
+	if(req.body.filteredProjects[0] !== undefined) {
 		criteria.projectId = {'$nin': req.body.filteredProjects[0]._id};
 	}
 
@@ -782,13 +780,10 @@ apiRoutes.post('/tasks/all', function(req, res, next) {
 			Project.find(activeStatus, function(error, projects) {
 				if(error) return next(error);
 
-				var activeIds = [];
-				
-				for(var i=0; i<projects.length; i++) {
-
-						activeIds.push(projects[i]._id)
-				}
-
+				var activeIds = projects.map((p) => {
+					return p._id
+				})
+				console.log("And the criteria is...", criteria)
 				Task.find(criteria)
 					.where('projectId')
 					.in(activeIds)
@@ -812,9 +807,9 @@ apiRoutes.post('/tasks/all', function(req, res, next) {
 			})
 		})
 
+	// activeProjects is set to false
 	} else {
 
-		console.log("No time value: ", req.body.noTime)
 		if(req.body.noTime !== true) {
 			criteria.createdAt = {'$gte': req.body.startDate, '$lte': req.body.endDate};
 			console.log("No Time Was Called!")
@@ -825,7 +820,7 @@ apiRoutes.post('/tasks/all', function(req, res, next) {
 			console.log("User ID Was Called!")
 		}
 
-		if(req.body.projectId !== 0 && req.body.projectId !== "0") {
+		if(req.body.projectId !== null) {
 			criteria.projectId = req.body.projectId;
 			console.log("Project ID Was Called!")
 		}
@@ -838,9 +833,7 @@ apiRoutes.post('/tasks/all', function(req, res, next) {
 				}
 			}
 		}
-		
-		console.log("Criteria: ", criteria)
-
+	
 		Task.find(criteria)
 		.populate('userId')
 		.populate('projectId')
@@ -850,13 +843,17 @@ apiRoutes.post('/tasks/all', function(req, res, next) {
 
 			Type.populate(results, {
 				path: 'projectId.typeId'
+			}, () => {
+
+				Customer.populate(results, {
+					path: 'projectId.customerId'
+				}, () => {
+					res.json(results);
+				})
+					
 			});
 
-			Customer.populate(results, {
-				path: 'projectId.customerId'
-			}, () => {
-				res.json(results);
-			})
+			
 		});
 	}
 });

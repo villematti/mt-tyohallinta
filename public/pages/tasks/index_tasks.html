@@ -5,17 +5,21 @@
 	<h3>{{ 'TASKS_TITLE' | translate}}</h3>
 	<button class="btn btn-danger old-projects-btn" ng-click="fillWithAllProjects()">{{ 'ADD_OLD_PROJECTS' | translate }}</button>
 	<div class="col-md-12">
-		<div class="col-md-4">
+		<div class="col-md-3">
 			<label>{{ 'START_DATE' | translate }}</label><br />
 			<md-datepicker ng-model="startDate" md-placeholder="Enter date"></md-datepicker>
 		</div>
-		<div class="col-md-4">
+		<div class="col-md-3">
 			<label>{{ 'END_DATE' | translate }}</label><br />
 			<md-datepicker ng-model="endDate" md-placeholder="Enter date"></md-datepicker>
 		</div>
 		<div class="col-md-2">
 			<label>{{ 'NO_DATE_RANGE' | translate }}</label><br />
 			<input class="form-control" type="checkbox" ng-model="noTime" />
+		</div>
+		<div class="col-md-2">
+			<label style="margin-left: 25px;">{{ 'ACTIVE_PROJECTS' | translate }}</label><br />
+			<input class="form-control" type="checkbox" ng-model="activeProjects"  />
 		</div>
 		<div class="col-md-2">
 			<label>{{ 'SELECT_USER' | translate }}: </label><br />
@@ -53,18 +57,7 @@
 		</div>
 	</div>
 	<div class="col-md-12" style="margin-top: 10px;">
-		<div class="col-md-6">
-			<label>{{ 'SELECT_PROJECT' | translate }}: </label><br />
-			<select class="form-control" ng-model="selectedProject" style="margin-top: 11px;">
-				<option value="0" selected>{{ 'ALL' | translate }}</option>
-				<option ng-repeat="project in projects" value="{{ project._id }}">{{ project.displayName }}</option>
-			</select>
-		</div>
-		<div class="col-md-2">
-			<label style="margin-left: 25px;">{{ 'ACTIVE_PROJECTS' | translate }}</label><br />
-			<input class="form-control" type="checkbox" ng-model="activeProjects" style="margin-top: 11px;" />
-		</div>
-		<div class="col-md-2">
+		<div class="col-md-2 col-md-offset-8">
 			<button style="margin-top: 36px;" class="form-control btn btn-primary btn-sm" ng-click="getTasksOnTime()">{{ 'GET_TASKS' | translate }}</button>
 		</div>
 		<div class="col-md-2">
@@ -74,7 +67,7 @@
 
 </md-content>
 <div ng-if="notFound == true" class="alert alert-warning">{{ 'NO_RESULTS_FOUND_ERROR' | translate }}</div>
-<table ng-if="tasks.length !== 0" class="table table-bordered col-md-12" style="text-align: center; margin-left: -70px;">
+<table ng-if="tasks.length !== 0" class="table table-bordered col-md-12" style="text-align: center; margin-left: -70px; margin-top: 10px;">
 	<thead>
 		<tr>
 			<th>{{ 'START_TIME' | translate }}</th>
