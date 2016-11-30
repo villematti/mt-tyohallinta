@@ -1,4 +1,4 @@
-var db = process.env.MONGO_DB || '192.168.199.3';
+var db = process.env.MONGO_DB || '101.1.151.13';
 
 module.exports = {
 	'secret': 'ilovedatabases',
